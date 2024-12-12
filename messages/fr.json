@@ -17,7 +17,8 @@
         "projects": "Voici mes projets",
         "projectType": {
             "personal": "Personnel",
-            "professional": "Professionnel"
+            "professional": "Professionnel",
+            "school": "Scolaire"
         },
         "link": "Accéder au projet"
     }

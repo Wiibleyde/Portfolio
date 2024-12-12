@@ -7,8 +7,8 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Montserrat } from 'next/font/google'
 import "@/app/globals.css"
-import { FloatingClock } from "@/components/FloatingClock/FloatingClock";
-import { ScrollToTop } from "@/components/ScrollToTop.tsx/ScrollToTop";
+import { FloatingClock } from "@/components/UI/FloatingClock/FloatingClock";
+import { ScrollToTop } from "@/components/UI/ScrollToTop.tsx/ScrollToTop";
 
 export const metadata: Metadata = {
     title: "Create Next App",

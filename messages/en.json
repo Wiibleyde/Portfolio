@@ -16,7 +16,9 @@
         "description": "This is the content of the projects page, for English speakers, the projects are not translated.",
         "projects": "Here are my projects",
         "projectType": {
-            "personal": "Personal"
+            "personal": "Personal",
+            "professional": "Professional",
+            "school": "School"
         },
         "link": "Access the project"
     }

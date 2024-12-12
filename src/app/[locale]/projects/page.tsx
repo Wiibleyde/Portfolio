@@ -38,7 +38,7 @@ const projects: Project[] = [
         url: "https://cartel.lex-port.com",
         image: LexPortLogo.src,
         tags: ["Lex-Port", "Alternance", "Next.js", "Typescript", "TailwindCSS", "Prisma"],
-    }
+    },
 ]
 
 export default function ProjectsPage() {

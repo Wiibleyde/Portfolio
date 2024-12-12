@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { ArrowUp } from 'react-bootstrap-icons';
 
 export function ScrollToTop() {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState<boolean>(false);
 
     useEffect(() => {
         const handleScroll = () => {

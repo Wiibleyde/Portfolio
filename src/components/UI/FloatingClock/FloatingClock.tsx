@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import { Mouse } from 'react-bootstrap-icons';
 
 export function FloatingClock() {
-    const [currentTime, setCurrentTime] = useState(new Date());
-    const [scrollPercentage, setScrollPercentage] = useState(0);
+    const [currentTime, setCurrentTime] = useState<Date>(new Date());
+    const [scrollPercentage, setScrollPercentage] = useState<number>(0);
+    const [isMounted, setIsMounted] = useState<boolean>(false);
 
     useEffect(() => {
+        setIsMounted(true);
         const timer = setInterval(() => {
             setCurrentTime(new Date());
         }, 1000);
@@ -25,6 +27,8 @@ export function FloatingClock() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    if (!isMounted) return null;
 
     return (
         <div className="fixed bottom-4 right-4 border-2 border-gray-300 shadow-lg rounded-md w-28 h-16">
