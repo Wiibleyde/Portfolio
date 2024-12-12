@@ -1,0 +1,23 @@
+{
+    "Navbar": {
+        "name": "Nathan Bonnell",
+        "job": "Full Stack Developer",
+        "title": "Portfolio",
+        "home": "Home",
+        "projects": "Projects",
+        "about": "About"
+    },
+    "HomePage": {
+        "title": "Welcome to the home page",
+        "description": "This is the content of the home page"
+    },
+    "ProjectsPage": {
+        "title": "Projects",
+        "description": "This is the content of the projects page, for English speakers, the projects are not translated.",
+        "projects": "Here are my projects",
+        "projectType": {
+            "personal": "Personal"
+        },
+        "link": "Access the project"
+    }
+}

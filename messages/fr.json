@@ -1,0 +1,24 @@
+{
+    "Navbar": {
+        "name": "Nathan Bonnell",
+        "job": "Développeur Full Stack",
+        "title": "Portfolio",
+        "home": "Accueil",
+        "projects": "Projets",
+        "about": "À propos"
+    },
+    "HomePage": {
+        "title": "Bienvenue sur la page d'accueil",
+        "description": "Ceci est le contenu de la page d'accueil"
+    },
+    "ProjectsPage": {
+        "title": "Projets",
+        "description": "Ceci est le contenu de la page des projets, pour les personnes anglophones, les projets ne sont pas traduits.",
+        "projects": "Voici mes projets",
+        "projectType": {
+            "personal": "Personnel",
+            "professional": "Professionnel"
+        },
+        "link": "Accéder au projet"
+    }
+}
