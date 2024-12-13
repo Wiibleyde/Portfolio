@@ -1,4 +1,7 @@
 {
+    "Loading": {
+        "loading": "Loading..."
+    },
     "Navbar": {
         "name": "Nathan Bonnell",
         "job": "Full Stack Developer",
@@ -7,19 +10,51 @@
         "projects": "Projects",
         "about": "About"
     },
+    "ScrollButton": {
+        "scroll": "Scroll down to see more!"
+    },
+    "NextBirthday": {
+        "years": "years in",
+        "days": "d",
+        "hours": "h",
+        "minutes": "m",
+        "seconds": "s"
+    },
+    "MeCard": {
+        "title": "Nathan Bonnell",
+        "citation": "« The only way to do great work is to love what you do. » — Steve Jobs",
+        "dates": "Birthdate",
+        "contact": "Contact",
+        "phone": "Phone",
+        "bluesky": "Bluesky",
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "twitter": "Twitter",
+        "email": "Email"
+    },
+    "Stack": {
+        "languages": "Languages",
+        "frameworks": "Frameworks",
+        "tools": "Tools",
+        "frontend": "Frontend",
+        "backend": "Backend"
+    },
     "HomePage": {
-        "title": "Welcome to the home page",
-        "description": "This is the content of the home page"
+        "title": "Nathan Bonnell's Portfolio",
+        "description": "Welcome, I am a Full Stack Developer passionate about web development. DevOps is also a field that interests me. Here, you will find my personal, professional, and academic projects.",
+        "me": "Here is my profile",
+        "stack": "Technologies"
     },
     "ProjectsPage": {
         "title": "Projects",
-        "description": "This is the content of the projects page, for English speakers, the projects are not translated.",
+        "scroll": "Scroll down to see more projects",
+        "description": "This is the content of the projects page. For English speakers, the projects are not translated.",
         "projects": "Here are my projects",
         "projectType": {
             "personal": "Personal",
             "professional": "Professional",
-            "school": "School"
+            "school": "Academic"
         },
-        "link": "Access the project"
+        "link": "View project"
     }
 }

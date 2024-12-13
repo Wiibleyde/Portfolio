@@ -8,7 +8,7 @@ export function Navbar() {
     const pathname = usePathname();
 
     return (
-        <div className="fixed bg-black bg-opacity-95 text-white w-full h-16 flex flex-row items-center justify-between px-6 shadow-lg">
+        <div className="fixed bg-black bg-opacity-95 text-white w-full h-16 flex flex-row items-center justify-between px-6 shadow-lg z-50">
             <div className="flex flex-row space-x-4 items-center">
                 <p className="font-bold text-lg">{t("name")}</p>
                 <p className="text-gray-400">-</p>

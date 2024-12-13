@@ -29,7 +29,7 @@ export function ScrollToTop() {
     };
 
     return (
-        <button onClick={scrollToTop} className={`fixed bottom-4 left-4 rounded-full transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'} bg-green-500 bg-opacity-90 text-white p-2`}>
+        <button onClick={scrollToTop} className={`fixed bottom-4 left-4 rounded-full transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'} bg-green-500 bg-opacity-90 text-white p-2 shadow-md`}>
             <ArrowUp className='text-black' />
         </button>
     );

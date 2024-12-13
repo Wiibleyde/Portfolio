@@ -7,8 +7,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Montserrat } from 'next/font/google'
 import "@/app/globals.css"
-import { FloatingClock } from "@/components/UI/FloatingClock/FloatingClock";
-import { ScrollToTop } from "@/components/UI/ScrollToTop.tsx/ScrollToTop";
+import { ScrollToTop } from "@/components/UI/ScrollToTop";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -42,7 +41,6 @@ export default async function RootLayout({
                 <NextIntlClientProvider messages={messages}>
                     <Navbar />
                     {children}
-                    <FloatingClock />
                     <ScrollToTop />
                 </NextIntlClientProvider>
             </body>

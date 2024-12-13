@@ -1,4 +1,7 @@
 {
+    "Loading": {
+        "loading": "Chargement..."
+    },
     "Navbar": {
         "name": "Nathan Bonnell",
         "job": "Développeur Full Stack",
@@ -7,12 +10,44 @@
         "projects": "Projets",
         "about": "À propos"
     },
+    "ScrollButton": {
+        "scroll": "Faites défiler pour voir la suite !"
+    },
+    "NextBirthday": {
+        "years": "ans dans",
+        "days": "j",
+        "hours": "h",
+        "minutes": "m",
+        "seconds": "s"
+    },
+    "MeCard": {
+        "title": "Nathan Bonnell",
+        "citation": "« La seule façon de faire du bon travail est d'aimer ce que l'on fait. » — Steve Jobs",
+        "dates": "Naissance",
+        "contact": "Contact",
+        "phone": "Téléphone",
+        "bluesky": "Bluesky",
+        "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "twitter": "Twitter",
+        "email": "Courriel"
+    },
+    "Stack": {
+        "languages": "Langages",
+        "frameworks": "Frameworks",
+        "tools": "Outils",
+        "frontend": "Frontend",
+        "backend": "Backend"
+    },
     "HomePage": {
-        "title": "Bienvenue sur la page d'accueil",
-        "description": "Ceci est le contenu de la page d'accueil"
+        "title": "Portfolio Nathan Bonnell",
+        "description": "Bienvenue, je suis un développeur Full Stack passionné par le développement web. Le DevOps est aussi un domaine qui m'intéresse. Vous trouverez ici mes projets personnels, professionnels et scolaires.",
+        "me": "Voici mon profil",
+        "stack": "Technologies"
     },
     "ProjectsPage": {
         "title": "Projets",
+        "scroll": "Faites défiler pour voir plus de projets",
         "description": "Ceci est le contenu de la page des projets, pour les personnes anglophones, les projets ne sont pas traduits.",
         "projects": "Voici mes projets",
         "projectType": {
