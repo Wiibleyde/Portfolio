@@ -22,8 +22,8 @@ export function ProjectCard({ project }: { project: Project }) {
     const t = useTranslations("ProjectsPage");
 
     return (
-        <div className='flex flex-col w-96 h-auto bg-black border-2 border-white p-6 rounded-lg shadow-lg transition-colors duration-300 hover:border-green-500'>
-            <Image src={project.image} alt={project.title} className='w-full h-48 object-cover rounded-lg bg-gray-300' height={192} width={384} />
+        <div className='flex flex-col w-96 h-auto m-3 bg-black border-2 border-white p-6 rounded-lg shadow-lg transition-all duration-300 hover:border-green-500 shadow-white hover:shadow-green-500'>
+            <Image src={project.image} alt={project.title} className='w-full h-48 object-cover rounded-lg bg-gray-300' height={300} width={900} />
             <div className='p-4'>
                 <h2 className='font-bold text-2xl mb-2'>{project.title}</h2>
                 <p className='text-gray-300 mb-4'>{project.description}</p>

@@ -6,6 +6,7 @@ import Css from '@public/img/stack/css.svg'
 import DavinciResolve from '@public/img/stack/davinciResolve.svg'
 import Docker from '@public/img/stack/docker.svg'
 import Express from '@public/img/stack/express.svg'
+import FastAPI from '@public/img/stack/fastapi.svg'
 import Figma from '@public/img/stack/figma.svg'
 import Git from '@public/img/stack/git.svg'
 import Go from '@public/img/stack/go.svg'
@@ -72,6 +73,7 @@ export function Stack() {
             title: t('backend'),
             stacks: [
                 { title: 'Node.js', image: NodeJS },
+                { title: 'FastAPI', image: FastAPI, url: "https://fastapi.tiangolo.com/" },
                 { title: 'Express', image: Express, url: "https://expressjs.com/" },
                 { title: 'Prisma', image: Prisma, url: "https://www.prisma.io/" },
                 { title: 'MongoDB', image: MongoDb, url: "https://www.mongodb.com/" },
