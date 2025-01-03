@@ -8,7 +8,16 @@
         "title": "Portfolio",
         "home": "Accueil",
         "projects": "Projets",
-        "about": "À propos"
+        "about": "À propos",
+        "cv": "Curriculum Vitae"
+    },
+    "Footer": {
+        "madeBy": "Fait par :",
+        "nathan": "Nathan Bonnell",
+        "home": "Accueil",
+        "about": "À propos",
+        "contact": "Contact",
+        "legal": "Mentions légales"
     },
     "ScrollButton": {
         "scroll": "Faites défiler pour voir la suite !"
@@ -32,18 +41,41 @@
         "twitter": "Twitter",
         "email": "Courriel"
     },
-    "Stack": {
+    "HardSkills": {
         "languages": "Langages",
         "frameworks": "Frameworks",
         "tools": "Outils",
         "frontend": "Frontend",
         "backend": "Backend"
     },
+    "SoftSkills": {
+        "teamwork": "Travail d'équipe",
+        "teamworkSub": {
+            "communication": "Communication",
+            "problemSolving": "Résolution de problèmes",
+            "empathy": "Empathie"
+        },
+        "organization": "Organisation",
+        "organizationSub": {
+            "timeManagement": "Gestion du temps",
+            "prioritization": "Priorisation",
+            "adaptability": "Adaptabilité"
+        },
+        "creativity": "Créativité",
+        "creativitySub": {
+            "innovation": "Innovation",
+            "criticalThinking": "Pensée critique",
+            "curiosity": "Curiosité"
+        }
+    },
     "HomePage": {
         "title": "Portfolio Nathan Bonnell",
-        "description": "Bienvenue, je suis un développeur Full Stack passionné par le développement web. Le DevOps est aussi un domaine qui m'intéresse. Vous trouverez ici mes projets personnels, professionnels et scolaires.",
+        "hello": "Bonjour.",
+        "intro": "Je suis Nathan Bonnell, étudiant en informatique au sein d'Ynov Campus.",
+        "description": "Bonjour ! Étudiant passionné par le développement web fullstack et l'exploration de diverses technologies, je crée des solutions innovantes et performantes qui allient créativité, efficacité et maîtrise technique.", 
         "me": "Voici mon profil",
-        "stack": "Technologies"
+        "hardskills": "Compétences techniques",
+        "softskills": "Compétences humaines"
     },
     "ProjectsPage": {
         "title": "Projets",

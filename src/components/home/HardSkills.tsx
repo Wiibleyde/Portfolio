@@ -1,4 +1,3 @@
-import { Link } from '@/i18n/routing'
 import Bootstrap from '@public/img/stack/bootstrap.svg'
 import Cpp from '@public/img/stack/cpp.svg'
 import Csharp from '@public/img/stack/csharp.svg'
@@ -29,24 +28,19 @@ import TypeScript from '@public/img/stack/typescript.svg'
 import Unity from '@public/img/stack/unity.svg'
 import Vmix from '@public/img/stack/vmix.svg'
 import VsCode from '@public/img/stack/vscode.svg'
+
 import { useTranslations } from 'next-intl'
-import Image, { StaticImageData } from 'next/image'
+import { SkillCard, SkillProps } from './SkillCard'
 
-interface StackProps {
+interface HardSkillsProps {
     title: string;
-    image: StaticImageData;
-    url?: string;
+    stacks: SkillProps[];
 }
 
-interface StackCategory {
-    title: string;
-    stacks: StackProps[];
-}
+export function HardSkills() {
+    const t = useTranslations('HardSkills')
 
-export function Stack() {
-    const t = useTranslations('Stack')
-
-    const stacks: StackCategory[] = [
+    const hardSkills: HardSkillsProps[] = [
         {
             title: t('languages'),
             stacks: [
@@ -101,33 +95,16 @@ export function Stack() {
 
     return (
         <div className='flex flex-col space-y-9'>
-            {stacks.map(({ title, stacks }) => (
+            {hardSkills.map(({ title, stacks }) => (
                 <div key={title} className='flex flex-col space-y-3'>
                     <h2 className='text-gray-100 text-3xl font-bold'>{title}</h2>
                     <div className='flex flex-wrap space-x-9 justify-center'>
                         {stacks.map(({ title, image, url }, index) => (
-                            <StackCard key={index} title={title} image={image} url={url} />
+                            <SkillCard key={index} title={title} image={image} url={url} />
                         ))}
                     </div>
                 </div>
             ))}
         </div>
-    )
-}
-
-export function StackCard({ title, image, url }: StackProps) {
-    if(!url) {
-        return (
-            <div className='flex flex-col items-center space-y-3'>
-                <Image src={image.src} alt={title} className='w-20 h-20' width={80} height={80} />
-                <p className='text-gray-100 text-lg font-semibold'>{title}</p>
-            </div>
-        )
-    }
-    return (
-        <Link href={url || "#"} target='_blank' rel='noreferrer' className='flex flex-col items-center space-y-3 transition-all duration-300 hover:scale-105'>
-            <Image src={image.src} alt={title} className='w-20 h-20' width={80} height={80} />
-            <p className='text-gray-100 text-lg font-semibold'>{title}</p>
-        </Link>
     )
 }

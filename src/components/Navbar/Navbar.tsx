@@ -2,44 +2,92 @@
 import { Link, usePathname } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { LocaleSelector } from "./LocaleSelector";
+import { useEffect, useState, useRef } from "react";
+import { useMouse } from "@/hooks/useMouse";
+import { List } from "react-bootstrap-icons";
+
+const cv = "/CV_Nathan_Bonnell.pdf";
 
 export function Navbar() {
     const t = useTranslations("Navbar");
     const pathname = usePathname();
 
+    const [showNavbar, setShowNavbar] = useState(false);
+    const navbarRef = useRef<HTMLDivElement>(null);
+
+    const { mouse } = useMouse();
+
+    useEffect(() => {
+        const handleMouseOver = (event: MouseEvent) => {
+            if (navbarRef.current && navbarRef.current.contains(event.target as Node)) {
+                setShowNavbar(true);
+            }
+        };
+
+        const handleMouseOut = (event: MouseEvent) => {
+            if (navbarRef.current && !navbarRef.current.contains(event.relatedTarget as Node)) {
+                setShowNavbar(false);
+            }
+        };
+
+        document.addEventListener('mouseover', handleMouseOver);
+        document.addEventListener('mouseout', handleMouseOut);
+
+        return () => {
+            document.removeEventListener('mouseover', handleMouseOver);
+            document.removeEventListener('mouseout', handleMouseOut);
+        };
+    }, []);
+
+    useEffect(() => {
+        const isMouseNearNavbar = mouse.x <= 150;
+        if (isMouseNearNavbar) {
+            setShowNavbar(true);
+        } else if (!navbarRef.current || !navbarRef.current.contains(document.querySelector(':hover'))) {
+            setShowNavbar(false);
+        }
+    }, [mouse]);
+
     return (
-        <div className="fixed bg-black bg-opacity-95 text-white w-full h-16 flex flex-row items-center justify-between px-6 shadow-lg z-50">
-            <div className="flex flex-row space-x-4 items-center">
-                <p className="font-bold text-lg">{t("name")}</p>
-                <p className="text-gray-400">-</p>
-                <p className="font-bold text-green-400 italic">{t("job")}</p>
+        <>
+            <div className={`fixed top-4 left-4 z-50 ${showNavbar ? "hidden" : "block"}`}>
+                <button onClick={() => setShowNavbar(true)} className="p-2 bg-black bg-opacity-95 text-white rounded-full shadow-lg">
+                    <List size={32} />
+                </button>
             </div>
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-                <Link href="/">
-                    <p className="text-2xl font-semibold">{t("title")}</p>
-                </Link>
+            <div ref={navbarRef} id="navbar" className={`fixed bg-black bg-opacity-95 text-white w-64 h-full flex flex-col items-start justify-between p-6 shadow-lg z-50 transition-transform duration-300 transform ${showNavbar ? "translate-x-0" : "-translate-x-full"}`}>
+                <div className="flex flex-col space-y-4 items-start mt-4">
+                    <p className="font-bold text-lg">{t("name")}</p>
+                    <p className="font-bold text-green-400 italic">{t("job")}</p>
+                </div>
+                <div className="flex flex-col space-y-6 items-start mt-4">
+                    <Link href="/">
+                        <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/" ? "decoration-2 underline-offset-4" : ""}`}>
+                            {t("home")}
+                            <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
+                        </h2>
+                    </Link>
+                    <Link href="/projects">
+                        <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/projects" ? "decoration-2 underline-offset-4" : ""}`}>
+                            {t("projects")}
+                            <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/projects" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
+                        </h2>
+                    </Link>
+                    <Link href="/about">
+                        <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/about" ? "decoration-2 underline-offset-4" : ""}`}>
+                            {t("about")}
+                            <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/about" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
+                        </h2>
+                    </Link>
+                    <a href={cv} target="_blank" rel="noreferrer">
+                        <h2 className={`relative hover:text-gray-400 transition duration-300`}>
+                            {t("cv")}
+                            <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/contact" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
+                        </h2>
+                    </a>
+                    <LocaleSelector />
+                </div>
             </div>
-            <div className="flex flex-row space-x-6 items-center">
-                <Link href="/">
-                    <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/" ? "decoration-2 underline-offset-4" : ""}`}>
-                        {t("home")}
-                        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
-                    </h2>
-                </Link>
-                <Link href="/projects">
-                    <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/projects" ? "decoration-2 underline-offset-4" : ""}`}>
-                        {t("projects")}
-                        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/projects" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
-                    </h2>
-                </Link>
-                <Link href="/about">
-                    <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/about" ? "decoration-2 underline-offset-4" : ""}`}>
-                        {t("about")}
-                        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/about" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
-                    </h2>
-                </Link>
-                <LocaleSelector />
-            </div>
-        </div>
+        </>
     );
 }

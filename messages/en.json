@@ -8,7 +8,16 @@
         "title": "Portfolio",
         "home": "Home",
         "projects": "Projects",
-        "about": "About"
+        "about": "About",
+        "cv": "Curriculum Vitae"
+    },
+    "Footer": {
+        "madeBy": "Made by:",
+        "nathan": "Nathan Bonnell",
+        "home": "Home",
+        "about": "About",
+        "contact": "Contact",
+        "legal": "Legal Notice"
     },
     "ScrollButton": {
         "scroll": "Scroll down to see more!"
@@ -22,7 +31,7 @@
     },
     "MeCard": {
         "title": "Nathan Bonnell",
-        "citation": "« The only way to do great work is to love what you do. » — Steve Jobs",
+        "citation": "“The only way to do great work is to love what you do.” — Steve Jobs",
         "dates": "Birthdate",
         "contact": "Contact",
         "phone": "Phone",
@@ -32,18 +41,41 @@
         "twitter": "Twitter",
         "email": "Email"
     },
-    "Stack": {
+    "HardSkills": {
         "languages": "Languages",
         "frameworks": "Frameworks",
         "tools": "Tools",
         "frontend": "Frontend",
         "backend": "Backend"
     },
+    "SoftSkills": {
+        "teamwork": "Teamwork",
+        "teamworkSub": {
+            "communication": "Communication",
+            "problemSolving": "Problem-Solving",
+            "empathy": "Empathy"
+        },
+        "organization": "Organization",
+        "organizationSub": {
+            "timeManagement": "Time Management",
+            "prioritization": "Prioritization",
+            "adaptability": "Adaptability"
+        },
+        "creativity": "Creativity",
+        "creativitySub": {
+            "innovation": "Innovation",
+            "criticalThinking": "Critical Thinking",
+            "curiosity": "Curiosity"
+        }
+    },
     "HomePage": {
-        "title": "Nathan Bonnell's Portfolio",
-        "description": "Welcome, I am a Full Stack Developer passionate about web development. DevOps is also a field that interests me. Here, you will find my personal, professional, and academic projects.",
+        "title": "Nathan Bonnell Portfolio",
+        "hello": "Hello.",
+        "intro": "I am Nathan Bonnell, a computer science student at Ynov Campus.",
+        "description": "Hello! As a student passionate about full-stack web development and exploring various technologies, I create innovative and high-performing solutions that blend creativity, efficiency, and technical expertise.",
         "me": "Here is my profile",
-        "stack": "Technologies"
+        "hardskills": "Technical Skills",
+        "softskills": "Soft Skills"
     },
     "ProjectsPage": {
         "title": "Projects",
@@ -53,8 +85,8 @@
         "projectType": {
             "personal": "Personal",
             "professional": "Professional",
-            "school": "Academic"
+            "school": "School"
         },
-        "link": "View project"
+        "link": "Access the project"
     }
 }

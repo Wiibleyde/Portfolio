@@ -1,9 +1,8 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { NextBirthday } from "./NextBirthday";
 import { Calendar2DateFill } from "react-bootstrap-icons";
 import { useTranslations } from "next-intl";
 import ProfilePicture from "@public/img/picture/pp.png";
-import { Link } from "@/i18n/routing";
 
 import Bluesky from "@public/img/network/bluesky.svg";
 import Github from "@public/img/network/github.svg";
@@ -11,6 +10,7 @@ import Linkedin from "@public/img/network/linkedin.svg";
 import Mail from "@public/img/network/mail.svg";
 import Smartphone from "@public/img/network/smartphone.svg";
 import Twitter from "@public/img/network/twitter.svg";
+import { NetworkCard } from "./NetworkCard";
 
 export function MeCard() {
     const t = useTranslations('MeCard');
@@ -64,7 +64,7 @@ export function MeCard() {
                     <h3 className='text-gray-300 text-lg font-semibold'>{t('dates')}</h3>
                     <div className='grid grid-cols-2 gap-2'>
                         <div className='text-gray-300 mb-2 text-sm'>
-                            <Calendar2DateFill className='inline-block' /> : {bithdate.toLocaleDateString()}
+                            <Calendar2DateFill className='inline-block' /> : {bithdate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                         </div>
                         <div className='text-gray-300 mb-2 text-sm'>
                             <NextBirthday bithdate={bithdate} />
@@ -81,14 +81,5 @@ export function MeCard() {
                 </div>
             </div>
         </div>
-    )
-}
-
-export function NetworkCard({ title, url, icon }: { title: string, url: string, icon: StaticImageData }) {
-    return (
-        <Link href={url} target="_blank" className='flex flex-row items-center bg-black p-2 rounded-lg shadow-lg shadow-white border-white border-2 transition-all duration-300 hover:border-green-500 hover:shadow-green-500'>
-            <Image src={icon.src} alt={title} height={40} width={40} />
-            <h2 className='font-bold text-xl mb-2 text-white ml-2 my-auto'>{title}</h2>
-        </Link>
     )
 }

@@ -10,7 +10,7 @@ export function LocaleSelector() {
     const router = useRouter();
 
     const handleLanguageChange = (language: string) => {
-        router.push(pathname, { locale: language });
+        router.push(pathname, { locale: language, scroll: false });
     }
 
     return (

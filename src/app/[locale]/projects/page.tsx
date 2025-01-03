@@ -1,5 +1,4 @@
 import { useTranslations } from "next-intl";
-import Background from "@public/img/background/project.jpg";
 import { ScrollButton } from "@/components/UI/ScrollButton";
 import { Project, ProjectCard, ProjectType } from "@/components/projects/ProjectCard";
 
@@ -56,7 +55,7 @@ export default function ProjectsPage() {
     const t = useTranslations("ProjectsPage");
 
     return (
-        <div className='flex flex-col min-h-screen bg-no-repeat bg-fixed overflow-x-hidden' style={{ backgroundImage: `url(${Background.src})`, backgroundSize: 'cover', backgroundPosition: 'top' }}>
+        <div className='flex flex-col min-h-screen bg-no-repeat bg-fixed overflow-x-hidden' style={{ background: 'radial-gradient(circle, rgba(0, 192, 219, 0.3) 20%, rgba(0, 0, 0, 1) 80%)', backgroundSize: 'cover', backgroundPosition: 'top' }}>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
                 <div className='h-screen w-full bg-opacity-60 bg-black flex flex-col justify-center items-center'>
                     <h1 className='text-white text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
