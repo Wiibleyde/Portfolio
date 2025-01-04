@@ -14,6 +14,19 @@ import { ScrollCircle } from "@/components/UI/ScrollCircle";
 export const metadata: Metadata = {
     title: "Portfolio - Nathan Bonnell",
     description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
+    twitter: {
+        card: "summary",
+        title: "Portfolio - Nathan Bonnell",
+        description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
+        creator: "@wiibleyde",
+        site: "https://portfolio.bonnell.fr",
+    },
+    authors: [{
+        name: "Nathan Bonnell",
+        url: "https://portfolio.bonnell.fr",
+    }],
+    keywords: ["portfolio", "nathan bonnell", "développeur web", "fullstack", "react", "nextjs", "tailwindcss", "typescript"],
+    robots: "index, follow",
 };
 
 const montserrat = Montserrat({
