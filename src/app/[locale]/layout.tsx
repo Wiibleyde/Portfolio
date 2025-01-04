@@ -27,6 +27,20 @@ export const metadata: Metadata = {
     }],
     keywords: ["portfolio", "nathan bonnell", "développeur web", "fullstack", "react", "nextjs", "tailwindcss", "typescript"],
     robots: "index, follow",
+    openGraph: {
+        type: "website",
+        url: "https://portfolio.bonnell.fr",
+        title: "Portfolio - Nathan Bonnell",
+        description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
+        images: [
+            {
+                url: "https://portfolio.bonnell.fr/img/picture/pp.png",
+                width: 1200,
+                height: 630,
+                alt: "Portfolio - Nathan Bonnell",
+            },
+        ],
+    },
 };
 
 const montserrat = Montserrat({

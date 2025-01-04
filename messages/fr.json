@@ -75,7 +75,8 @@
         "description": "Bonjour ! Étudiant passionné par le développement web fullstack et l'exploration de diverses technologies, je crée des solutions innovantes et performantes qui allient créativité, efficacité et maîtrise technique.", 
         "me": "Voici mon profil",
         "hardskills": "Compétences techniques",
-        "softskills": "Compétences humaines"
+        "softskills": "Compétences humaines",
+        "timeline": "Expérience (professionnelle, scolaire et associative)"
     },
     "ProjectsPage": {
         "title": "Projets",
@@ -88,5 +89,13 @@
             "school": "Scolaire"
         },
         "link": "Accéder au projet"
+    },
+    "AboutPage": {
+        "title": "À propos",
+        "about": "À propos du portfolio",
+        "design": "Design",
+        "designContent": "Le design de ce portfolio a été créé avec Figma, un outil de design graphique et d'interface utilisateur.",
+        "technical": "Technologies utilisées",
+        "technicalContent": "Ce portfolio a été créé avec Next.js (App Router), un framework React, et est hébergé sur un serveur sous Linux (Rocky Linux)."
     }
 }

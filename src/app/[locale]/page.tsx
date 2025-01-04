@@ -1,9 +1,10 @@
 import { ScrollButton } from "@/components/UI/ScrollButton";
 import { useTranslations } from "next-intl";
-import { WordAnimation } from "@/components/home/WordAnimation";
-import { MeCard } from "@/components/home/MeCard";
-import { HardSkills } from "@/components/home/HardSkills";
-import { SoftSkills } from "@/components/home/SoftSkills";
+import { WordAnimation } from "@/components/Home/WordAnimation";
+import { MeCard } from "@/components/Home/MeCard";
+import { HardSkills } from "@/components/Home/HardSkills";
+import { SoftSkills } from "@/components/Home/SoftSkills";
+import { Timeline } from "@/components/Home/Timeline";
 
 export default function Home() {
     const t = useTranslations('HomePage');
@@ -31,6 +32,10 @@ export default function Home() {
                         <h1 className='text-4xl font-bold mb-4 text-end'>{t('softskills')}</h1>
                         <SoftSkills />
                     </div>
+                </div>
+                <div className=''>
+                    <h1 className='text-4xl font-bold mb-4'>{t('timeline')}</h1>
+                    <Timeline />
                 </div>
             </div>
         </div>

@@ -41,7 +41,7 @@ export function Navbar() {
                     <List size={32} />
                 </button>
             </div>
-            <div ref={navbarRef} id="navbar" className={`fixed bg-black bg-opacity-95 text-white w-64 h-full flex flex-col items-start justify-between p-6 shadow-lg z-50 transition-transform duration-300 transform ${showNavbar ? "translate-x-0" : "-translate-x-full"}`}>
+            <div ref={navbarRef} id="navbar" className={`fixed bg-black bg-opacity-95 text-white border-r-2 border-white w-64 h-full flex flex-col items-start justify-between p-6 shadow-lg z-50 transition-transform duration-300 transform ${showNavbar ? "translate-x-0" : "-translate-x-full"}`}>
                 <div className="flex flex-col space-y-4 items-start mt-4">
                     <p className="font-bold text-lg">{t("name")}</p>
                     <p className="font-bold text-green-400 italic">{t("job")}</p>
