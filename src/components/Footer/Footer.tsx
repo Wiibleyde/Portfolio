@@ -7,7 +7,7 @@ export function Footer() {
     const t = useTranslations('Footer')
 
     return (
-        <footer className='bg-black text-white p-16 border-t-2 border-white' style={{ background: 'radial-gradient(circle, rgba(83, 3, 232, 0.8) 0.1%, rgba(0, 0, 0, 1) 80%)', backgroundSize: 'cover', backgroundPosition: 'bottom' }}>
+        <footer className='bg-black text-white p-14 border-t-2 border-white' style={{ background: 'radial-gradient(circle, rgba(0, 108, 255, 0.7) 0.1%, rgba(0, 0, 0, 1) 80%)', backgroundSize: 'cover', backgroundPosition: 'bottom' }}>
             <div className='flex justify-center items-center space-x-1'>
                 <ul className='space-y-2 text-center'>
                     <li><Link href='/'>{t('home')}</Link></li>

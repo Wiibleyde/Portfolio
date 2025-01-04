@@ -2,6 +2,11 @@
     "Loading": {
         "loading": "Chargement..."
     },
+    "Error": {
+        "title": "Erreur",
+        "message": "Erreur ou page introuvable. Veuillez réessayer plus tard.",
+        "home": "Retour à l'accueil"
+    },
     "Navbar": {
         "name": "Nathan Bonnell",
         "job": "Développeur Full Stack",
@@ -66,6 +71,54 @@
             "innovation": "Innovation",
             "criticalThinking": "Pensée critique",
             "curiosity": "Curiosité"
+        }
+    },
+    "Timeline": {
+        "latest": "Expérience la plus récente",
+        "1": {
+            "title": "Développeur Full Stack",
+            "duration": "Septembre 2024 - Aujourd'hui",
+            "org": "Lex-Port",
+            "description": "Développement de sites web pour les clients du cabinet.",
+            "skills": {
+                "0": "Next.js",
+                "1": "React",
+                "2": "Tailwind CSS",
+                "3": "TypeScript",
+                "4": "Node.js"
+            }
+        },
+        "2": {
+            "title": "Mastère Informatique",
+            "duration": "Septembre 2022 - Septembre 2027",
+            "org": "Ynov Campus",
+            "description": "Développement d'applications web, mobile et logiciel (apprentissage néanmoins de technologies d'infrastructures et de réseaux).",
+            "skills": {
+                "0": "Développement Web",
+                "1": "Développement Mobile",
+                "2": "Développement Logiciel"
+            }
+        },
+        "3": {
+            "title": "Maraude de l'Ordre de Malte",
+            "duration": "Septembre 2019 - Aujourd'hui",
+            "org": "Ordre de Malte",
+            "description": "Aide aux sans-abris de Bordeaux.",
+            "skills": {
+                "0": "Écoute",
+                "1": "Aide",
+                "2": "Partage"
+            }
+        },
+        "4": {
+            "title": "Baccalauréat Général",
+            "duration": "Septembre 2007 - Juin 2022",
+            "org": "Sainte Marie Grand Lebrun",
+            "skills": {
+                "0": "Numérique et Sciences Informatiques",
+                "1": "Historie-Géographie Géopolitique et Sciences Politiques",
+                "2": "Sciences Économiques et Sociales"
+            }
         }
     },
     "HomePage": {

@@ -25,11 +25,11 @@ export default function Home() {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-8 w-full'>
                     <div className=''>
-                        <h1 className='text-4xl font-bold mb-4'>{t('hardskills')}</h1>
+                        <h1 className='text-4xl font-bold mb-4 text-center'>{t('hardskills')}</h1>
                         <HardSkills />
                     </div>
                     <div className=''>
-                        <h1 className='text-4xl font-bold mb-4 text-end'>{t('softskills')}</h1>
+                        <h1 className='text-4xl font-bold mb-4 text-center'>{t('softskills')}</h1>
                         <SoftSkills />
                     </div>
                 </div>

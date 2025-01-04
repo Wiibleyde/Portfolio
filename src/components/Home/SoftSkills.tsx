@@ -50,7 +50,7 @@ export function SoftSkills() {
         <div className='flex flex-col space-y-9'>
             {softSkills.map(({ title, stacks }) => (
                 <div key={title} className='flex flex-col space-y-3'>
-                    <h2 className='text-gray-100 text-3xl font-bold text-end'>{title}</h2>
+                    <h2 className='text-gray-100 text-3xl font-bold text-center'>{title}</h2>
                     <div className='flex flex-wrap space-x-9 justify-center'>
                         {stacks.map(({ title, image, url }, index) => (
                             <SkillCard key={index} title={title} image={image} url={url} />

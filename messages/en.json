@@ -2,6 +2,11 @@
     "Loading": {
         "loading": "Loading..."
     },
+    "Error": {
+        "title": "Error",
+        "message": "Error or page not found. Please try again later.",
+        "home": "Back to Home"
+    },
     "Navbar": {
         "name": "Nathan Bonnell",
         "job": "Full Stack Developer",
@@ -68,6 +73,54 @@
             "curiosity": "Curiosity"
         }
     },
+    "Timeline": {
+        "latest": "Most Recent Experience",
+        "1": {
+            "title": "Full Stack Developer",
+            "duration": "September 2024 - Present",
+            "org": "Lex-Port",
+            "description": "Development of websites for the firm's clients.",
+            "skills": {
+                "0": "Next.js",
+                "1": "React",
+                "2": "Tailwind CSS",
+                "3": "TypeScript",
+                "4": "Node.js"
+            }
+        },
+        "2": {
+            "title": "Master's in Computer Science",
+            "duration": "September 2022 - September 2027",
+            "org": "Ynov Campus",
+            "description": "Development of web, mobile, and software applications (also learning infrastructure and network technologies).",
+            "skills": {
+                "0": "Web Development",
+                "1": "Mobile Development",
+                "2": "Software Development"
+            }
+        },
+        "3": {
+            "title": "Order of Malta Outreach",
+            "duration": "September 2019 - Present",
+            "org": "Order of Malta",
+            "description": "Helping the homeless in Bordeaux.",
+            "skills": {
+                "0": "Listening",
+                "1": "Helping",
+                "2": "Sharing"
+            }
+        },
+        "4": {
+            "title": "General Baccalaureate",
+            "duration": "September 2007 - June 2022",
+            "org": "Sainte Marie Grand Lebrun",
+            "skills": {
+                "0": "Digital and Computer Sciences",
+                "1": "History-Geography, Geopolitics, and Political Science",
+                "2": "Economic and Social Sciences"
+            }
+        }
+    },
     "HomePage": {
         "title": "Nathan Bonnell Portfolio",
         "hello": "Hello.",
@@ -75,7 +128,8 @@
         "description": "Hello! As a student passionate about full-stack web development and exploring various technologies, I create innovative and high-performing solutions that blend creativity, efficiency, and technical expertise.",
         "me": "Here is my profile",
         "hardskills": "Technical Skills",
-        "softskills": "Soft Skills"
+        "softskills": "Soft Skills",
+        "timeline": "Experience (Professional, Academic, and Volunteer)"
     },
     "ProjectsPage": {
         "title": "Projects",
@@ -88,5 +142,13 @@
             "school": "School"
         },
         "link": "Access the project"
+    },
+    "AboutPage": {
+        "title": "About",
+        "about": "About the Portfolio",
+        "design": "Design",
+        "designContent": "The design of this portfolio was created using Figma, a graphic design and user interface tool.",
+        "technical": "Technologies Used",
+        "technicalContent": "This portfolio was created using Next.js (App Router), a React framework, and is hosted on a Linux server (Rocky Linux)."
     }
 }
