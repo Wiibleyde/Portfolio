@@ -13,40 +13,26 @@ export function Navbar() {
     const pathname = usePathname();
 
     const [showNavbar, setShowNavbar] = useState(false);
+    const [isShowingNavbar, setIsShowingNavbar] = useState(false);
     const navbarRef = useRef<HTMLDivElement>(null);
 
-    const { mouse } = useMouse();
+    const { mouse, onElement } = useMouse({ element: navbarRef.current as HTMLElement });
 
     useEffect(() => {
-        const handleMouseOver = (event: MouseEvent) => {
-            if (navbarRef.current && navbarRef.current.contains(event.target as Node)) {
-                setShowNavbar(true);
-            }
-        };
-
-        const handleMouseOut = (event: MouseEvent) => {
-            if (navbarRef.current && !navbarRef.current.contains(event.relatedTarget as Node)) {
-                setShowNavbar(false);
-            }
-        };
-
-        document.addEventListener('mouseover', handleMouseOver);
-        document.addEventListener('mouseout', handleMouseOut);
-
-        return () => {
-            document.removeEventListener('mouseover', handleMouseOver);
-            document.removeEventListener('mouseout', handleMouseOut);
-        };
-    }, []);
-
-    useEffect(() => {
-        const isMouseNearNavbar = mouse.x <= 150;
+        const isMouseNearNavbar = mouse.x <= 50;
         if (isMouseNearNavbar) {
             setShowNavbar(true);
-        } else if (!navbarRef.current || !navbarRef.current.contains(document.querySelector(':hover'))) {
-            setShowNavbar(false);
+            setIsShowingNavbar(true);
+        } else {
+            if (!onElement && isShowingNavbar) {
+                setShowNavbar(false);
+                setIsShowingNavbar(false);
+            } else if (onElement && !isShowingNavbar) {
+                setShowNavbar(true);
+                setIsShowingNavbar(true);
+            }
         }
-    }, [mouse]);
+    }, [mouse, onElement, isShowingNavbar]);
 
     return (
         <>
