@@ -3,6 +3,11 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin();
 
-const nextConfig: NextConfig = {};
+const isDocker = process.env.IS_DOCKER === 'true';
+
+
+const nextConfig: NextConfig = {
+    output: isDocker ? 'standalone' : undefined,
+};
 
 export default withNextIntl(nextConfig);
