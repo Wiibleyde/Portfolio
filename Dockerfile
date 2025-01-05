@@ -27,6 +27,9 @@ RUN apk update \
 WORKDIR /app
 COPY . .
 
+# Install dependencies before building the project
+COPY --from=deps /app/node_modules ./node_modules
+
 # Set environment variable to indicate Docker build
 ENV IS_DOCKER=true
 
