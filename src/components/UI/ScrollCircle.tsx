@@ -5,21 +5,15 @@ import { useEffect, useState } from "react";
 
 export function ScrollCircle() {
     const [isVisible, setIsVisible] = useState<boolean>(false);
-    const { scroll, scrollPercent } = useScroll();
+    const { scroll, scrollPercentage } = useScroll();
 
     useEffect(() => {
-            const toggleVisibility = () => {
-                if (scroll > 150) {
-                    setIsVisible(true);
-                } else {
-                    setIsVisible(false);
-                }
-            };
-
-            window.addEventListener('scroll', toggleVisibility);
-
-            return () => window.removeEventListener('scroll', toggleVisibility);
-        }, [scroll]);
+        if (scroll > 150) {
+            setIsVisible(true);
+        } else {
+            setIsVisible(false);
+        }
+    }, [scroll]);
 
     return (
         <div className='fixed right-4 bottom-4'>
@@ -27,11 +21,11 @@ export function ScrollCircle() {
                 <div
                     className="w-10 h-10 rounded-full flex justify-center items-center"
                     style={{
-                        background: `conic-gradient(#00E46C ${scrollPercent}%, #173B2A ${scrollPercent}% 100%)`,
+                        background: `conic-gradient(#00E46C ${scrollPercentage}%, #173B2A ${scrollPercentage}% 100%)`,
                     }}
                 >
                     <div className="w-8 h-8 bg-black rounded-full flex justify-center items-center">
-                        <span className="text-[#00E46C] text-xs font-bold">{Math.round(scrollPercent)}</span>
+                        <span className="text-[#00E46C] text-xs font-bold">{scrollPercentage}</span>
                     </div>
                 </div>
             </div>

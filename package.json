@@ -9,13 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "discord.js": "^14.17.2",
     "framer-motion": "^11.14.2",
     "next": "15.1.0",
     "next-intl": "^3.26.1",
     "react": "^19.0.0",
     "react-bootstrap-icons": "^1.11.5",
     "react-dom": "^19.0.0",
-    "react-tooltip": "^5.28.0"
+    "react-tooltip": "^5.28.0",
+    "zlib-sync": "^0.1.9"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
