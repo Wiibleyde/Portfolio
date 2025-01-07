@@ -21,8 +21,10 @@ export default function Home() {
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
-                <WordAnimation title={t('description')} />
-                <div className='w-1/2'>
+                <div className='w-full mb-36'>
+                    <WordAnimation title={t('description')} />
+                </div>
+                <div className='w-1/2 mb-36'>
                     <h1 className='text-4xl font-bold mb-4'>{t('me')}</h1>
                     <MeCard />
                 </div>

@@ -7,12 +7,13 @@ export function Footer() {
     const t = useTranslations('Footer')
 
     return (
-        <footer className='bg-black text-white py-10 px-6 border-t-2 border-gray-800' style={{ background: 'radial-gradient(circle, rgba(0, 108, 255, 0.7) 0.1%, rgba(0, 0, 0, 1) 80%)', backgroundSize: 'cover', backgroundPosition: 'bottom' }}>
+        <footer className='bg-black text-white py-10 px-6 border-t-2 border-gray-800'>
             <div className='max-w-7xl mx-auto'>
                 <div className='flex flex-col md:flex-row justify-between items-center'>
                     <ul className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-center md:text-left'>
                         <li><Link href='/' className="hover:underline">{t('home')}</Link></li>
                         <li><Link href='/about' className="hover:underline">{t('about')}</Link></li>
+                        <li><Link href='/projects' className="hover:underline">{t('projects')}</Link></li>
                         <li><Link href='/contact' className="hover:underline">{t('contact')}</Link></li>
                     </ul>
                     <h1 className='text-center text-2xl md:text-4xl font-bold mt-8 md:mt-0'>Nathan Bonnell</h1>
