@@ -6,7 +6,12 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 RUN apk update \
   && apk add openssl \
-  && apk add libressl
+  && apk add libressl \
+  && apk add python3 \
+  && apk add py3-pip \
+  && apk add make \
+  && apk add g++ \
+  && ln -sf python3 /usr/bin/python
 
 WORKDIR /app
 
@@ -23,7 +28,10 @@ RUN \
 FROM base AS builder
 RUN apk update \
   && apk add openssl \
-  && apk add libressl
+  && apk add libressl \
+  && apk add python3 \
+  && apk add py3-pip \
+  && ln -sf python3 /usr/bin/python
 WORKDIR /app
 COPY . .
 
@@ -49,7 +57,10 @@ RUN \
 FROM base AS runner
 RUN apk update \
   && apk add openssl \
-  && apk add libressl
+  && apk add libressl \
+  && apk add python3 \
+  && apk add py3-pip \
+  && ln -sf python3 /usr/bin/python
 WORKDIR /app
 
 ENV NODE_ENV=production
