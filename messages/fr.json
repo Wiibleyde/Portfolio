@@ -141,7 +141,8 @@
             "professional": "Professionnel",
             "school": "Scolaire"
         },
-        "link": "Accéder au projet"
+        "link": "Accéder au projet",
+        "repo": "Accéder au dépôt"
     },
     "AboutPage": {
         "title": "À propos",

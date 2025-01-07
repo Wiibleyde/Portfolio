@@ -10,6 +10,15 @@ import WeazelNewsLogo from "@public/img/projects/WeazelNews_Logo.png";
 
 const projects: Project[] = [
     {
+        title: "Portfolio",
+        description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
+        type: ProjectType.Personal,
+        url: "https://portfolio.bonnell.fr",
+        repoUrl: "https://github.com/Wiibleyde/portfolio",
+        image: "/img/picture/pp.png",
+        tags: ["Portfolio", "React", "Next.js", "TailwindCSS", "Typescript"],
+    },
+    {
         title: "Hope - GTARP",
         description: "Hope - GTARP est un serveur de jeu en ligne sur la plateforme FiveM.",
         type: ProjectType.Personal,
@@ -22,6 +31,7 @@ const projects: Project[] = [
         description: "RPlace Analyzer est un outil d'analyse des données de l'événement RPlace 2017. Il permet de visualiser les données de l'événement.",
         type: ProjectType.School,
         url: "https://github.com/Wiibleyde/RPlaceAnalyzer",
+        repoUrl: "https://github.com/Wiibleyde/RPlaceAnalyzer",
         image: RPlaceLogo.src,
         tags: ["RPlace", "MongoDB", "Python", "Reddit", "Data Analysis"],
     },
@@ -38,6 +48,7 @@ const projects: Project[] = [
         description: "Eve est un bot Discord multifonctionnel pour les serveurs Discord fait en Typescript.",
         type: ProjectType.Personal,
         url: "https://github.com/Wiibleyde/Eve",
+        repoUrl: "https://github.com/Wiibleyde/Eve",
         image: EveBanner.src,
         tags: ["Discord.js", "Bot", "Typescript", "Node.js", "Prisma"],
     },
@@ -46,6 +57,7 @@ const projects: Project[] = [
         description: "Fivem Cam Script est une ressource à ajouter à votre serveur FiveM (GTA-RP) qui vous permet de passer en mode caméraman à pied ou en hélicoptère, écrite en Lua.",
         type: ProjectType.Personal,
         url: "https://github.com/Wiibleyde/Fivem-Cam-Script",
+        repoUrl: "https://github.com/Wiibleyde/Fivem-Cam-Script",
         image: WeazelNewsLogo.src,
         tags: ["FiveM", "GTARP", "Lua"],
     }

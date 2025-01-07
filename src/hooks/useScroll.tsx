@@ -3,22 +3,34 @@ import { useEffect, useState } from "react";
 export function useScroll() {
     const [scroll, setScroll] = useState(0);
     const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
-    const [scrollPercent, setScrollPercent] = useState(0);
+    const [scrollPercentage, setScrollPercentage] = useState(0);
+    const [lastScroll, setLastScroll] = useState(0);
 
     useEffect(() => {
-        let lastScrollY = window.scrollY;
-
         const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-            setScroll(currentScrollY);
-            setScrollDirection(lastScrollY > currentScrollY ? 'up' : 'down');
-            setScrollPercent((currentScrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-            lastScrollY = currentScrollY;
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (scrollTop / docHeight) * 100;
+            if(isNaN(scrolled)) {
+                setScrollPercentage(0);
+                setScroll(0);
+                setScrollDirection('down');
+                return
+            }
+            setScrollPercentage(Math.round(Number(scrolled.toFixed(2))));
+            setScroll(scrollTop);
+            setScrollDirection(lastScroll > scrollTop ? 'up' : 'down');
+            setLastScroll(scrollTop);
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        handleScroll();
 
-    return { scroll, scrollDirection, scrollPercent };
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [lastScroll]);
+
+    return { scroll, scrollDirection, scrollPercentage: scrollPercentage };
 }

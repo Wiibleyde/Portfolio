@@ -141,7 +141,8 @@
             "professional": "Professional",
             "school": "School"
         },
-        "link": "Access the project"
+        "link": "Access the project",
+        "repo": "Access the repository"
     },
     "AboutPage": {
         "title": "About",
