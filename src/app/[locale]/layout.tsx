@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         name: "Nathan Bonnell",
         url: "https://portfolio.bonnell.fr",
     }],
-    keywords: ["portfolio", "nathan bonnell", "développeur web", "fullstack", "react", "nextjs", "tailwindcss", "typescript"],
+    keywords: ["portfolio", "nathan bonnell", "développeur web", "fullstack", "react", "nextjs", "tailwindcss", "typescript", "nathan", "bonnell"],
     robots: "index, follow",
     openGraph: {
         type: "website",

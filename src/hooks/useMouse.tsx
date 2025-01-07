@@ -7,10 +7,13 @@ export function useMouse({ element }: { element?: HTMLElement } = {}) {
     }
 
     const [mouse, setMouse] = useState({ x: 500, y: 500 }); // Default value is weird...
+    const [mouseOnWebsite, setMouseOnWebsite] = useState(false);
     const [onElement, setOnElement] = useState(false);
 
     useEffect(() => {
         window.addEventListener('mousemove', (e) => setMouse(handleMouseMove(e)));
+        window.addEventListener('mouseover', () => setMouseOnWebsite(true));
+        window.addEventListener('mouseout', () => setMouseOnWebsite(false));
         if (element) {
             element.addEventListener('mouseover', () => setOnElement(true));
             element.addEventListener('mouseout', () => setOnElement(false));
@@ -18,5 +21,5 @@ export function useMouse({ element }: { element?: HTMLElement } = {}) {
         return () => window.removeEventListener('mousemove', (e) => setMouse(handleMouseMove(e)));
     }, [element]);
 
-    return { mouse, onElement };
+    return { mouse, onElement, mouseOnWebsite };
 }

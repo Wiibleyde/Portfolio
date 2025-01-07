@@ -46,7 +46,8 @@
         "github": "GitHub",
         "linkedin": "LinkedIn",
         "twitter": "Twitter",
-        "email": "Email"
+        "email": "Email",
+        "cv": "Download CV"
     },
     "HardSkills": {
         "languages": "Languages",
