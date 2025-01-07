@@ -16,9 +16,13 @@ export function Navbar() {
     const [isShowingNavbar, setIsShowingNavbar] = useState(false);
     const navbarRef = useRef<HTMLDivElement>(null);
 
-    const { mouse, onElement } = useMouse({ element: navbarRef.current as HTMLElement });
+    const { mouse, onElement, mouseOnWebsite } = useMouse({ element: navbarRef.current as HTMLElement });
 
     useEffect(() => {
+        if(!mouseOnWebsite) {
+            setShowNavbar(false);
+            setIsShowingNavbar(false);
+        }
         const isMouseNearNavbar = mouse.x <= 50;
         if (isMouseNearNavbar) {
             setShowNavbar(true);
@@ -32,7 +36,7 @@ export function Navbar() {
                 setIsShowingNavbar(true);
             }
         }
-    }, [mouse, onElement, isShowingNavbar]);
+    }, [mouse, onElement, isShowingNavbar, mouseOnWebsite]);
 
     return (
         <>
