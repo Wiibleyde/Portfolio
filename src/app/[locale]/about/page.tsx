@@ -1,3 +1,4 @@
+import { ContactForm } from "@/components/Forms/ContactForm";
 import { ScrollButton } from "@/components/UI/ScrollButton";
 import { useTranslations } from "next-intl";
 
@@ -24,6 +25,10 @@ export default function AboutPage() {
                         <p>{t('technicalContent')}</p>
                     </div>
                 </div>
+            </div>
+            <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white'>
+                <h1 className='text-4xl font-bold'>{t('contact')}</h1>
+                <ContactForm />
             </div>
         </div>
     )

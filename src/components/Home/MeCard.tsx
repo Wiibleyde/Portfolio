@@ -51,35 +51,40 @@ export function MeCard() {
     ]
 
     return (
-        <div className='flex flex-row w-full h-auto bg-black p-6 rounded-lg border-white border-2'>
-            <Image src={ProfilePicture.src} alt={t('title')} className='w-1/2 h-full rounded-lg bg-gray-300 my-auto' height={ProfilePicture.height} width={ProfilePicture.width} />
-            <div className='p-4'>
-                <div>
-                    <h2 className='font-bold text-2xl mb-2 text-white'>{t('title')}</h2>
-                </div>
-                <div>
-                    <p className='text-gray-300 text-sm italic mb-2'>{t('citation')}</p>
-                </div>
-                <div>
-                    <h3 className='text-gray-300 text-lg font-semibold'>{t('dates')}</h3>
-                    <div className='grid grid-cols-2 gap-2'>
-                        <div className='text-gray-300 mb-2 text-sm'>
-                            <Calendar2DateFill className='inline-block' /> : {bithdate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                        </div>
-                        <div className='text-gray-300 mb-2 text-sm'>
-                            <NextBirthday bithdate={bithdate} />
+        <div className="w-full h-auto bg-black p-6 rounded-lg border-white border-2 flex flex-col">
+            <div className='flex flex-row'>
+                <Image src={ProfilePicture.src} alt={t('title')} className='w-1/2 h-full rounded-lg bg-gray-300 my-auto' height={ProfilePicture.height} width={ProfilePicture.width} />
+                <div className='p-4'>
+                    <div>
+                        <h2 className='font-bold text-2xl mb-2 text-white'>{t('title')}</h2>
+                    </div>
+                    <div>
+                        <p className='text-gray-300 text-sm italic mb-2'>{t('citation')}</p>
+                    </div>
+                    <div>
+                        <h3 className='text-gray-300 text-lg font-semibold'>{t('dates')}</h3>
+                        <div className='grid grid-cols-2 gap-2'>
+                            <div className='text-gray-300 mb-2 text-sm'>
+                                <Calendar2DateFill className='inline-block' /> : {bithdate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                            </div>
+                            <div className='text-gray-300 mb-2 text-sm'>
+                                <NextBirthday bithdate={bithdate} />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <h3 className='text-gray-300 text-lg font-semibold'>{t('contact')}</h3>
-                    <div className="grid grid-cols-2 gap-2">
-                        {networks.map((network, index) => (
-                            <NetworkCard key={index} title={network.title} url={network.url} icon={network.icon} />
-                        ))}
+                    <div>
+                        <h3 className='text-gray-300 text-lg font-semibold'>{t('contact')}</h3>
+                        <div className="grid grid-cols-2 gap-2">
+                            {networks.map((network, index) => (
+                                <NetworkCard key={index} title={network.title} url={network.url} icon={network.icon} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
+            <a href='/CV_Nathan_Bonnell.pdf' className='bg-white text-black p-2 rounded-lg my-auto text-center'>
+                {t('cv')}
+            </a>
         </div>
     )
 }

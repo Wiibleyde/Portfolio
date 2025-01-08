@@ -20,11 +20,11 @@ export default function Home() {
                     <ScrollButton />
                 </div>
             </div>
-            <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
+            <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content'>
                 <div className='w-full mb-36'>
                     <WordAnimation title={t('description')} />
                 </div>
-                <div className='w-1/2 mb-36'>
+                <div className='w-1/2'>
                     <h1 className='text-4xl font-bold mb-4'>{t('me')}</h1>
                     <MeCard />
                 </div>

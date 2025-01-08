@@ -46,7 +46,8 @@
         "github": "GitHub",
         "linkedin": "LinkedIn",
         "twitter": "Twitter",
-        "email": "Courriel"
+        "email": "Courriel",
+        "cv": "Télécharger le CV"
     },
     "HardSkills": {
         "languages": "Langages",
@@ -130,7 +131,8 @@
         "message": "Message",
         "submit": "Envoyer",
         "sending": "En cours d'envoi...",
-        "sent": "Message envoyé !"
+        "sent": "Message envoyé !",
+        "error": "Erreur lors de l'envoi du message. Veuillez réessayer plus tard."
     },
     "HomePage": {
         "title": "Portfolio Nathan Bonnell",
@@ -161,7 +163,8 @@
         "design": "Design",
         "designContent": "Le design de ce portfolio a été créé avec Figma, un outil de design graphique et d'interface utilisateur.",
         "technical": "Technologies utilisées",
-        "technicalContent": "Ce portfolio a été créé avec Next.js (App Router), un framework React, et est hébergé sur un serveur sous Linux (Rocky Linux)."
+        "technicalContent": "Ce portfolio a été créé avec Next.js (App Router), un framework React, et est hébergé sur un serveur sous Linux (Rocky Linux), le tout dockerisé ;).",
+        "contact": "Contactez-moi"
     },
     "ContactPage": {
         "title": "Contact",
