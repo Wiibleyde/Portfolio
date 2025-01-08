@@ -79,7 +79,7 @@
     "Timeline": {
         "latest": "Expérience la plus récente",
         "1": {
-            "title": "Développeur Full Stack",
+            "title": "Développeur Full Stack (alternance)",
             "duration": "Septembre 2024 - Aujourd'hui",
             "org": "Lex-Port",
             "description": "Développement de sites web pour les clients du cabinet.",
@@ -148,7 +148,7 @@
         "title": "Projets",
         "scroll": "Faites défiler pour voir plus de projets",
         "description": "Ceci est le contenu de la page des projets, pour les personnes anglophones, les projets ne sont pas traduits.",
-        "projects": "Voici mes projets",
+        "projects": "Voici (certains de) mes projets",
         "projectType": {
             "personal": "Personnel",
             "professional": "Professionnel",
@@ -168,6 +168,7 @@
     },
     "ContactPage": {
         "title": "Contact",
-        "contact": "Contactez-moi"
+        "contact": "Contactez-moi",
+        "description": "Si vous avez des questions, des commentaires ou des propositions, n'hésitez pas à me contacter en remplissant le formulaire ci-dessous. Je vous répondrai dans les plus brefs délais."
     }
 }
