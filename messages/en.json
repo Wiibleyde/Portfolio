@@ -13,7 +13,6 @@
         "title": "Portfolio",
         "home": "Home",
         "projects": "Projects",
-        "about": "About",
         "contact": "Contact",
         "cv": "Curriculum Vitae"
     },
@@ -21,7 +20,6 @@
         "madeBy": "Made by:",
         "nathan": "Nathan Bonnell",
         "home": "Home",
-        "about": "About",
         "projects": "Projects",
         "contact": "Contact",
         "legal": "Legal Notice"
@@ -156,15 +154,6 @@
         },
         "link": "Access the project",
         "repo": "Access the repository"
-    },
-    "AboutPage": {
-        "title": "About",
-        "about": "About the Portfolio",
-        "design": "Design",
-        "designContent": "The design of this portfolio was created using Figma, a graphic design and user interface tool.",
-        "technical": "Technologies Used",
-        "technicalContent": "This portfolio was created using Next.js (App Router), a React framework, and is hosted on a Linux server (Rocky Linux), all dockerized ;).",
-        "contact": "Contact Me"
     },
     "ContactPage": {
         "title": "Contact",

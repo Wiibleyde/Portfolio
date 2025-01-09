@@ -82,7 +82,7 @@ export function MeCard() {
                     </div>
                 </div>
             </div>
-            <a href='/CV_Nathan_Bonnell.pdf' className='bg-white text-black p-2 rounded-lg my-auto text-center'>
+            <a href='/CV_Nathan_Bonnell.pdf' target='_blank' rel='noopener noreferrer' className='bg-white text-black p-2 rounded-lg my-auto text-center hover:bg-gray-200 transition duration-300 ease-in-out'>
                 {t('cv')}
             </a>
         </div>

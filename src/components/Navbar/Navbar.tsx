@@ -63,12 +63,6 @@ export function Navbar() {
                             <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/projects" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
                         </h2>
                     </Link>
-                    <Link href="/about">
-                        <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/about" ? "decoration-2 underline-offset-4" : ""}`}>
-                            {t("about")}
-                            <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/about" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
-                        </h2>
-                    </Link>
                     <Link href="/contact">
                         <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/contact" ? "decoration-2 underline-offset-4" : ""}`}>
                             {t("contact")}
