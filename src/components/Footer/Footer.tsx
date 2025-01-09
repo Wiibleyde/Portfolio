@@ -12,7 +12,6 @@ export function Footer() {
                 <div className='flex flex-col md:flex-row justify-between items-center'>
                     <ul className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-center md:text-left'>
                         <li><Link href='/' className="hover:underline">{t('home')}</Link></li>
-                        <li><Link href='/about' className="hover:underline">{t('about')}</Link></li>
                         <li><Link href='/projects' className="hover:underline">{t('projects')}</Link></li>
                         <li><Link href='/contact' className="hover:underline">{t('contact')}</Link></li>
                     </ul>

@@ -7,6 +7,8 @@ import LexPortLogo from "@public/img/projects/lexport.png";
 import RPlaceLogo from "@public/img/projects/rplace-logo.png";
 import EveBanner from "@public/img/projects/eve-banner.png";
 import WeazelNewsLogo from "@public/img/projects/WeazelNews_Logo.png";
+import Motus from "@public/img/projects/motus.jpg";
+import Twitch from "@public/img/projects/twitch.webp";
 
 const projects: Project[] = [
     {
@@ -20,7 +22,7 @@ const projects: Project[] = [
     },
     {
         title: "Hope - GTARP",
-        description: "Hope - GTARP est un serveur de jeu en ligne sur la plateforme FiveM.",
+        description: "Hope - GTARP est (était) un serveur de jeu en ligne sur la plateforme FiveM.",
         type: ProjectType.Personal,
         url: "https://panel.hope-rp.com",
         image: HopeLogo.src,
@@ -30,7 +32,6 @@ const projects: Project[] = [
         title: "RPlace Analyser",
         description: "RPlace Analyzer est un outil d'analyse des données de l'événement RPlace 2017. Il permet de visualiser les données de l'événement.",
         type: ProjectType.School,
-        url: "https://github.com/Wiibleyde/RPlaceAnalyzer",
         repoUrl: "https://github.com/Wiibleyde/RPlaceAnalyzer",
         image: RPlaceLogo.src,
         tags: ["RPlace", "MongoDB", "Python", "Reddit", "Data Analysis"],
@@ -41,13 +42,12 @@ const projects: Project[] = [
         type: ProjectType.Professional,
         url: "https://cartel.lex-port.com",
         image: LexPortLogo.src,
-        tags: ["Lex-Port", "Alternance", "Next.js", "Typescript", "TailwindCSS", "Prisma"],
+        tags: ["Lex-Port", "Alternance", "Next.js", "Typescript", "TailwindCSS", "Prisma", "i18n"],
     },
     {
         title: "Eve",
         description: "Eve est un bot Discord multifonctionnel pour les serveurs Discord fait en Typescript.",
         type: ProjectType.Personal,
-        url: "https://github.com/Wiibleyde/Eve",
         repoUrl: "https://github.com/Wiibleyde/Eve",
         image: EveBanner.src,
         tags: ["Discord.js", "Bot", "Typescript", "Node.js", "Prisma"],
@@ -56,10 +56,26 @@ const projects: Project[] = [
         title: "Script Caméra pour FiveM (GTA)",
         description: "Fivem Cam Script est une ressource à ajouter à votre serveur FiveM (GTA-RP) qui vous permet de passer en mode caméraman à pied ou en hélicoptère, écrite en Lua.",
         type: ProjectType.Personal,
-        url: "https://github.com/Wiibleyde/Fivem-Cam-Script",
         repoUrl: "https://github.com/Wiibleyde/Fivem-Cam-Script",
         image: WeazelNewsLogo.src,
         tags: ["FiveM", "GTARP", "Lua"],
+    },
+    {
+        title: "TwitchStreamRetrievers",
+        description: "TwitchStreamRetrievers est une API et websocket pour récupérer les informations de streams Twitch.",
+        type: ProjectType.Personal,
+        repoUrl: "https://github.com/Wiibleyde/TwitchStreamRetrievers",
+        image: Twitch.src,
+        tags: ["Twitch", "API", "Websocket", "Typescript", "Node.js"],
+    },
+    {
+        title: "Mootus",
+        description: "Mootus est une reproduction du jeu Motus en ligne.",
+        type: ProjectType.School,
+        url: "https://wiibleyde.github.io/Mootus/",
+        repoUrl: "https://github.com/Wiibleyde/Mootus",
+        image: Motus.src,
+        tags: ["Motus", "Vite", "React", "Typescript", "Atom", "TailwindCSS"],
     }
 ]
 

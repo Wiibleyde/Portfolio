@@ -13,7 +13,6 @@
         "title": "Portfolio",
         "home": "Accueil",
         "projects": "Projets",
-        "about": "À propos",
         "contact": "Contact",
         "cv": "Curriculum Vitae"
     },
@@ -21,7 +20,6 @@
         "madeBy": "Fait par :",
         "nathan": "Nathan Bonnell",
         "home": "Accueil",
-        "about": "À propos",
         "projects": "Projets",
         "contact": "Contact",
         "legal": "Mentions légales"
@@ -79,7 +77,7 @@
     "Timeline": {
         "latest": "Expérience la plus récente",
         "1": {
-            "title": "Développeur Full Stack",
+            "title": "Développeur Full Stack (alternance)",
             "duration": "Septembre 2024 - Aujourd'hui",
             "org": "Lex-Port",
             "description": "Développement de sites web pour les clients du cabinet.",
@@ -148,7 +146,7 @@
         "title": "Projets",
         "scroll": "Faites défiler pour voir plus de projets",
         "description": "Ceci est le contenu de la page des projets, pour les personnes anglophones, les projets ne sont pas traduits.",
-        "projects": "Voici mes projets",
+        "projects": "Voici (certains de) mes projets",
         "projectType": {
             "personal": "Personnel",
             "professional": "Professionnel",
@@ -157,17 +155,9 @@
         "link": "Accéder au projet",
         "repo": "Accéder au dépôt"
     },
-    "AboutPage": {
-        "title": "À propos",
-        "about": "À propos du portfolio",
-        "design": "Design",
-        "designContent": "Le design de ce portfolio a été créé avec Figma, un outil de design graphique et d'interface utilisateur.",
-        "technical": "Technologies utilisées",
-        "technicalContent": "Ce portfolio a été créé avec Next.js (App Router), un framework React, et est hébergé sur un serveur sous Linux (Rocky Linux), le tout dockerisé ;).",
-        "contact": "Contactez-moi"
-    },
     "ContactPage": {
         "title": "Contact",
-        "contact": "Contactez-moi"
+        "contact": "Contactez-moi",
+        "description": "Si vous avez des questions, des commentaires ou des propositions, n'hésitez pas à me contacter en remplissant le formulaire ci-dessous. Je vous répondrai dans les plus brefs délais."
     }
 }

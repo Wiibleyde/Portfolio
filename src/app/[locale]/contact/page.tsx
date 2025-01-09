@@ -15,6 +15,7 @@ export default function ContactPage() {
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
                 <h1 className='text-4xl font-bold'>{t('contact')}</h1>
+                <p className='text-gray-500'>{t('description')}</p>
                 <ContactForm />
             </div>
         </div>
