@@ -53,7 +53,7 @@ export function MeCard() {
     return (
         <div className="w-full h-auto bg-black p-6 rounded-lg border-white border-2 flex flex-col">
             <div className='flex flex-row'>
-                <Image src={ProfilePicture.src} alt={t('title')} className='w-1/2 h-full rounded-lg bg-gray-300 my-auto' height={ProfilePicture.height} width={ProfilePicture.width} />
+                <Image src={ProfilePicture.src} alt={t('title')} className='w-1/2 h-full rounded-lg bg-gray-300 my-auto' height={300} width={300} />
                 <div className='p-4'>
                     <div>
                         <h2 className='font-bold text-2xl mb-2 text-white'>{t('title')}</h2>
