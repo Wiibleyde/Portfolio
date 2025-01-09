@@ -41,7 +41,7 @@ export function Navbar() {
     return (
         <>
             <div className={`fixed top-4 right-4 z-50 ${showNavbar ? "hidden" : "block"}`}>
-                <button onClick={() => setShowNavbar(true)} className="p-2 bg-black bg-opacity-95 text-white rounded-full shadow-lg">
+                <button onClick={() => setShowNavbar(true)} className="p-2 bg-black bg-opacity-95 text-white rounded-full shadow-lg" name="Open Navbar">
                     <List size={32} />
                 </button>
             </div>
