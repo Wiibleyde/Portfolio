@@ -35,7 +35,7 @@ class Webhook {
             .setTimestamp()
             .setAuthor({
                 name: 'Portfolio',
-                url: 'https://portfolio.bonnell.fr',
+                url: 'https://nathan.bonnell.fr',
             })
             .setColor('Aqua');
     }

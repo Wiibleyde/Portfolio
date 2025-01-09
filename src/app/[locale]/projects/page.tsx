@@ -15,7 +15,7 @@ const projects: Project[] = [
         title: "Portfolio",
         description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
         type: ProjectType.Personal,
-        url: "https://portfolio.bonnell.fr",
+        url: "https://nathan.bonnell.fr",
         repoUrl: "https://github.com/Wiibleyde/portfolio",
         image: "/img/picture/pp.png",
         tags: ["Portfolio", "React", "Next.js", "TailwindCSS", "Typescript"],
