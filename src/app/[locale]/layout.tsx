@@ -19,22 +19,22 @@ export const metadata: Metadata = {
         title: "Portfolio - Nathan Bonnell",
         description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
         creator: "@wiibleyde",
-        site: "https://portfolio.bonnell.fr",
+        site: "https://nathan.bonnell.fr",
     },
     authors: [{
         name: "Nathan Bonnell",
-        url: "https://portfolio.bonnell.fr",
+        url: "https://nathan.bonnell.fr",
     }],
     keywords: ["portfolio", "nathan bonnell", "développeur web", "fullstack", "react", "nextjs", "tailwindcss", "typescript", "nathan", "bonnell"],
     robots: "index, follow",
     openGraph: {
         type: "website",
-        url: "https://portfolio.bonnell.fr",
+        url: "https://nathan.bonnell.fr",
         title: "Portfolio - Nathan Bonnell",
         description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
         images: [
             {
-                url: "https://portfolio.bonnell.fr/img/picture/pp.png",
+                url: "https://nathan.bonnell.fr/img/picture/pp.png",
                 width: 1200,
                 height: 630,
                 alt: "Portfolio - Nathan Bonnell",

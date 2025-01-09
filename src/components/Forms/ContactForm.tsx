@@ -108,6 +108,7 @@ export function ContactForm() {
             <motion.button
                 className='bg-red-500 text-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300'
                 whileHover={{ scale: 1.05 }}
+                name='submit'
             >
                 {t('submit')}
             </motion.button>

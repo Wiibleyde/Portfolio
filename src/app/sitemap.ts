@@ -1,6 +1,6 @@
 import { routing } from "@/i18n/routing";
 
-export const BASE_URL = 'https://portfolio.bonnell.fr';
+export const BASE_URL = 'https://nathan.bonnell.fr';
 
 export default async function sitemap() {
     const locales = routing.locales;
