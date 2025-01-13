@@ -1,10 +1,11 @@
 import { ScrollButton } from "@/components/UI/ScrollButton";
 import { useTranslations } from "next-intl";
-import { WordAnimation } from "@/components/Home/WordAnimation";
 import { MeCard } from "@/components/Home/MeCard";
 import { HardSkills } from "@/components/Home/HardSkills";
 import { SoftSkills } from "@/components/Home/SoftSkills";
 import { Timeline } from "@/components/Home/Timeline";
+import { Words3D } from "@/components/Home/Words3D";
+import { WordAnimation } from "@/components/Home/WordAnimation";
 
 export default function Home() {
     const t = useTranslations('HomePage');
@@ -16,8 +17,13 @@ export default function Home() {
             </video>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
                 <div className='h-screen w-full bg-opacity-60 bg-black flex flex-col justify-center items-center'>
-                    <h1 className='text-white text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
-                    <ScrollButton />
+                    {/* <h1 className='text-white text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1> */}
+                    <div className='flex flex-col items-center justify-center'>
+                        <Words3D text={t('title')} />
+                    </div>
+                    <div className='absolute bottom-0'>
+                        <ScrollButton />
+                    </div>
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content'>
