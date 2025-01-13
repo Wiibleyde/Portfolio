@@ -13,6 +13,12 @@ class Webhook {
     }
 
     private prepareEmbed(name: string, email: string, message: string): EmbedBuilder {
+        if(!name || !email || !message) {
+            throw new Error('Missing required fields');
+        }
+        if(message.length > 1024) {
+            message = message.slice(0, 1021) + '...';
+        }
         return new EmbedBuilder()
             .setTitle('Nouveau message')
             .addFields(
@@ -36,6 +42,7 @@ class Webhook {
             .setAuthor({
                 name: 'Portfolio',
                 url: 'https://nathan.bonnell.fr',
+                iconURL: 'https://nathan.bonnell.fr/img/picture/pp.png',
             })
             .setColor('Aqua');
     }
