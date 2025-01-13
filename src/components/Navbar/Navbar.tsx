@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { LocaleSelector } from "./LocaleSelector";
 import { useEffect, useState, useRef } from "react";
 import { useMouse } from "@/hooks/useMouse";
-import { List } from "react-bootstrap-icons";
+import { List, X } from "react-bootstrap-icons";
 
 const cv = "/CV_Nathan_Bonnell.pdf";
 
@@ -16,14 +16,16 @@ export function Navbar() {
     const [isShowingNavbar, setIsShowingNavbar] = useState(false);
     const navbarRef = useRef<HTMLDivElement>(null);
 
-    const { mouse, onElement, mouseOnWebsite } = useMouse({ element: navbarRef.current as HTMLElement });
+    const { mouse, onElement, mouseOnWebsite } = useMouse({ element: typeof window !== 'undefined' ? navbarRef.current ?? undefined : undefined });
 
     useEffect(() => {
+        if (typeof window === 'undefined') return;
+
         if(!mouseOnWebsite) {
             setShowNavbar(false);
             setIsShowingNavbar(false);
         }
-        const isMouseNearNavbar = mouse.x >= window.innerWidth - 50;
+        const isMouseNearNavbar = mouse.x >= window.innerWidth - 20;
         if (isMouseNearNavbar) {
             setShowNavbar(true);
             setIsShowingNavbar(true);
@@ -41,11 +43,16 @@ export function Navbar() {
     return (
         <>
             <div className={`fixed top-4 right-4 z-50 ${showNavbar ? "hidden" : "block"}`}>
-                <button onClick={() => setShowNavbar(true)} className="p-2 bg-black bg-opacity-95 text-white rounded-full shadow-lg" name="Open Navbar">
+                <button onClick={() => setShowNavbar(true)} className="p-2 text-white" name="Open Navbar">
                     <List size={32} />
                 </button>
             </div>
             <div ref={navbarRef} id="navbar" className={`fixed bg-gradient-to-r from-black via-gray-900 to-black text-white border-2 border-white rounded-xl w-64 h-[calc(100%-2rem)] top-4 right-4 flex flex-col items-start justify-between p-8 shadow-2xl z-50 transition-transform duration-300 transform ${showNavbar ? "translate-x-0" : "translate-x-[calc(100%+2rem)]"}`}>
+                <div className="absolute top-4 right-4 z-50">
+                    <button onClick={() => setShowNavbar(false)} className="p-2 bg-black bg-opacity-95 text-white rounded-full shadow-lg" name="Close Navbar">
+                        <X size={24} />
+                    </button>
+                </div>
                 <div className="flex flex-col space-y-6 items-start mt-6">
                     <p className="font-bold text-lg">{t("name")}</p>
                     <p className="font-bold text-green-400 italic">{t("job")}</p>
@@ -72,7 +79,7 @@ export function Navbar() {
                     <a href={cv} target="_blank" rel="noreferrer">
                         <h2 className={`relative hover:text-gray-400 transition duration-300`}>
                             {t("cv")}
-                            <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "RIEN CAR IL Y A PAS DE LIENS A METTRE MDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
+                            <span className={`absolute bottom-0 left-0 w-full h-0.5 transition-transform duration-300`}></span>
                         </h2>
                     </a>
                     <LocaleSelector />

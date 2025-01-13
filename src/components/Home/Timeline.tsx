@@ -24,7 +24,7 @@ export function Timeline() {
             "icon": Briefcase,
             "description": t("1.description"),
             "skills": [t("1.skills.0"), t("1.skills.1"), t("1.skills.2"), t("1.skills.3"), t("1.skills.4")],
-            "class": "bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300"
         },
         {
             "title": t("2.title"),
@@ -41,7 +41,7 @@ export function Timeline() {
             "icon": HeartFill,
             "description": t("3.description"),
             "skills": [t("3.skills.0"), t("3.skills.1"), t("3.skills.2")],
-            "class": "bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
+            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-yellow-900 text-yellow-300"
         },
         {
             "title": t("4.title"),
@@ -49,13 +49,13 @@ export function Timeline() {
             "org": t("4.org"),
             "icon": Book,
             "skills": [t("4.skills.0"), t("4.skills.1"), t("4.skills.2")],
-            "class": "bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
+            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-green-900 text-green-300"
         },
     ]
 
     return (
         <div>
-            <ol className="relative border-s border-gray-200 dark:border-gray-700">
+            <ol className="relative border-s border-gray-700">
                 {data.map((item) => (
                     <TimelineItem key={item.title} item={item} index={data.indexOf(item)} />
                 ))}
@@ -75,10 +75,10 @@ function TimelineItem({ item, index }: { item: Timeline; index: number }) {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
         >
-            <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-                {item.icon ? <item.icon className={"text-blue-800 dark:text-blue-300 w-2.5 h-2.5"} /> : <Calendar className={"text-blue-800 dark:text-blue-300 w-2.5 h-2.5"} />}
+            <span className="absolute flex items-center justify-center w-6 h-6 rounded-full -start-3 ring-8 ring-gray-900 bg-blue-900">
+                {item.icon ? <item.icon className={"text-blue-300 w-2.5 h-2.5"} /> : <Calendar className={"text-blue-800 dark:text-blue-300 w-2.5 h-2.5"} />}
             </span>
-            <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="flex items-center mb-1 text-lg font-semibold text-white">
                 {item.title}
                 {index === 0 && (
                     <span className="bg-red-500 text-[#fff] text-sm font-medium me-2 px-2.5 py-0.5 border-sky-100 rounded ms-3">
@@ -86,7 +86,7 @@ function TimelineItem({ item, index }: { item: Timeline; index: number }) {
                     </span>
                 )}
             </h3>
-            <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+            <time className="block mb-2 text-sm font-normal leading-none text-gray-500">
                 {item.duration}
             </time>
             <p>{item.org}</p>

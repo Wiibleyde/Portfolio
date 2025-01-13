@@ -1,3 +1,4 @@
+"use client"
 import { useTranslations } from "next-intl";
 import { ScrollButton } from "@/components/UI/ScrollButton";
 import { Project, ProjectCard, ProjectType } from "@/components/projects/ProjectCard";
@@ -9,6 +10,8 @@ import EveBanner from "@public/img/projects/eve-banner.png";
 import WeazelNewsLogo from "@public/img/projects/WeazelNews_Logo.png";
 import Motus from "@public/img/projects/motus.jpg";
 import Twitch from "@public/img/projects/twitch.webp";
+import Bro from "@public/img/projects/bro.png";
+import FurutsuGame from "@public/img/projects/furutsugame.png";
 
 const projects: Project[] = [
     {
@@ -76,6 +79,22 @@ const projects: Project[] = [
         repoUrl: "https://github.com/Wiibleyde/Mootus",
         image: Motus.src,
         tags: ["Motus", "Vite", "React", "Typescript", "Atom", "TailwindCSS"],
+    },
+    {
+        title: "Régie Black Room Orchestra",
+        description: "Régie vidéo du concert de Black Room Orchestra sur le serveur FailyV (ainsi que d'autres sur le même serveur).",
+        type: ProjectType.Personal,
+        url: "https://youtu.be/otioMSFKVi0",
+        image: Bro.src,
+        tags: ["VMix", "FailyV", "Concert", "Régie", "Vidéo", "Live","FiveM"],
+    },
+    {
+        title: "Furutsu Game",
+        description: "Furutsu Game est une copie du jeu Suika Game fait avec Unity.",
+        type: ProjectType.School,
+        repoUrl: "https://github.com/Wiibleyde/FurutsuGame",
+        image: FurutsuGame.src,
+        tags: ["Unity", "C#", "Game", "Suika Game", "Ynov"],
     }
 ]
 
@@ -93,7 +112,7 @@ export default function ProjectsPage() {
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
                 <p className="italic text-gray-500">{t('description')}</p>
                 <h1 className='text-4xl font-bold'>{t('projects')}</h1>
-                <div className='flex flex-row flex-wrap justify-center'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
                     {projects.map((project, index) => (
                         <ProjectCard key={index} project={project} />
                     ))}
