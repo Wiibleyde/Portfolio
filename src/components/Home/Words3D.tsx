@@ -70,7 +70,7 @@ export function Words3D({ text }: { text: string }) {
             cancelAnimationFrame(animFrame);
             const text = texts[textIndex++ % texts.length];
             let fontSize = 170;
-            let startX = window.innerWidth / 2;
+            // const startX = window.innerWidth / 2;
             let startY = window.innerHeight / 2;
             particles = [];
             targets = [];
@@ -80,6 +80,23 @@ export function Words3D({ text }: { text: string }) {
             let w = cx.measureText(text).width;
             const h = fontSize * 1.5;
             let gap = 7;
+
+            // Split text into multiple lines if it exceeds canvas width
+            const words = text.split(' ');
+            const lines: string[] = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = cx.measureText(currentLine + ' ' + word).width;
+                if (width < window.innerWidth * 0.8) {
+                    currentLine += ' ' + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
 
             while (w > window.innerWidth * 0.8) {
                 fontSize -= 1;
@@ -91,18 +108,24 @@ export function Words3D({ text }: { text: string }) {
             if (fontSize < 40) gap = 2;
             size = Math.max(gap / 2, 1);
             c.width = w;
-            c.height = h;
-            startX = Math.floor(startX - w / 2);
-            startY = Math.floor(startY - h / 2);
+            c.height = h * lines.length;
+            startY = Math.floor((window.innerHeight - (h * lines.length)) / 2);
             cx.fillStyle = '#000';
             cx.font = `900 ${fontSize}px Arial`;
-            cx.fillText(text, 0, fontSize);
-            const data = cx.getImageData(0, 0, w, h);
+
+            // Draw each line of text centered
+            lines.forEach((line, index) => {
+                const lineWidth = cx.measureText(line).width;
+                const lineStartX = Math.floor((window.innerWidth - lineWidth) / 2);
+                cx.fillText(line, lineStartX, startY + fontSize * (index + 1));
+            });
+
+            const data = cx.getImageData(0, 0, w, h * lines.length);
 
             for (let i = 0; i < data.data.length; i += 4) {
                 const rw = data.width * 4;
-                const x = startX + Math.floor((i % rw) / 4);
-                const y = startY + Math.floor(i / rw);
+                const x = Math.floor((i % rw) / 4);
+                const y = Math.floor(i / rw);
 
                 if (data.data[i + 3] > 0 && x % gap === 0 && y % gap === 0) {
                     for (let j = 0; j < layers; j++) {
