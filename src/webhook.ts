@@ -6,8 +6,7 @@ class Webhook {
     constructor(url: string) {
         try {
             this.client = new WebhookClient({ url });
-        } catch (error) {
-            console.error('An error occurred while creating the webhook client:', error);
+        } catch {
             this.client = null;
         }
     }
@@ -49,7 +48,6 @@ class Webhook {
 
     async send(name: string, email: string, message: string) {
         if (!this.client) {
-            console.error('Webhook client not initialized');
             return;
         }
         const embed = this.prepareEmbed(name, email, message);
