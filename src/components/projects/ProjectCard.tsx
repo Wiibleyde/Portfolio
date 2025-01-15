@@ -66,7 +66,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
     return (
         <div className='flex flex-col w-full md:w-80 lg:w-96 h-auto m-3 bg-black border border-gray-700 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105'>
-            <Image src={project.image} alt={project.title} className='w-full h-48 object-cover rounded-t-lg bg-gray-300' width={300} height={150} />
+            <Image src={project.image} alt={project.title} className='w-full h-48 object-cover rounded-lg bg-gray-300' width={350} height={200} />
             <div className='p-4'>
                 <h2 className='font-bold text-2xl mb-2' style={{ color: dominantColor }}>{project.title}</h2>
                 <p className='text-gray-300 mb-4'>{project.description}</p>

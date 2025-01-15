@@ -76,7 +76,7 @@ function TimelineItem({ item, index }: { item: Timeline; index: number }) {
             viewport={{ once: true }}
         >
             <span className="absolute flex items-center justify-center w-6 h-6 rounded-full -start-3 ring-8 ring-gray-900 bg-blue-900">
-                {item.icon ? <item.icon className={"text-blue-300 w-2.5 h-2.5"} /> : <Calendar className={"text-blue-800 dark:text-blue-300 w-2.5 h-2.5"} />}
+                {item.icon ? <item.icon className={"text-blue-300 w-3.5 h-3.5"} /> : <Calendar className={"text-blue-800 dark:text-blue-300 w-2.5 h-2.5"} />}
             </span>
             <h3 className="flex items-center mb-1 text-lg font-semibold text-white">
                 {item.title}

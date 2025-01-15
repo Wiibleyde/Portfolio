@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     },
 };
 
-const montserrat = Montserrat({
+export const montserrat = Montserrat({
     subsets: ['latin'],
     display: 'swap',
 })

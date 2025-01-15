@@ -10,14 +10,14 @@ export interface SkillProps {
 export function SkillCard({ title, image, url }: SkillProps) {
     if(!url) {
         return (
-            <div className='flex flex-col items-center space-y-3'>
+            <div className='flex flex-col items-center space-y-3 my-5'>
                 <Image src={image.src} alt={title + " SVG logo not clickable"} className='w-20 h-20' width={80} height={80} />
                 <p className='text-gray-100 text-lg font-semibold'>{title}</p>
             </div>
         )
     }
     return (
-        <Link href={url || "#"} target='_blank' rel='noreferrer' className='flex flex-col items-center space-y-3 transition-all duration-300 hover:scale-105'>
+        <Link href={url || "#"} target='_blank' rel='noreferrer' className='flex flex-col items-center space-y-3 transition-all duration-300 hover:scale-105 my-5'>
             <Image src={image.src} alt={title + " SVG logo clickable"} className='w-20 h-20' width={80} height={80} />
             <p className='text-gray-100 text-lg font-semibold'>{title}</p>
         </Link>

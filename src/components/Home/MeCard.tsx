@@ -51,8 +51,8 @@ export function MeCard() {
     ]
 
     return (
-        <div className="w-full h-auto bg-black p-6 rounded-lg border-white border-2 flex flex-col">
-            <div className='flex flex-row'>
+        <div className="w-full h-auto bg-black p-6 rounded-3xl border-white border-2 flex flex-col">
+            <div className='flex flex-row space-x-4 mb-5'>
                 <Image src={ProfilePicture.src} alt={t('title')} className='w-1/2 h-full rounded-lg bg-gray-300 my-auto' height={300} width={300} />
                 <div className='p-4'>
                     <div>
@@ -65,7 +65,7 @@ export function MeCard() {
                         <h3 className='text-gray-300 text-lg font-semibold'>{t('dates')}</h3>
                         <div className='grid grid-cols-2 gap-2'>
                             <div className='text-gray-300 mb-2 text-sm'>
-                                <Calendar2DateFill className='inline-block' /> : {bithdate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                <Calendar2DateFill className='inline-block' /> : {bithdate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                             </div>
                             <div className='text-gray-300 mb-2 text-sm'>
                                 <NextBirthday bithdate={bithdate} />
@@ -82,7 +82,7 @@ export function MeCard() {
                     </div>
                 </div>
             </div>
-            <a href='/CV_Nathan_Bonnell.pdf' target='_blank' rel='noopener noreferrer' className='bg-white text-black p-2 rounded-lg my-auto text-center hover:bg-gray-200 transition duration-300 ease-in-out'>
+            <a href='/CV_Nathan_Bonnell.pdf' target='_blank' className='bg-white text-black p-2 rounded-lg my-auto font-extrabold text-center hover:bg-gray-200 transition duration-300 ease-in-out'>
                 {t('cv')}
             </a>
         </div>
