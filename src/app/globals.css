@@ -8,36 +8,15 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 10px;
-    border: 3px solid #f1f1f1;
+    background-color: #000000;
+    border-radius: 100px;
+    border: 1px solid #00ff40;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-}
-
-/* Dark theme styles */
-@media (prefers-color-scheme: dark) {
-    body {
-        @apply bg-gray-900 text-white;
-    }
-
-    /* Custom scrollbar styles for dark theme */
-    ::-webkit-scrollbar-track {
-        background: #2d2d2d;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: #555;
-        border: 3px solid #2d2d2d;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background-color: #888;
-    }
+    background-color: #3f3f3f;
 }

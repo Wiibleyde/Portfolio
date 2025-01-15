@@ -13,6 +13,7 @@ export function ContactForm() {
     const [email, setEmail] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
+
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     }

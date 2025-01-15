@@ -12,13 +12,17 @@ export function useMouse({ element }: { element?: HTMLElement } = {}) {
 
     useEffect(() => {
         window.addEventListener('mousemove', (e) => setMouse(handleMouseMove(e)));
-        window.addEventListener('mouseover', () => setMouseOnWebsite(true));
-        window.addEventListener('mouseout', () => setMouseOnWebsite(false));
+        document.addEventListener('mouseenter', () => setMouseOnWebsite(true));
+        document.addEventListener('mouseleave', () => setMouseOnWebsite(false));
         if (element) {
             element.addEventListener('mouseover', () => setOnElement(true));
             element.addEventListener('mouseout', () => setOnElement(false));
         }
-        return () => window.removeEventListener('mousemove', (e) => setMouse(handleMouseMove(e)));
+        return () => {
+            window.removeEventListener('mousemove', (e) => setMouse(handleMouseMove(e)));
+            document.removeEventListener('mouseenter', () => setMouseOnWebsite(true));
+            document.removeEventListener('mouseleave', () => setMouseOnWebsite(false));
+        };
     }, [element]);
 
     return { mouse, onElement, mouseOnWebsite };

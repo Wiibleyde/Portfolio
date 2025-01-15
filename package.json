@@ -11,7 +11,7 @@
   "dependencies": {
     "discord.js": "^14.17.2",
     "framer-motion": "^11.14.2",
-    "next": "15.1.0",
+    "next": "^15.1.4",
     "next-intl": "^3.26.1",
     "react": "^19.0.0",
     "react-bootstrap-icons": "^1.11.5",

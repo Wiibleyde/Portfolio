@@ -11,6 +11,7 @@ import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
 import { ScrollCircle } from "@/components/UI/ScrollCircle";
 
+
 export const metadata: Metadata = {
     title: "Portfolio - Nathan Bonnell",
     description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
