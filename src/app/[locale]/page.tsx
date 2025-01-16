@@ -5,6 +5,13 @@ import { MeCard } from "@/components/Home/MeCard";
 import { HardSkills } from "@/components/Home/HardSkills";
 import { SoftSkills } from "@/components/Home/SoftSkills";
 import { Timeline } from "@/components/Home/Timeline";
+import { Pridi } from "next/font/google";
+
+const pridi = Pridi({
+    weight: "700",
+    subsets: ['latin'],
+    display: 'swap',
+})
 
 export default function Home() {
     const t = useTranslations('HomePage');
@@ -25,16 +32,16 @@ export default function Home() {
                     <WordAnimation title={t('description')} />
                 </div>
                 <div className='w-1/2'>
-                    <h1 className='text-4xl font-bold mb-4'>{t('me')}</h1>
+                    <h1 className={'text-5xl text-center font-bold mb-4 ' + pridi.className}>{t('me')}</h1>
                     <MeCard />
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-8 w-full'>
                     <div className=''>
-                        <h1 className='text-4xl font-bold mb-4 text-center'>{t('hardskills')}</h1>
+                        <h1 className={'text-5xl font-bold mb-4 text-center ' + pridi.className}>{t('hardskills')}</h1>
                         <HardSkills />
                     </div>
                     <div className=''>
-                        <h1 className='text-4xl font-bold mb-4 text-center'>{t('softskills')}</h1>
+                        <h1 className={'text-5xl font-bold mb-4 text-center ' + pridi.className}>{t('softskills')}</h1>
                         <SoftSkills />
                     </div>
                 </div>

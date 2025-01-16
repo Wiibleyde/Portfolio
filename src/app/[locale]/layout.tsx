@@ -10,6 +10,8 @@ import "@/app/globals.css"
 import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
 import { ScrollCircle } from "@/components/UI/ScrollCircle";
+import { Providers } from "./clientProviders";
+
 
 export const metadata: Metadata = {
     title: "Portfolio - Nathan Bonnell",
@@ -43,7 +45,7 @@ export const metadata: Metadata = {
     },
 };
 
-const montserrat = Montserrat({
+export const montserrat = Montserrat({
     subsets: ['latin'],
     display: 'swap',
 })
@@ -68,11 +70,13 @@ export default async function RootLayout({
         <html lang={locale}>
             <body className={montserrat.className}>
                 <NextIntlClientProvider messages={messages}>
-                    <Navbar />
-                    {children}
-                    <ScrollToTop />
-                    <ScrollCircle />
-                    <Footer />
+                    <Providers>
+                        <Navbar />
+                        {children}
+                        <ScrollToTop />
+                        <ScrollCircle />
+                        <Footer />
+                    </Providers>
                 </NextIntlClientProvider>
             </body>
         </html>
