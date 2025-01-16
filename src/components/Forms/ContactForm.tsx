@@ -2,6 +2,8 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useReCaptcha } from "next-recaptcha-v3";
+import { verifyCaptchaAction } from "@/captcha";
 
 export function ContactForm() {
     const t = useTranslations('ContactForm');
@@ -13,6 +15,7 @@ export function ContactForm() {
     const [email, setEmail] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
+    const { executeRecaptcha } = useReCaptcha();
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
@@ -26,9 +29,24 @@ export function ContactForm() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         setSending(true);
         setSent(false);
         setError('');
+
+        if (!executeRecaptcha) {
+            return
+        }
+        const token = await executeRecaptcha("onSubmit")
+        const verified = await verifyCaptchaAction(token)
+
+        if (!verified) {
+            console.error('Captcha verification failed')
+            setSending(false)
+            setError(t('error'));
+            return
+        }
+
         const formData = new FormData(e.currentTarget);
         const data = Object.fromEntries(formData.entries());
         if (!data.name || !data.email || !data.message) {
