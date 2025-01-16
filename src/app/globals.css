@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.grecaptcha-badge {
+    visibility: hidden !important;
+}
+
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
     width: 12px;
