@@ -10,7 +10,7 @@ import "@/app/globals.css"
 import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
 import { ScrollCircle } from "@/components/UI/ScrollCircle";
-import { Providers } from "./clientProviders";
+import { ClientProviders } from "./ClientProviders";
 
 
 export const metadata: Metadata = {
@@ -70,13 +70,13 @@ export default async function RootLayout({
         <html lang={locale}>
             <body className={montserrat.className}>
                 <NextIntlClientProvider messages={messages}>
-                    <Providers>
+                    <ClientProviders>
                         <Navbar />
                         {children}
                         <ScrollToTop />
                         <ScrollCircle />
                         <Footer />
-                    </Providers>
+                    </ClientProviders>
                 </NextIntlClientProvider>
             </body>
         </html>

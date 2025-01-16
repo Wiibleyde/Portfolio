@@ -97,7 +97,10 @@
             "skills": {
                 "0": "Web Development",
                 "1": "Mobile Development",
-                "2": "Software Development"
+                "2": "Software Development",
+                "3": "Infrastructure and Networks",
+                "4": "Cybersecurity",
+                "5": "Data Science"
             }
         },
         "3": {

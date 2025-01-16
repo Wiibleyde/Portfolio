@@ -31,7 +31,7 @@ export function Timeline() {
             "duration": t("2.duration"),
             "org": t("2.org"),
             "description": t("2.description"),
-            "skills": [t("2.skills.0"), t("2.skills.1"), t("2.skills.2")],
+            "skills": [t("2.skills.0"), t("2.skills.1"), t("2.skills.2"), t("2.skills.3"), t("2.skills.4"), t("2.skills.5")],
             "class": "bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
         },
         {
