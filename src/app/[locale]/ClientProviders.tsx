@@ -8,7 +8,7 @@ export function ClientProviders({ children }: { children: ReactNode }) {
         <>
             <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || ''} />
             <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ''} />
-            <ReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}>
+            <ReCaptchaProvider reCaptchaKey={process.env.RECAPTCHA_SECRET_KEY}>
                 {children}
             </ReCaptchaProvider>
         </>
