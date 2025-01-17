@@ -2,8 +2,8 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useReCaptcha } from "next-recaptcha-v3";
 import { verifyCaptchaAction } from "@/captcha";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export function ContactForm() {
     const t = useTranslations('ContactForm');
@@ -15,7 +15,7 @@ export function ContactForm() {
     const [email, setEmail] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
-    const { executeRecaptcha } = useReCaptcha();
+    const { executeRecaptcha } = useGoogleReCaptcha();
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
@@ -41,14 +41,17 @@ export function ContactForm() {
         const verified = await verifyCaptchaAction(token)
 
         if (!verified) {
-            console.error('Captcha verification failed')
+            console.error('Captcha verification failed', verified, token)
             setSending(false)
             setError(t('error'));
             return
         }
 
-        const formData = new FormData(e.currentTarget);
-        const data = Object.fromEntries(formData.entries());
+        const data = {
+            name: name,
+            email: email,
+            message: message
+        }
         if (!data.name || !data.email || !data.message) {
             setError(t('error'));
             setSending(false);
