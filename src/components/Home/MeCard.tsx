@@ -46,9 +46,9 @@ export function MeCard() {
     ]
 
     return (
-        <div className="grid grid-cols-3 gap-6 my-16">
-            <div className='col-span-2 flex flex-row space-x-4 bg-black p-6 rounded-[2rem] nice-shadow'>
-                <Image src={ProfilePicture.src} alt={t('title')} className='h-full rounded-xl bg-gray-900 my-auto' height={300} width={300} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-16">
+            <div className='col-span-1 md:col-span-2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-black p-6 rounded-[2rem] nice-shadow'>
+                <Image src={ProfilePicture.src} alt={t('title')} className='w-full md:w-auto h-auto rounded-xl bg-gray-900 my-auto' height={300} width={300} />
                 <div className='p-4'>
                     <p className='text-2xl font-bold'>{t('title')}</p>
                     <p className='italic text-gray-400'>{t('citation')}</p>
