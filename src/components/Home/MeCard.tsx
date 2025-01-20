@@ -7,7 +7,6 @@ import Bluesky from "@public/img/network/bluesky.svg";
 import Github from "@public/img/network/github.svg";
 import Linkedin from "@public/img/network/linkedin.svg";
 import Mail from "@public/img/network/mail.svg";
-import Smartphone from "@public/img/network/smartphone.svg";
 import Twitter from "@public/img/network/twitter.svg";
 import { NetworkCard } from "./NetworkCard";
 import { LoadingSvg } from "../UI/Loading";
