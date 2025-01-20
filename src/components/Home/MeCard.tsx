@@ -73,8 +73,8 @@ export function MeCard() {
                         </div>
                     </div>
                     <div>
-                        <h3 className='text-gray-300 text-lg font-semibold'>{t('contact')}</h3>
-                        <div className="grid grid-cols-2 gap-2">
+                        <h3 className='text-gray-300 text-lg font-semibold mb-3'>{t('contact')}</h3>
+                        <div className="grid grid-cols-2 gap-6">
                             {networks.map((network, index) => (
                                 <NetworkCard key={index} title={network.title} url={network.url} icon={network.icon} />
                             ))}
