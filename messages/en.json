@@ -29,14 +29,17 @@
     },
     "NextBirthday": {
         "years": "years in",
+        "yearsOnly": "years",
         "days": "d",
         "hours": "h",
         "minutes": "m",
-        "seconds": "s"
+        "seconds": "s",
+        "until": "of time before my"
     },
     "MeCard": {
         "title": "Nathan Bonnell",
         "citation": "“The only way to do great work is to love what you do.” — Steve Jobs",
+        "description": "Computer science student at Ynov Campus in Bordeaux. I am passionate about full-stack web development and exploring various technologies. I create innovative and high-performing solutions that blend creativity, efficiency, and technical expertise. I have had the opportunity to carry out several projects of all kinds, ranging from simple web pages to more complex applications, including game servers.",
         "dates": "Birthdate",
         "contact": "Contact",
         "phone": "Phone",
@@ -45,7 +48,12 @@
         "linkedin": "LinkedIn",
         "twitter": "Twitter",
         "email": "Email",
-        "cv": "Download CV"
+        "cv": "Curriculum Vitae",
+        "cvAltText": "Nathan Bonnell's Curriculum Vitae",
+        "downloadCv": "Download CV",
+        "contactMe": "Contact Me",
+        "WIP": "Work in Progress",
+        "WIPMessage": "This widget is a work in progress. Thank you for your understanding."
     },
     "HardSkills": {
         "languages": "Languages",

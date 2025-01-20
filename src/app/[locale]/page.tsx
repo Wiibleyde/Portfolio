@@ -5,13 +5,6 @@ import { MeCard } from "@/components/Home/MeCard";
 import { HardSkills } from "@/components/Home/HardSkills";
 import { SoftSkills } from "@/components/Home/SoftSkills";
 import { Timeline } from "@/components/Home/Timeline";
-import { Pridi } from "next/font/google";
-
-const pridi = Pridi({
-    weight: "700",
-    subsets: ['latin'],
-    display: 'swap',
-})
 
 export default function Home() {
     const t = useTranslations('HomePage');
@@ -28,10 +21,10 @@ export default function Home() {
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content'>
-                <div className='w-full mb-36'>
+                <div className='w-full mb-24'>
                     <WordAnimation title={t('description')} />
                 </div>
-                <div className='w-1/2'>
+                <div className='w-full'>
                     <h1 className={'text-5xl text-center font-bold mb-4'}>{t('me')}</h1>
                     <MeCard />
                 </div>

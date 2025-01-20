@@ -3,9 +3,11 @@ import Image, { StaticImageData } from "next/image";
 
 export function NetworkCard({ title, url, icon }: { title: string, url: string, icon: StaticImageData }) {
     return (
-        <Link href={url} target="_blank" className='flex flex-row flex-nowrap items-center bg-black p-1.5 rounded-lg shadow-md shadow-white border-white border-2 transition-all duration-300 hover:border-green-500 hover:shadow-green-500 overflow-hidden'>
-            <Image src={icon.src} alt={title} height={30} width={30} />
-            <h2 className='font-bold text-lg text-white ml-2 my-auto truncate'>{title}</h2>
-        </Link>
+        <div className='flex flex-col items-center transition-all duration-300 hover:scale-105 my-5'>
+            <Link href={url} target="_blank" className='flex flex-col items-center space-y-3 transition-all duration-300 hover:scale-105 my-2'>
+                <Image src={icon.src} alt={title} height={40} width={40} />
+                <h2 className='font-bold text-lg text-white truncate'>{title}</h2>
+            </Link>
+        </div>
     )
 }

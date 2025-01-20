@@ -29,14 +29,17 @@
     },
     "NextBirthday": {
         "years": "ans dans",
+        "yearsOnly": "ans",
         "days": "j",
         "hours": "h",
         "minutes": "m",
-        "seconds": "s"
+        "seconds": "s",
+        "until": "du temps avant mes"
     },
     "MeCard": {
         "title": "Nathan Bonnell",
         "citation": "« La seule façon de faire du bon travail est d'aimer ce que l'on fait. » — Steve Jobs",
+        "description": "Étudiant en informatique au sain de Bordeaux Ynov Campus. Je suis passionné par le développement web fullstack et l'exploration de diverses technologies. Je crée des solutions innovantes et performantes qui allient créativité, efficacité et maîtrise technique. J'ai eu l'occasion de porter plusieurs projets en tout genre, allant de la simple page web, à des applications plus complexes, en passant par le serveur de jeu.",
         "dates": "Naissance",
         "contact": "Contact",
         "phone": "Téléphone",
@@ -45,7 +48,12 @@
         "linkedin": "LinkedIn",
         "twitter": "Twitter",
         "email": "Courriel",
-        "cv": "Télécharger le CV"
+        "cv": "Curriculum Vitae",
+        "cvAltText": "Curriculum Vitae de Nathan Bonnell",
+        "downloadCv": "Télécharger le CV",
+        "contactMe": "Contactez-moi",
+        "WIP": "En cours de rédaction",
+        "WIPMessage": "Ce widget est en cours de rédaction. Merci de votre compréhension."
     },
     "HardSkills": {
         "languages": "Langages",
