@@ -68,9 +68,9 @@ export function MeCard() {
             </div>
             <div className='flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow'>
                 <h3 className='text-xl font-semibold mb-4'>{t('cv')}</h3>
-                <div className='rounded-[2rem] w-full p-2'>
+                <a href="/CV_Nathan_Bonnell.pdf" className='rounded-[2rem] w-full p-2'>
                     <Image src='/img/cv/CV_Nathan_Bonnell.png' alt={t('cvAltText')} className='object-cover rounded-[2rem]' height={500} width={500} />
-                </div>
+                </a>
                 <a href='/CV_Nathan_Bonnell.pdf' target='_blank' className='bg-red-500 text-white p-4 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300'>
                     {t('downloadCv')}
                 </a>
