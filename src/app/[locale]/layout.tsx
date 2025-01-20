@@ -68,6 +68,7 @@ export default async function RootLayout({
 
     return (
         <html lang={locale}>
+            <meta name="google-site-verification" content="a4uoCtPLK4IRbmmpoko6el3U8PAeRUvlnEWAcBFi0NA" />
             <body className={montserrat.className}>
                 <NextIntlClientProvider messages={messages}>
                     <ClientProviders>
