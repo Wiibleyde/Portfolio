@@ -25,7 +25,7 @@ export function WordAnimation({ title }: { title: string }) {
     return (
         <motion.div ref={containerRef} className='flex flex-wrap justify-center text-justify'>
             {wordMap.map(({ word, opacity }, index) => (
-                <motion.span key={index} style={{ opacity }} className='text-gray-100 text-7xl font-black mx-3'>
+                <motion.span key={index} style={{ opacity }} className='text-gray-100 text-4xl md:text-5xl lg:text-7xl font-black mx-3'>
                     {word}
                 </motion.span>
             ))}
