@@ -1,10 +1,10 @@
 "use client"
 import { Link, usePathname } from "@/i18n/routing";
-import { useTranslations } from "next-intl";
 import { LocaleSelector } from "./LocaleSelector";
 import { useEffect, useState, useRef } from "react";
 import { useMouse } from "@/hooks/useMouse";
 import { List, X } from "react-bootstrap-icons";
+import { useTranslations } from "next-intl";
 
 const cv = "/CV_Nathan_Bonnell.pdf";
 
@@ -16,29 +16,23 @@ export function Navbar() {
     const [isShowingNavbar, setIsShowingNavbar] = useState(false);
     const navbarRef = useRef<HTMLDivElement>(null);
 
-    const { mouse, onElement, mouseOnWebsite } = useMouse({ element: typeof window !== 'undefined' ? navbarRef.current ?? undefined : undefined });
+    const { mouse, onElement } = useMouse({ element: typeof window !== 'undefined' ? navbarRef.current ?? undefined : undefined });
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
-        if(!mouseOnWebsite) {
-            setShowNavbar(false);
-            setIsShowingNavbar(false);
-        }
-        const isMouseNearNavbar = mouse.x <= 20;
-        if (isMouseNearNavbar) {
+        const isMouseNearNavbar = mouse.x <= 40;
+        if (isMouseNearNavbar && !isShowingNavbar) {
             setShowNavbar(true);
             setIsShowingNavbar(true);
-        } else {
-            if (!onElement && isShowingNavbar) {
-                setShowNavbar(false);
-                setIsShowingNavbar(false);
-            } else if (onElement && !isShowingNavbar) {
-                setShowNavbar(true);
-                setIsShowingNavbar(true);
-            }
+        } else if (!isMouseNearNavbar && !onElement && isShowingNavbar) {
+            setShowNavbar(false);
+            setIsShowingNavbar(false);
+        } else if (onElement && !isShowingNavbar) {
+            setShowNavbar(true);
+            setIsShowingNavbar(true);
         }
-    }, [mouse, onElement, isShowingNavbar, mouseOnWebsite]);
+    }, [onElement, isShowingNavbar, mouse]);
 
     return (
         <>
