@@ -12,7 +12,7 @@ import { NetworkCard } from "./NetworkCard";
 import { LoadingSvg } from "../UI/Loading";
 import { Link } from "@/i18n/routing";
 
-export function MeCard() {
+export function MeCards() {
     const t = useTranslations('MeCard');
 
     const birthdate = new Date('2004-11-01');
