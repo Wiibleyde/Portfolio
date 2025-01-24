@@ -12,7 +12,7 @@ import { NetworkCard } from "./NetworkCard";
 import { LoadingSvg } from "../UI/Loading";
 import { Link } from "@/i18n/routing";
 
-export function MeCard() {
+export function MeCards() {
     const t = useTranslations('MeCard');
 
     const birthdate = new Date('2004-11-01');
@@ -47,7 +47,7 @@ export function MeCard() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-16">
-            <div className='col-span-1 md:col-span-2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-black p-6 rounded-[2rem] nice-shadow'>
+            <div className='col-span-1 md:col-span-2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <Image src={ProfilePicture.src} alt={t('title')} className='w-full md:w-auto h-auto rounded-xl bg-gray-900 my-auto' height={300} width={300} />
                 <div className='p-4'>
                     <p className='text-2xl font-bold'>{t('title')}</p>
@@ -55,29 +55,29 @@ export function MeCard() {
                     <p className='text-lg mt-4 text-justify'>{t('description')}</p>
                 </div>
             </div>
-            <div className='flex flex-col space-x-4 bg-black p-6 rounded-[2rem] nice-shadow'>
+            <div className='flex flex-col space-x-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('dates')}</h3>
                 <div className='flex items-center'>
                     <span className='text-lg font-medium text-gray-300 bg-gray-800 p-2 rounded-lg'>
                         {birthdate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                     </span>
                 </div>
-                <div className='mt-4'>
+                <div className='mt-4 w-full'>
                     <NextBirthday birthdate={birthdate} />
                 </div>
             </div>
-            <div className='flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow'>
+            <div className='flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('cv')}</h3>
                 <a href="/CV_Nathan_Bonnell.pdf" className='rounded-[2rem] w-full p-2'>
-                    <Image src='/img/cv/CV_Nathan_Bonnell.png' alt={t('cvAltText')} className='object-cover rounded-[2rem]' height={500} width={500} />
+                    <Image src='/img/cv/CV_Nathan_Bonnell.png' alt={t('cvAltText')} className='object-cover w-full rounded-[2rem]' height={500} width={500} />
                 </a>
                 <a href='/CV_Nathan_Bonnell.pdf' target='_blank' className='bg-red-500 text-white p-4 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300'>
                     {t('downloadCv')}
                 </a>
             </div>
-            <div className='flex flex-col space-x-4 bg-black p-6 rounded-[2rem] nice-shadow'>
+            <div className='flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('contact')}</h3>
-                <div className='w-full flex flex-col space-y-2 my-4 p-2'>
+                <div className='w-full flex flex-col space-y-6 my-4 p-2'>
                     {networks.map((network, index) => (
                         <NetworkCard key={index} title={network.title} url={network.url} icon={network.icon} />
                     ))}
@@ -86,7 +86,7 @@ export function MeCard() {
                     {t('contactMe')}
                 </Link>
             </div>
-            <div className='bg-black p-6 rounded-[2rem] nice-shadow'>
+            <div className='bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <div className='flex flex-col justify-center items-center space-y-4'>
                     <LoadingSvg />
                     <p className='text-xl font-semibold text-center'>{t('WIP')}</p>

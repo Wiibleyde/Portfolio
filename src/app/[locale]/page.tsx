@@ -1,7 +1,7 @@
 import { ScrollButton } from "@/components/UI/ScrollButton";
 import { useTranslations } from "next-intl";
 import { WordAnimation } from "@/components/Home/WordAnimation";
-import { MeCard } from "@/components/Home/MeCard";
+import { MeCards } from "@/components/Home/MeCards";
 import { HardSkills } from "@/components/Home/HardSkills";
 import { SoftSkills } from "@/components/Home/SoftSkills";
 import { Timeline } from "@/components/Home/Timeline";
@@ -26,7 +26,7 @@ export default function Home() {
                 </div>
                 <div className='w-full'>
                     <h1 className={'text-5xl text-center font-bold mb-4'}>{t('me')}</h1>
-                    <MeCard />
+                    <MeCards />
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-8 w-full'>
                     <div className=''>
