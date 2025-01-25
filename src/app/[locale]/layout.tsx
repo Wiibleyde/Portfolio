@@ -11,15 +11,17 @@ import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
 import { ScrollCircle } from "@/components/UI/ScrollCircle";
 import { ClientProviders } from "./ClientProviders";
+import robots from "../robots";
+import { Robots } from "next/dist/lib/metadata/types/metadata-types";
 
 
 export const metadata: Metadata = {
     title: "Portfolio - Nathan Bonnell",
-    description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
+    description: "Portfolio de Nathan Bonnell, développeur web fullstack en alternance. Réalisé avec React, Next.js, TailwindCSS et TypeScript, disponible en français et en anglais ce site présente mes projets, mes compétences et mon parcours.",
     twitter: {
         card: "summary",
         title: "Portfolio - Nathan Bonnell",
-        description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
+        description: "Portfolio de Nathan Bonnell, développeur web fullstack en alternance. Réalisé avec React, Next.js, TailwindCSS et TypeScript, disponible en français et en anglais ce site présente mes projets, mes compétences et mon parcours.",
         creator: "@wiibleyde",
         site: "https://nathan.bonnell.fr",
     },
@@ -27,13 +29,13 @@ export const metadata: Metadata = {
         name: "Nathan Bonnell",
         url: "https://nathan.bonnell.fr",
     }],
-    keywords: ["portfolio", "nathan bonnell", "développeur web", "fullstack", "react", "nextjs", "tailwindcss", "typescript", "nathan", "bonnell"],
-    robots: "index, follow",
+    keywords: ["portfolio", "nathan bonnell", "développeur web", "fullstack", "react", "nextjs", "tailwindcss", "typescript", "nathan", "bonnell", "bordeaux", "ynov"],
+    robots: robots() as Robots,
     openGraph: {
         type: "website",
         url: "https://nathan.bonnell.fr",
         title: "Portfolio - Nathan Bonnell",
-        description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
+        description: "Portfolio de Nathan Bonnell, développeur web fullstack en alternance. Réalisé avec React, Next.js, TailwindCSS et TypeScript, disponible en français et en anglais ce site présente mes projets, mes compétences et mon parcours.",
         images: [
             {
                 url: "https://nathan.bonnell.fr/img/picture/pp.png",

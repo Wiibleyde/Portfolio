@@ -1,12 +1,18 @@
 import { MetadataRoute } from "next";
 import { BASE_URL } from "./sitemap";
 
-export default function robots():MetadataRoute.Robots {
+export default function robots(): MetadataRoute.Robots {
     return {
         rules: [
             {
                 userAgent: '*',
-                allow: '/',
+                allow: [
+                    '/',
+                    '/fr',
+                    '/en',
+                    '/fr/*',
+                    '/en/*',
+                ],
                 disallow: [
                     '/api',
                     '/_next',
