@@ -7,6 +7,7 @@ export default async function sitemap() {
     const paths = [
         '/',
         '/projects',
+        '/contact',
     ];
     const urls = locales.flatMap(locale => paths.map(path => `${BASE_URL}/${locale}${path}`));
     return urls.map(url => {
@@ -25,6 +26,8 @@ function getPriority(path: string): number {
             return 1;
         case '/projects':
             return 0.9;
+        case '/contact':
+            return 0.8;
         default:
             return 0.5;
     }
