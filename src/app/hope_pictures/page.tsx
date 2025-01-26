@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { File, Folder, ImageAlt } from "react-bootstrap-icons";
+import { Folder, ImageAlt } from "react-bootstrap-icons";
 
 interface Contents {
     folders: string[];
@@ -50,7 +50,7 @@ export default function Home() {
                                 className="rounded-lg shadow-lg border border-gray-700"
                                 onClick={() => window.open(selectedImage, "_blank")}
                             />
-                            <p className="text-sm mt-2 text-gray-600">Cliquez sur l'image pour l'ouvrir dans un nouvel onglet</p>
+                            <p className="text-sm mt-2 text-gray-600">Cliquez sur l&apos;image pour l&apos;ouvrir dans un nouvel onglet</p>
                         </div>
                     </div>
                 )}
