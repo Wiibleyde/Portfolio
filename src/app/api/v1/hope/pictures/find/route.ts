@@ -3,8 +3,8 @@ import fs from "fs";
 import path from "path"; // Import path module
 
 const rootFolder = "./public/hope_pictures";
-let cache: { [key: string]: { folders: string[], files: string[] } } = {};
-let cacheTimestamp: { [key: string]: number } = {};
+const cache: { [key: string]: { folders: string[], files: string[] } } = {};
+const cacheTimestamp: { [key: string]: number } = {};
 const cacheDuration = 5 * 60 * 1000; // 5 minutes
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
