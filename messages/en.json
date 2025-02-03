@@ -41,6 +41,7 @@
         "citation": "“The only way to do great work is to love what you do.” — Steve Jobs",
         "description": "Computer science student at Ynov Campus in Bordeaux. I am passionate about full-stack web development and exploring various technologies. I create innovative and high-performing solutions that blend creativity, efficiency, and technical expertise. I have had the opportunity to carry out several projects of all kinds, ranging from simple web pages to more complex applications, including game servers.",
         "dates": "Birthdate",
+        "born": "I was born on {date} in Paris. I lived in Paris for 3 years before moving to Bordeaux where I currently live.",
         "contact": "Contact",
         "phone": "Phone",
         "bluesky": "Bluesky",
