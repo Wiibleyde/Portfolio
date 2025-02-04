@@ -15,7 +15,7 @@ export default function Home() {
                 <source src={"/video/background.mp4"} type='video/mp4' />
             </video>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
-                <div className='h-screen w-full bg-opacity-60 bg-black flex flex-col justify-center items-center'>
+                <div className='h-screen w-full bg-black/80 flex flex-col justify-center items-center'>
                     <h1 className='text-white text-4xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
                     <ScrollButton />
                 </div>

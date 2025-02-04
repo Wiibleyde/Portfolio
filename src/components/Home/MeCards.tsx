@@ -57,11 +57,7 @@ export function MeCards() {
             </div>
             <div className='flex flex-col space-x-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('dates')}</h3>
-                <div className='flex items-center'>
-                    <span className='text-lg font-medium text-gray-300 bg-gray-800 p-2 rounded-lg'>
-                        {birthdate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                    </span>
-                </div>
+                {t('born', { date: birthdate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) })}
                 <div className='mt-4 w-full'>
                     <NextBirthday birthdate={birthdate} />
                 </div>

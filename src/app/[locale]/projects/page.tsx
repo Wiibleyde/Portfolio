@@ -1,7 +1,7 @@
 "use client"
 import { useTranslations } from "next-intl";
 import { ScrollButton } from "@/components/UI/ScrollButton";
-import { Project, ProjectCard, ProjectType } from "@/components/projects/ProjectCard";
+import { Project, ProjectCard, ProjectType } from "@/components/Projects/ProjectCard";
 
 import HopeLogo from "@public/img/projects/hope.png";
 import LexPortLogo from "@public/img/projects/lexport.png";
@@ -24,12 +24,11 @@ const projects: Project[] = [
         tags: ["Portfolio", "React", "Next.js", "TailwindCSS", "Typescript"],
     },
     {
-        title: "Hope - GTARP",
-        description: "Hope - GTARP est (était) un serveur de jeu en ligne sur la plateforme FiveM.",
+        title: "Hope - GTARP (Fermé)",
+        description: "Hope - GTARP est (était 😢) un serveur de jeu en ligne sur la plateforme FiveM.",
         type: ProjectType.Personal,
-        url: "https://panel.hope-rp.com",
         image: HopeLogo.src,
-        tags: ["GTAV", "Hope", "FiveM", "Typescript", "Lua", "C#", "Go", "MariaDB", "InfluxDB"],
+        tags: ["GTAV", "Hope", "FiveM", "Typescript", "Lua", "C#", "Go", "MariaDB", "InfluxDB", "C++", "Grafana", "Discord.js"],
     },
     {
         title: "RPlace Analyser",
@@ -104,7 +103,7 @@ export default function ProjectsPage() {
     return (
         <div className='flex flex-col min-h-screen bg-no-repeat bg-fixed overflow-x-hidden' style={{ background: 'radial-gradient(circle, rgba(0, 192, 219, 0.3) 20%, rgba(0, 0, 0, 1) 80%)', backgroundSize: 'cover', backgroundPosition: 'top' }}>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
-                <div className='h-screen w-full bg-opacity-60 bg-black flex flex-col justify-center items-center'>
+                <div className='h-screen w-full bg-black/80 flex flex-col justify-center items-center'>
                     <h1 className='text-white text-4xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
                     <ScrollButton />
                 </div>
