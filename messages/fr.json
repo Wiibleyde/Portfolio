@@ -148,7 +148,7 @@
         "title": "Portfolio Nathan Bonnell",
         "hello": "Bonjour.",
         "intro": "Je suis Nathan Bonnell, étudiant en informatique au sein d'Ynov Campus.",
-        "description": "Bonjour ! Étudiant passionné par le développement web fullstack et l'exploration de diverses technologies, je crée des solutions innovantes et performantes qui allient créativité, efficacité et maîtrise technique.", 
+        "description": "Bonjour ! Étudiant passionné par le développement web fullstack et l'exploration de diverses technologies, je crée des solutions innovantes et performantes qui allient créativité, efficacité et maîtrise technique.",
         "me": "Voici mon profil",
         "hardskills": "Compétences techniques",
         "softskills": "Compétences humaines",
@@ -171,5 +171,25 @@
         "title": "Contact",
         "contact": "Contactez-moi",
         "description": "Si vous avez des questions, des commentaires ou des propositions, n'hésitez pas à me contacter en remplissant le formulaire ci-dessous. Je vous répondrai dans les plus brefs délais."
+    },
+    "QrCodePage": {
+        "title": "QR Code",
+        "description": "Créez votre propre carte de visite numérique en remplissant le formulaire ci-dessous. Vous pourrez ensuite la télécharger sous forme de QR Code pour la partager facilement avec vos contacts.",
+        "placeholders": {
+            "firstName": "Prénom",
+            "lastName": "Nom",
+            "company": "Entreprise",
+            "jobTitle": "Poste",
+            "email": "Courriel",
+            "phone": "Téléphone",
+            "address": "Adresse",
+            "website": "Site web",
+            "logo": "Logo",
+            "dotType": "Type de point",
+            "cornerType": "Type de coin",
+            "dotColor": "Couleur du point",
+            "cornerColor": "Couleur du coin",
+            "lightColor": "Couleur claire"
+        }
     }
 }
