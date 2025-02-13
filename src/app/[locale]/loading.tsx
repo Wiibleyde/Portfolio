@@ -20,7 +20,7 @@ export default function Loading() {
                     transition={{ repeat: Infinity, duration: 1, times: [0, 0.5, 1], ease: ['easeInOut', 'linear', 'easeInOut'] }}
                 />
                 <motion.div
-                    className="mt-4 text-white text-lg"
+                    className="mt-4 text-white text-3xl uppercase font-black"
                     initial={{ opacity: 1 }}
                     animate={{ opacity: [1, 0.5, 1] }}
                     transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}

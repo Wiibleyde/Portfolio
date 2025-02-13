@@ -194,5 +194,11 @@
             "lightColor": "Couleur claire"
         },
         "generateQrCode": "Générer le QR Code"
+    },
+    "ToolsPage": {
+        "title": "Outils",
+        "description": "Voici une liste des outils développé que je mets à disposition.",
+        "qrcode": "Générateur de QR Code",
+        "vcard": "Carte de visite numérique"
     }
 }
