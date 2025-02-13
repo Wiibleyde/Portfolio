@@ -70,6 +70,12 @@ export function Navbar() {
                             <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/contact" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
                         </h2>
                     </Link>
+                    <Link href="/tools">
+                        <h2 className={`relative hover:text-gray-400 transition duration-300 ${pathname === "/tools" ? "decoration-2 underline-offset-4" : ""}`}>
+                            {t("tools")}
+                            <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-400 transition-transform duration-300 ${pathname === "/tools" ? "scale-x-100" : "scale-x-0"} origin-left`}></span>
+                        </h2>
+                    </Link>
                     <a href={cv} target="_blank" rel="noreferrer">
                         <h2 className={`relative hover:text-gray-400 transition duration-300`}>
                             {t("cv")}
