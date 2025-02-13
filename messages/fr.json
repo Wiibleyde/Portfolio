@@ -174,8 +174,10 @@
     },
     "QrCodePage": {
         "title": "QR Code",
+        "titleVCard": "Carte de visite numérique",
         "description": "Créez votre propre carte de visite numérique en remplissant le formulaire ci-dessous. Vous pourrez ensuite la télécharger sous forme de QR Code pour la partager facilement avec vos contacts.",
         "placeholders": {
+            "text": "Texte",
             "firstName": "Prénom",
             "lastName": "Nom",
             "company": "Entreprise",
@@ -190,6 +192,7 @@
             "dotColor": "Couleur du point",
             "cornerColor": "Couleur du coin",
             "lightColor": "Couleur claire"
-        }
+        },
+        "generateQrCode": "Générer le QR Code"
     }
 }
