@@ -9,11 +9,12 @@
     },
     "Navbar": {
         "name": "Nathan Bonnell",
-        "job": "Développeur Full Stack",
+        "job": "Web Full Stack",
         "title": "Portfolio",
         "home": "Accueil",
         "projects": "Projets",
         "contact": "Contact",
+        "tools": "Outils",
         "cv": "Curriculum Vitae"
     },
     "Footer": {
@@ -22,6 +23,7 @@
         "home": "Accueil",
         "projects": "Projets",
         "contact": "Contact",
+        "tools": "Outils",
         "legal": "Mentions légales"
     },
     "ScrollButton": {
@@ -53,8 +55,8 @@
         "cvAltText": "Curriculum Vitae de Nathan Bonnell",
         "downloadCv": "Télécharger le CV",
         "contactMe": "Contactez-moi",
-        "WIP": "En cours de rédaction",
-        "WIPMessage": "Ce widget est en cours de rédaction. Merci de votre compréhension."
+        "WIP": "En cours de création...",
+        "WIPMessage": "Ce widget est en cours de création. Merci de votre compréhension."
     },
     "HardSkills": {
         "languages": "Langages",

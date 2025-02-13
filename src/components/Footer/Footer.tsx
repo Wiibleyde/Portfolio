@@ -14,6 +14,7 @@ export function Footer() {
                         <li><Link href='/' className="hover:underline">{t('home')}</Link></li>
                         <li><Link href='/projects' className="hover:underline">{t('projects')}</Link></li>
                         <li><Link href='/contact' className="hover:underline">{t('contact')}</Link></li>
+                        <li><Link href='/tools' className="hover:underline">{t('tools')}</Link></li>
                     </ul>
                     <h1 className='text-center text-2xl md:text-4xl font-bold mt-8 md:mt-0'>Nathan Bonnell</h1>
                 </div>

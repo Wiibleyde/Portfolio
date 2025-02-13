@@ -88,7 +88,7 @@ function TimelineItem({ item, index }: { item: Timeline; index: number }) {
             <span className={`absolute flex items-center justify-center w-6 h-6 rounded-full -start-3 ring-8 ring-opacity-45 ${item.ringColor} ${item.circleColor}`}>
                 {item.icon ? <item.icon className={"text-white w-3.5 h-3.5"} /> : <Calendar className={"text-white w-2.5 h-2.5"} />}
             </span>
-            <h3 className="flex items-center mb-1 text-lg font-semibold text-white">
+            <h3 className="flex items-center mb-1 lg:text-lg text-sm font-semibold text-white">
                 {item.title}
                 {index === 0 && (
                     <span className="bg-red-500 text-[#fff] text-sm font-medium me-2 px-2.5 py-0.5 border-sky-100 rounded ms-3">
@@ -99,8 +99,8 @@ function TimelineItem({ item, index }: { item: Timeline; index: number }) {
             <time className="block mb-2 text-sm font-normal leading-none text-gray-500">
                 {item.duration}
             </time>
-            <p>{item.org}</p>
-            {item.description && <p>{item.description}</p>}
+            <p className="lg:text-lg text-sm">{item.org}</p>
+            <span className="lg:text-lg text-sm">{item.description && <p>{item.description}</p>}</span>
             <div className="flex flex-wrap mt-8">
                 {item.skills.map((skill, idx) => (
                     <span key={idx} className={item.class}>
