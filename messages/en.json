@@ -84,7 +84,6 @@
         }
     },
     "Timeline": {
-        "latest": "Most Recent Experience",
         "1": {
             "title": "Full Stack Developer (apprenticeship)",
             "duration": "September 2024 - Present",
@@ -132,7 +131,8 @@
                 "1": "History-Geography, Geopolitics, and Political Science",
                 "2": "Economic and Social Sciences"
             }
-        }
+        },
+        "latest": "Most Recent Experience"
     },
     "ContactForm": {
         "title": "Contact Me",
@@ -194,5 +194,11 @@
             "lightColor": "Light Color"
         },
         "generateQrCode": "Generate QR Code"
+    },
+    "ToolsPage": {
+        "title": "Tools",
+        "description": "Here is a list of the developed tools that I make available.",
+        "qrcode": "QR code generator",
+        "vcard": "Digital business card"
     }
 }
