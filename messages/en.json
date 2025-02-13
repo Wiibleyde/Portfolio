@@ -174,8 +174,10 @@
     },
     "QrCodePage": {
         "title": "QR Code",
+        "titleVCard": "Digital Business Card",
         "description": "Create your own numeric business card by filling out the form below. You can customize the colors and shapes of the dots and corners of the QR code.",
         "placeholders": {
+            "text": "Text",
             "firstName": "Firstname",
             "lastName": "Lastname",
             "company": "Company",
@@ -190,6 +192,7 @@
             "dotColor": "Dot Color",
             "cornerColor": "Corner Color",
             "lightColor": "Light Color"
-        }
+        },
+        "generateQrCode": "Generate QR Code"
     }
 }
