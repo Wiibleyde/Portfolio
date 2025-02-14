@@ -128,7 +128,7 @@ export default function ContactPage() {
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
-                <h1 className='text-2xl font-bold'>{t('description')}</h1>
+                <h2 className='text-2xl font-bold'>{t('description')}</h2>
                 <div className="flex flex-row space-x-4 p-4">
                     <div>
                         <form className="space-y-4">
