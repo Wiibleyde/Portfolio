@@ -4,13 +4,13 @@ import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
 import { Montserrat } from 'next/font/google'
 import "@/app/globals.css"
 import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
 import { ScrollCircle } from "@/components/UI/ScrollCircle";
 import { ClientProviders } from "./ClientProviders";
+import Error from "./[...not_found]/page";
 
 export const metadata: Metadata = {
     title: "Portfolio - Nathan Bonnell",
@@ -58,7 +58,21 @@ export default async function RootLayout({
     const { locale } = await params;
 
     if (!routing.locales.includes(locale as Languges)) {
-        notFound();
+        return (
+            <html lang={routing.defaultLocale}>
+                <body className={montserrat.className}>
+                    <NextIntlClientProvider messages={await getMessages({ locale: routing.defaultLocale })}>
+                        <ClientProviders>
+                            <Navbar />
+                            <Error />
+                            <ScrollToTop />
+                            <ScrollCircle />
+                            <Footer />
+                        </ClientProviders>
+                    </NextIntlClientProvider>
+                </body>
+            </html>
+        );
     }
 
     const messages = await getMessages({ locale });

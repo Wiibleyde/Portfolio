@@ -37,7 +37,7 @@ export function Navbar() {
     return (
         <>
             <div className={`fixed top-4 left-4 z-50 ${showNavbar ? "hidden" : "block"}`}>
-                <button onClick={() => setShowNavbar(true)} className="p-2 text-white" name="Open Navbar">
+                <button onClick={() => setShowNavbar(true)} className="p-2 text-white" name="Open Navbar" aria-label="Open Navbar">
                     <List size={32} />
                 </button>
             </div>
