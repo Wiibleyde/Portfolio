@@ -1,5 +1,5 @@
 import { useLocale } from "next-intl";
-import ReactMarkdown from 'react-markdown';
+import Markdown from 'markdown-to-jsx';
 import './markdown.css';
 
 export default function LegalMentions() {
@@ -11,13 +11,13 @@ export default function LegalMentions() {
                 locale === "fr" ? (
                     <div className='flex flex-col items-center justify-center'>
                         <div className='w-full max-w-3xl p-8 bg-black rounded-lg shadow-lg border-2 markdownApplicable'>
-                            <ReactMarkdown className='prose prose-lg prose-invert'>{frenchMd}</ReactMarkdown>
+                            <Markdown className='prose prose-lg prose-invert'>{frenchMd}</Markdown>
                         </div>
                     </div>
                 ) : locale === "en" ? (
                     <div className='flex flex-col items-center justify-center'>
                         <div className='w-full max-w-3xl p-8 bg-black rounded-lg shadow-lg border-2 markdownApplicable'>
-                            <ReactMarkdown className='prose prose-lg prose-invert'>{englishMd}</ReactMarkdown>
+                            <Markdown className='prose prose-lg prose-invert'>{englishMd}</Markdown>
                         </div>
                     </div>
                 ) : null
