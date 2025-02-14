@@ -43,7 +43,7 @@ export function Navbar() {
             </div>
             <div ref={navbarRef} id="navbar" className={`fixed bg-gradient-to-r from-black via-gray-900 to-black text-white border-2 border-white rounded-xl w-64 h-[calc(100%-2rem)] top-4 left-4 flex flex-col items-start justify-between p-8 shadow-2xl z-50 transition-transform duration-300 transform ${showNavbar ? "translate-x-0" : "-translate-x-[calc(100%+2rem)]"}`}>
                 <div className="absolute top-4 left-4 z-50">
-                    <button onClick={() => setShowNavbar(false)} className="p-2 bg-black bg-opacity-95 text-white rounded-full shadow-lg" name="Close Navbar">
+                    <button onClick={() => setShowNavbar(false)} className="p-2 bg-black bg-opacity-95 text-white rounded-full shadow-lg" name="Close Navbar" aria-label="Close Navbar">
                         <X size={24} />
                     </button>
                 </div>

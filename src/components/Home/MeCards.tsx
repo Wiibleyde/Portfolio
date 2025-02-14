@@ -50,7 +50,7 @@ export function MeCards() {
             <div className='col-span-1 md:col-span-2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <Image src={ProfilePicture.src} alt={t('title')} className='w-full md:w-auto h-auto rounded-xl bg-gray-900 my-auto' height={300} width={300} />
                 <div className='p-4'>
-                    <p className='text-2xl font-bold'>{t('title')}</p>
+                    <h3 className='text-2xl font-bold'>{t('title')}</h3>
                     <p className='italic text-gray-400'>{t('citation')}</p>
                     <p className='text-lg mt-4 text-justify'>{t('description')}</p>
                 </div>

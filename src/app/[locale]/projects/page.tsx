@@ -110,7 +110,7 @@ export default function ProjectsPage() {
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
                 <p className="italic text-gray-500">{t('description')}</p>
-                <h1 className='text-4xl font-bold'>{t('projects')}</h1>
+                <h2 className='text-4xl font-bold'>{t('projects')}</h2>
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
                     {projects.map((project, index) => (
                         <ProjectCard key={index} project={project} />
