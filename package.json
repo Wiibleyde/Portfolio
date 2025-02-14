@@ -21,6 +21,7 @@
     "react-bootstrap-icons": "^1.11.5",
     "react-dom": "^19.0.0",
     "react-google-recaptcha-v3": "^1.10.1",
+    "react-markdown": "^9.0.3",
     "react-tooltip": "^5.28.0"
   },
   "devDependencies": {
