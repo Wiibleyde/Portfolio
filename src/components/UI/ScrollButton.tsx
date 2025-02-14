@@ -14,7 +14,7 @@ export function ScrollButton() {
 
 
     return (
-        <button className='flex flex-col justify-end items-center space-y-8 mb-10' onClick={handleScroll} name="Scroll to content">
+        <button className='flex flex-col justify-end items-center space-y-8 mb-10' onClick={handleScroll} name="Scroll to content" aria-label="Scroll to content">
             <p className='text-white lg:text-4xl text-lg italic'>{t('scroll')}</p>
             <ArrowDownCircleFill className='text-white lg:text-4xl text-3xl animate-bounce' />
         </button>
