@@ -20,9 +20,9 @@ export function Footer() {
                 </div>
                 <div className='flex justify-center items-center mt-8'>
                     <ul className='flex space-x-6'>
-                        <li><Link href='https://github.com/wiibleyde' aria-label="Wiibleyde Github" className="text-white hover:text-gray-400 transition duration-300"><Github size={32} /></Link></li>
-                        <li><Link href='https://twitter.com/wiibleyde' aria-label="Wiibleyde Twitter" className="text-white hover:text-gray-400 transition duration-300"><TwitterX size={32} /></Link></li>
-                        <li><Link href='https://www.linkedin.com/in/nathan-bonnell-57736926a/' aria-label="Wiibleyde LinkedIn" className="text-white hover:text-blue-500 transition duration-300"><Linkedin size={32} /></Link></li>
+                        <li><Link href='https://github.com/wiibleyde' aria-label="Wiibleyde Github" className="text-white hover:text-gray-400 transition duration-300"><Github size={32} style={{ width: '32px', height: '32px' }} /></Link></li>
+                        <li><Link href='https://twitter.com/wiibleyde' aria-label="Wiibleyde Twitter" className="text-white hover:text-gray-400 transition duration-300"><TwitterX size={32} style={{ width: '32px', height: '32px' }} /></Link></li>
+                        <li><Link href='https://www.linkedin.com/in/nathan-bonnell-57736926a/' aria-label="Wiibleyde LinkedIn" className="text-white hover:text-blue-500 transition duration-300"><Linkedin size={32} style={{ width: '32px', height: '32px' }} /></Link></li>
                     </ul>
                 </div>
             </div>
