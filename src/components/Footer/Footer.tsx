@@ -26,7 +26,7 @@ export function Footer() {
                     </ul>
                 </div>
             </div>
-            <div className="text-center text-sm mt-16">
+            <div className="text-center text-sm mt-16 mb-16">
                 <Link href='/legal-mentions' className="hover:underline mb-4 inline-block">{t('legal')}</Link>
                 <br />
                 This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.

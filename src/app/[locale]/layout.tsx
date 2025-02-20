@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/Navbar/Navbar";
 import { Languges } from "@/i18n/request";
 import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
@@ -63,7 +62,7 @@ export default async function RootLayout({
                 <body className={montserrat.className}>
                     <NextIntlClientProvider messages={await getMessages({ locale: routing.defaultLocale })}>
                         <ClientProviders>
-                            <Navbar />
+                            {/* <Navbar /> */}
                             <Error />
                             <ScrollToTop />
                             <ScrollCircle />
@@ -83,7 +82,7 @@ export default async function RootLayout({
             <body className={montserrat.className}>
                 <NextIntlClientProvider messages={messages}>
                     <ClientProviders>
-                        <Navbar />
+                        {/* <Navbar /> */}
                         {children}
                         <ScrollToTop />
                         <ScrollCircle />
