@@ -148,6 +148,7 @@
     },
     "HomePage": {
         "title": "Portfolio Nathan Bonnell",
+        "title-desc": "Étudiant alternant en informatique à Ynov Campus.",
         "hello": "Bonjour.",
         "intro": "Je suis Nathan Bonnell, étudiant en informatique au sein d'Ynov Campus.",
         "description": "Bonjour ! Étudiant passionné par le développement web fullstack et l'exploration de diverses technologies, je crée des solutions innovantes et performantes qui allient créativité, efficacité et maîtrise technique.",

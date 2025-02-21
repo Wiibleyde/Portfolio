@@ -5,11 +5,10 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Montserrat } from 'next/font/google'
 import "@/app/globals.css"
-import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
-import { ScrollCircle } from "@/components/UI/ScrollCircle";
 import { ClientProviders } from "./ClientProviders";
 import Error from "./[...not_found]/page";
+import { DockProvider } from "./DockProvider";
 
 export const metadata: Metadata = {
     title: "Portfolio - Nathan Bonnell",
@@ -62,10 +61,8 @@ export default async function RootLayout({
                 <body className={montserrat.className}>
                     <NextIntlClientProvider messages={await getMessages({ locale: routing.defaultLocale })}>
                         <ClientProviders>
-                            {/* <Navbar /> */}
+                            <DockProvider />
                             <Error />
-                            <ScrollToTop />
-                            <ScrollCircle />
                             <Footer />
                         </ClientProviders>
                     </NextIntlClientProvider>
@@ -82,10 +79,8 @@ export default async function RootLayout({
             <body className={montserrat.className}>
                 <NextIntlClientProvider messages={messages}>
                     <ClientProviders>
-                        {/* <Navbar /> */}
+                        <DockProvider />
                         {children}
-                        <ScrollToTop />
-                        <ScrollCircle />
                         <Footer />
                     </ClientProviders>
                 </NextIntlClientProvider>

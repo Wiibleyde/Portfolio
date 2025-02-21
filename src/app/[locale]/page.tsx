@@ -5,41 +5,36 @@ import { HardSkills } from "@/components/Home/HardSkills";
 import { SoftSkills } from "@/components/Home/SoftSkills";
 import { Timeline } from "@/components/Home/Timeline";
 import BlurText from "@/components/UI/BlurText";
-import Iridescence from "@/components/UI/Iridescence";
+import Wallpaper from "@public/img/picture/wallpaper.jpg";
+import Image from "next/image";
 
 export default function Home() {
     const t = useTranslations('HomePage');
 
     return (
         <div className='flex flex-col min-h-screen bg-no-repeat bg-fixed overflow-x-hidden'>
-            {/* <video autoPlay muted loop className='absolute -z-10 w-full h-full object-cover'>
-                <source src={"/video/background.mp4"} type='video/mp4' />
-            </video> */}
             <div className="-z-10 w-full h-full object-cover bg-fixed fixed">
-                {/* <LetterGlitch
-                    glitchSpeed={14}
-                    centerVignette={true}
-                    outerVignette={false}
-                    smooth={true}
-                    glitchColors={['#27FB6B', '#14CC60', '#09A129']}
-                /> */}
-                <Iridescence
-                    color={[0, 0.5, 0]}
-                    mouseReact={true}
-                    amplitude={0.01}
-                    speed={1.0}
-                />
+                <Image src={Wallpaper} alt="Wallpaper" objectFit="cover" className="blur-xs bg-black" />
             </div>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
-                <div className='h-screen w-full bg-black/30 flex flex-col justify-center items-center'>
-                    <BlurText
-                        text={t('title')}
-                        delay={0}
-                        animateBy="letters"
-                        direction="top"
-                        className="text-white text-3xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-center justify-center"
-                    />
-                    {/* <ScrollButton /> */}
+                <div className='h-screen w-full bg-black/50 flex flex-col justify-start items-start'>
+                    <div className="mt-28 ml-28">
+                        <BlurText
+                            text={t('title')}
+                            delay={10}
+                            animateBy="letters"
+                            direction="top"
+                            className="text-white text-3xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-start justify-start"
+                        />
+                        <BlurText
+                            text={t('title-desc')}
+                            delay={15}
+                            animateBy="letters"
+                            direction="bottom"
+                            className="text-white text-2xl font-bold flex-grow flex items-start justify-start"
+                        />
+                        {/* <ScrollButton /> */}
+                    </div>
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content'>
