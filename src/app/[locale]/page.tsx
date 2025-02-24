@@ -8,6 +8,7 @@ import BlurText from "@/components/UI/BlurText";
 import Wallpaper from "@public/img/picture/wallpaper.jpg";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
+import { ScrollButton } from "@/components/UI/ScrollButton";
 
 export default function Home() {
     const t = useTranslations('HomePage');
@@ -38,6 +39,9 @@ export default function Home() {
                     <Link href="/contact" className="absolute bottom-0 right-0 mr-28 mb-28 text-white text-4xl font-bold transition duration-300 hover:text-gray-400">
                         {t('contact')}
                     </Link>
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-28">
+                        <ScrollButton />
+                    </div>
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content'>

@@ -147,14 +147,15 @@
     "error": "Error sending message. Please try again later."
   },
   "HomePage": {
-    "title": "Nathan Bonnell Portfolio",
-    "hello": "Hello.",
+    "title": "Nathan Bonnell",
     "intro": "I am Nathan Bonnell, a computer science student at Ynov Campus.",
     "description": "Hello! As a student passionate about full-stack web development and exploring various technologies, I create innovative and high-performing solutions that blend creativity, efficiency, and technical expertise.",
     "me": "Here is my profile",
     "hardskills": "Technical Skills",
     "softskills": "Soft Skills",
-    "timeline": "Experience (Professional, Academic, and Volunteer)"
+    "timeline": "Experience (Professional, Academic, and Volunteer)",
+    "contact": "Contact me!",
+    "title-desc": "Student alternating in computer science at Ynov Campus."
   },
   "ProjectsPage": {
     "title": "Projects",
