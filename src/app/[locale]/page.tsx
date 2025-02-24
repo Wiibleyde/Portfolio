@@ -7,14 +7,15 @@ import { Timeline } from "@/components/Home/Timeline";
 import BlurText from "@/components/UI/BlurText";
 import Wallpaper from "@public/img/picture/wallpaper.jpg";
 import Image from "next/image";
+import { Link } from "@/i18n/routing";
 
 export default function Home() {
     const t = useTranslations('HomePage');
 
     return (
         <div className='flex flex-col min-h-screen bg-no-repeat bg-fixed overflow-x-hidden'>
-            <div className="-z-10 w-full h-full object-cover bg-fixed fixed">
-                <Image src={Wallpaper} alt="Wallpaper" objectFit="cover" className="blur-xs bg-black" />
+            <div className="-z-10 w-screen h-screen object-cover bg-fixed fixed">
+                <Image src={Wallpaper} alt="Wallpaper" className="blur-xs bg-black w-full h-full object-cover" />
             </div>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
                 <div className='h-screen w-full bg-black/50 flex flex-col justify-start items-start'>
@@ -33,8 +34,10 @@ export default function Home() {
                             direction="bottom"
                             className="text-white text-2xl font-bold flex-grow flex items-start justify-start"
                         />
-                        {/* <ScrollButton /> */}
                     </div>
+                    <Link href="/contact" className="absolute bottom-0 right-0 mr-28 mb-28 text-white text-4xl font-bold transition duration-300 hover:text-gray-400">
+                        {t('contact')}
+                    </Link>
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content'>
