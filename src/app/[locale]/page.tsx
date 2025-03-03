@@ -1,10 +1,10 @@
 import { ScrollButton } from "@/components/UI/ScrollButton";
 import { useTranslations } from "next-intl";
-import { WordAnimation } from "@/components/Home/WordAnimation";
 import { MeCards } from "@/components/Home/MeCards";
 import { HardSkills } from "@/components/Home/HardSkills";
 import { SoftSkills } from "@/components/Home/SoftSkills";
 import { Timeline } from "@/components/Home/Timeline";
+import BlurText from "@/components/UI/BlurText";
 
 export default function Home() {
     const t = useTranslations('HomePage');
@@ -15,15 +15,33 @@ export default function Home() {
                 <source src={"/video/background.mp4"} type='video/mp4' />
             </video>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
-                <div className='h-screen w-full bg-black/80 flex flex-col justify-center items-center'>
-                    <h1 className='text-white text-3xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
-                    <ScrollButton />
+            <div className='h-screen w-full bg-black/50 flex flex-col justify-start items-start'>
+                    <div className="mt-28 ml-28">
+                        <BlurText
+                            text={t('title')}
+                            delay={10}
+                            animateBy="letters"
+                            direction="top"
+                            className="text-white text-3xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-start justify-start"
+                        />
+                        <BlurText
+                            text={t('title-desc')}
+                            delay={15}
+                            animateBy="letters"
+                            direction="bottom"
+                            className="text-white text-2xl font-bold flex-grow flex items-start justify-start"
+                        />
+                    </div>
+                    {/* center */}
+                    <div className='absolute bottom-0 left-0 right-0 flex justify-center'>
+                        <ScrollButton />
+                    </div>
                 </div>
             </div>
-            <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content'>
-                <div className='w-full mb-24'>
+            <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content' style={{ boxShadow: '0 0 100px 110px rgba(0, 0, 0, 1)' }}>
+                {/* <div className='w-full mb-24'>
                     <WordAnimation title={t('description')} />
-                </div>
+                </div> */}
                 <div className='w-full'>
                     <h2 className={'text-5xl text-center font-bold mb-4'}>{t('me')}</h2>
                     <MeCards />

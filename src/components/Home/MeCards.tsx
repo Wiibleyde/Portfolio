@@ -9,7 +9,6 @@ import Linkedin from "@public/img/network/linkedin.svg";
 import Mail from "@public/img/network/mail.svg";
 import Twitter from "@public/img/network/twitter.svg";
 import { NetworkCard } from "./NetworkCard";
-import { LoadingSvg } from "../UI/Loading";
 import { Link } from "@/i18n/routing";
 
 export function MeCards() {
@@ -55,14 +54,7 @@ export function MeCards() {
                     <p className='text-lg mt-4 text-justify'>{t('description')}</p>
                 </div>
             </div>
-            <div className='flex flex-col space-x-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
-                <h3 className='text-xl font-semibold mb-4'>{t('dates')}</h3>
-                {t('born', { date: birthdate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) })}
-                <div className='mt-4 w-full'>
-                    <NextBirthday birthdate={birthdate} />
-                </div>
-            </div>
-            <div className='flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
+            <div className='row-span-2 flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('cv')}</h3>
                 <a href="/CV_Nathan_Bonnell.pdf" className='rounded-[2rem] w-full p-2'>
                     <Image src='/img/cv/CV_Nathan_Bonnell.png' alt={t('cvAltText')} className='object-cover w-full rounded-[2rem]' height={500} width={500} />
@@ -71,9 +63,16 @@ export function MeCards() {
                     {t('downloadCv')}
                 </a>
             </div>
+            <div className='flex flex-col space-x-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
+                <h3 className='text-xl font-semibold mb-4'>{t('dates')}</h3>
+                <p className='text-lg text-white'>{t('born', { date: birthdate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) })}</p>
+                <div className='mt-4 w-full'>
+                    <NextBirthday birthdate={birthdate} />
+                </div>
+            </div>
             <div className='flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('contact')}</h3>
-                <div className='w-full flex flex-col space-y-6 my-4 p-2'>
+                <div className='w-full flex flex-wrap justify-center items-center space-x-4'>
                     {networks.map((network, index) => (
                         <NetworkCard key={index} title={network.title} url={network.url} icon={network.icon} />
                     ))}
@@ -81,13 +80,6 @@ export function MeCards() {
                 <Link href='/contact' className='bg-blue-500 text-white m-2 p-4 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300'>
                     {t('contactMe')}
                 </Link>
-            </div>
-            <div className='bg-black p-6 rounded-[2rem] nice-shadow items-center'>
-                <div className='flex flex-col justify-center items-center space-y-4'>
-                    <LoadingSvg />
-                    <p className='text-xl font-semibold text-center'>{t('WIP')}</p>
-                    <p className='text-gray-400 text-center'>{t('WIPMessage')}</p>
-                </div>
             </div>
         </div>
     )
