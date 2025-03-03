@@ -7,7 +7,7 @@ import { Timeline } from "@/components/Home/Timeline";
 import BlurText from "@/components/UI/BlurText";
 import Wallpaper from "@public/img/picture/wallpaper.jpg";
 import Image from "next/image";
-import { Link } from "@/i18n/routing";
+// import { Link } from "@/i18n/routing";
 import { ScrollButton } from "@/components/UI/ScrollButton";
 
 export default function Home() {
@@ -36,9 +36,9 @@ export default function Home() {
                             className="text-white text-2xl font-bold flex-grow flex items-start justify-start"
                         />
                     </div>
-                    <Link href="/contact" className="absolute bottom-0 right-0 mr-28 mb-28 text-white text-4xl font-bold transition duration-300 hover:text-gray-400">
+                    {/* <Link href="/contact" className="absolute bottom-0 right-0 mr-28 mb-28 text-white text-4xl font-bold transition duration-300 hover:text-gray-400">
                         {t('contact')}
-                    </Link>
+                    </Link> */}
                     <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-28">
                         <ScrollButton />
                     </div>
