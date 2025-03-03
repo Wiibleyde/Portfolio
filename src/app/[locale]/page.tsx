@@ -16,7 +16,7 @@ export default function Home() {
             </video>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
             <div className='h-screen w-full bg-black/50 flex flex-col justify-start items-start'>
-                    <div className="mt-28 ml-28">
+                    <div className="lg:mt-28 lg:ml-28 mt-32 ml-16">
                         <BlurText
                             text={t('title')}
                             delay={10}
