@@ -9,8 +9,7 @@
   },
   "Navbar": {
     "name": "Nathan Bonnell",
-    "job": "Full Stack Web",
-    "title": "Portfolio",
+    "job": "Student Developer",
     "home": "Home",
     "projects": "Projects",
     "contact": "Contact",
@@ -102,7 +101,7 @@
     "2": {
       "title": "Master's in Computer Science",
       "duration": "September 2022 - September 2027",
-      "org": "Ynov Campus",
+      "org": "Ynov Campus (Currently in B3)",
       "description": "Development of web, mobile, and software applications (also learning infrastructure and network technologies).",
       "skills": {
         "0": "Web Development",
@@ -125,9 +124,10 @@
       }
     },
     "4": {
-      "title": "General Baccalaureate",
+      "title": "Schooling (kindergarten, primary, college, high school)",
       "duration": "September 2007 - June 2022",
       "org": "Sainte Marie Grand Lebrun",
+      "description": "School of kindergarten to the final year, general baccalaureate.",
       "skills": {
         "0": "Digital and Computer Sciences",
         "1": "History-Geography, Geopolitics, and Political Science",
@@ -147,7 +147,8 @@
     "error": "Error sending message. Please try again later."
   },
   "HomePage": {
-    "title": "Nathan Bonnell Portfolio",
+    "title": "Nathan Bonnell",
+    "title-desc": "Computer Science Student at Ynov Campus.",
     "hello": "Hello.",
     "intro": "I am Nathan Bonnell, a computer science student at Ynov Campus.",
     "description": "Hello! As a student passionate about full-stack web development and exploring various technologies, I create innovative and high-performing solutions that blend creativity, efficiency, and technical expertise.",

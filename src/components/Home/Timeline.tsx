@@ -55,6 +55,7 @@ export function Timeline() {
             "title": t("4.title"),
             "duration": t("4.duration"),
             "org": t("4.org"),
+            "description": t("4.description"),
             "icon": Book,
             "skills": [t("4.skills.0"), t("4.skills.1"), t("4.skills.2")],
             "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-green-900 text-green-300",

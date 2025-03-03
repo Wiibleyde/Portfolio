@@ -9,8 +9,7 @@
     },
     "Navbar": {
         "name": "Nathan Bonnell",
-        "job": "Web Full Stack",
-        "title": "Portfolio",
+        "job": "Étudiant développeur",
         "home": "Accueil",
         "projects": "Projets",
         "contact": "Contact",
@@ -103,7 +102,7 @@
         "2": {
             "title": "Mastère Informatique",
             "duration": "Septembre 2022 - Septembre 2027",
-            "org": "Ynov Campus",
+            "org": "Ynov Campus (Actuellement en B3)",
             "description": "Développement d'applications web, mobile et logiciel (apprentissage néanmoins de technologies d'infrastructures et de réseaux).",
             "skills": {
                 "0": "Développement Web",
@@ -126,9 +125,10 @@
             }
         },
         "4": {
-            "title": "Baccalauréat Général",
+            "title": "Scolarité (Maternelle, Primaire, Collège, Lycée)",
             "duration": "Septembre 2007 - Juin 2022",
             "org": "Sainte Marie Grand Lebrun",
+            "description": "Scolarité de la maternelle à la terminale, baccalauréat général.",
             "skills": {
                 "0": "Numérique et Sciences Informatiques",
                 "1": "Historie-Géographie Géopolitique et Sciences Politiques",
@@ -147,7 +147,8 @@
         "error": "Erreur lors de l'envoi du message. Veuillez réessayer plus tard."
     },
     "HomePage": {
-        "title": "Portfolio Nathan Bonnell",
+        "title": "Nathan Bonnell",
+        "title-desc": "Étudiant alternant en informatique à Ynov Campus.",
         "hello": "Bonjour.",
         "intro": "Je suis Nathan Bonnell, étudiant en informatique au sein d'Ynov Campus.",
         "description": "Bonjour ! Étudiant passionné par le développement web fullstack et l'exploration de diverses technologies, je crée des solutions innovantes et performantes qui allient créativité, efficacité et maîtrise technique.",

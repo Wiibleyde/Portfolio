@@ -41,12 +41,17 @@ export function NextBirthday({ birthdate }: { birthdate: Date }) {
     const progress = ((totalDiff - diff) / totalDiff) * 100;
 
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col items-center'>
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 my-2">
                 <div className="bg-green-500 h-2.5 rounded-full transition-all duration-100" style={{ width: `${progress}%` }}></div>
             </div>
             <span className="text-xs text-gray-700 dark:text-gray-300">{progress.toFixed(5)}% {t('until')} {nextAge} {t('yearsOnly')}</span>
-            <span className="text-gray-300 text-sm my-2 transition-all duration-500">{days}{t('days')} {hours}{t('hours')} {minutes}{t('minutes')} {seconds}{t('seconds')}</span>
+            <div className="text-gray-300 text-sm my-2 transition-all duration-500 flex space-x-2">
+                <span>{days}<span className="font-semibold">{t('days')}</span></span>
+                <span>{hours}<span className="font-semibold">{t('hours')}</span></span>
+                <span>{minutes}<span className="font-semibold">{t('minutes')}</span></span>
+                <span>{seconds}<span className="font-semibold">{t('seconds')}</span></span>
+            </div>
         </div>
     );
 }
