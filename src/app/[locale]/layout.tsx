@@ -9,8 +9,8 @@ import "@/app/globals.css"
 import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
 import { ScrollCircle } from "@/components/UI/ScrollCircle";
-import { ClientProviders } from "./ClientProviders";
 import Error from "./[...not_found]/page";
+import { ClientProviders } from "./clientProviders";
 
 export const metadata: Metadata = {
     title: "Portfolio - Nathan Bonnell",
