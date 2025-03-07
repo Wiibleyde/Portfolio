@@ -22,14 +22,14 @@ export default function Home() {
                             delay={10}
                             animateBy="letters"
                             direction="top"
-                            className="text-white text-3xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-start justify-start"
+                            className="dark:text-white text-3xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-start justify-start"
                         />
                         <BlurText
                             text={t('title-desc')}
                             delay={15}
                             animateBy="letters"
                             direction="bottom"
-                            className="text-white text-2xl font-bold flex-grow flex items-start justify-start"
+                            className="dark:text-white text-2xl font-bold flex-grow flex items-start justify-start"
                         />
                     </div>
                     {/* center */}

@@ -101,15 +101,15 @@ export default function ProjectsPage() {
     const t = useTranslations("ProjectsPage");
 
     return (
-        <div className='flex flex-col min-h-screen bg-no-repeat bg-fixed overflow-x-hidden' style={{ background: 'radial-gradient(circle, rgba(0, 192, 219, 0.3) 20%, rgba(0, 0, 0, 1) 80%)', backgroundSize: 'cover', backgroundPosition: 'top' }}>
+        <div className='flex flex-col min-h-screen bg-no-repeat bg-fixed overflow-x-hidden' style={{ background: 'radial-gradient(circle, rgba(0, 192, 219, 0.3) 20%, rgba(255, 255, 255, 1) 80%)', backgroundSize: 'cover', backgroundPosition: 'top' }}>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
-                <div className='h-screen w-full bg-black/80 flex flex-col justify-center items-center'>
-                    <h1 className='text-white text-4xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
+                <div className='h-screen w-full bg-white/80 dark:bg-black/80 flex flex-col justify-center items-center'>
+                    <h1 className='text-black dark:text-white text-4xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
                     <ScrollButton />
                 </div>
             </div>
-            <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
-                <p className="italic text-gray-500">{t('description')}</p>
+            <div className='flex flex-col justify-center items-center bg-white dark:bg-black h-fit p-8 space-y-8 text-black dark:text-white' id='content'>
+                <p className="italic text-gray-700 dark:text-gray-500">{t('description')}</p>
                 <h2 className='text-4xl font-bold'>{t('projects')}</h2>
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
                     {projects.map((project, index) => (
