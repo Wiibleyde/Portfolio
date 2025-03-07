@@ -46,7 +46,7 @@ export function NextBirthday({ birthdate }: { birthdate: Date }) {
                 <div className="bg-green-500 h-2.5 rounded-full transition-all duration-100" style={{ width: `${progress}%` }}></div>
             </div>
             <span className="text-xs text-gray-700 dark:text-gray-300">{progress.toFixed(5)}% {t('until')} {nextAge} {t('yearsOnly')}</span>
-            <div className="text-gray-300 text-sm my-2 transition-all duration-500 flex space-x-2">
+            <div className="dark:text-gray-300 text-sm my-2 transition-all duration-500 flex space-x-2">
                 <span>{days}<span className="font-semibold">{t('days')}</span></span>
                 <span>{hours}<span className="font-semibold">{t('hours')}</span></span>
                 <span>{minutes}<span className="font-semibold">{t('minutes')}</span></span>

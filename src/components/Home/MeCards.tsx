@@ -46,15 +46,15 @@ export function MeCards() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-16">
-            <div className='col-span-1 md:col-span-2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
+            <div className='col-span-1 md:col-span-2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 dark:bg-black bg-gray-200 p-6 rounded-[2rem] nice-shadow items-center'>
                 <Image src={ProfilePicture.src} alt={t('title')} className='w-full md:w-auto h-auto rounded-xl bg-gray-900 my-auto' height={300} width={300} />
                 <div className='p-4'>
                     <h3 className='text-2xl font-bold'>{t('title')}</h3>
-                    <p className='italic text-gray-400'>{t('citation')}</p>
+                    <p className='italic dark:text-gray-400 text-gray-500'>{t('citation')}</p>
                     <p className='text-lg mt-4 text-justify'>{t('description')}</p>
                 </div>
             </div>
-            <div className='row-span-2 flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
+            <div className='row-span-2 flex flex-col space-y-4 dark:bg-black bg-gray-200 p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('cv')}</h3>
                 <a href="/CV_Nathan_Bonnell.pdf" className='rounded-[2rem] w-full p-2'>
                     <Image src='/img/cv/CV_Nathan_Bonnell.png' alt={t('cvAltText')} className='object-cover w-full rounded-[2rem]' height={500} width={500} />
@@ -63,14 +63,14 @@ export function MeCards() {
                     {t('downloadCv')}
                 </a>
             </div>
-            <div className='flex flex-col space-x-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
+            <div className='flex flex-col space-x-4 dark:bg-black bg-gray-200 p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('dates')}</h3>
-                <p className='text-lg text-white'>{t('born', { date: birthdate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) })}</p>
+                <p className='text-lg dark:text-white'>{t('born', { date: birthdate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) })}</p>
                 <div className='mt-4 w-full'>
                     <NextBirthday birthdate={birthdate} />
                 </div>
             </div>
-            <div className='flex flex-col space-y-4 bg-black p-6 rounded-[2rem] nice-shadow items-center'>
+            <div className='flex flex-col space-y-4 dark:bg-black bg-gray-200 p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('contact')}</h3>
                 <div className='w-full flex flex-wrap justify-center items-center space-x-4'>
                     {networks.map((network, index) => (
