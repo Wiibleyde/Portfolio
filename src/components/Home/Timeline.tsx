@@ -75,7 +75,7 @@ export function Timeline() {
     );
 }
 
-function TimelineItem({ item, index }: { item: Timeline; index: number }) {
+function TimelineItem({ item, index }: Readonly<{ item: Timeline; index: number }>) {
     const t = useTranslations("Timeline");
 
     return (
@@ -103,8 +103,8 @@ function TimelineItem({ item, index }: { item: Timeline; index: number }) {
             <p className="lg:text-lg text-sm">{item.org}</p>
             <span className="lg:text-lg text-sm">{item.description && <p>{item.description}</p>}</span>
             <div className="flex flex-wrap mt-8">
-                {item.skills.map((skill, idx) => (
-                    <span key={idx} className={item.class}>
+                {item.skills.map((skill) => (
+                    <span key={skill} className={item.class}>
                         {skill}
                     </span>
                 ))}

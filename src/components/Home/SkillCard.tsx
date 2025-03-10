@@ -7,7 +7,7 @@ export interface SkillProps {
     url?: string;
 }
 
-export function SkillCard({ title, image, url }: SkillProps) {
+export function SkillCard({ title, image, url }: Readonly<SkillProps>) {
     if(!url) {
         return (
             <div className='flex flex-col items-center space-y-3 my-5'>

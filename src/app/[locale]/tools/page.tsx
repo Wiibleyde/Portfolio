@@ -27,8 +27,8 @@ export default function ToolsPage() {
                 <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
                     <p className='text-xl font-light'>{t('description')}</p>
                     <div className='flex flex-col sm:flex-row justify-center items-center gap-8'>
-                        {subfolders.map((subfolder, index) => (
-                            <Link key={index} href={subfolder.url} className='bg-black border-2 rounded-xl p-4 text-center'>
+                        {subfolders.map((subfolder) => (
+                            <Link key={subfolder.url} href={subfolder.url} className='bg-black border-2 rounded-xl p-4 text-center'>
                                 <h2 className='text-xl font-bold'>{subfolder.label}</h2>
                             </Link>
                         ))}

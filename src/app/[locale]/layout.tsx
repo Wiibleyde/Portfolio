@@ -9,7 +9,7 @@ import "@/app/globals.css"
 import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
 import { ScrollCircle } from "@/components/UI/ScrollCircle";
-import Error from "./[...not_found]/page";
+import NotFound from "./[...not_found]/page";
 import { ClientProviders } from "./clientProviders";
 
 export const metadata: Metadata = {
@@ -55,7 +55,7 @@ export default async function RootLayout({
     children: React.ReactNode;
     params: { locale: string };
 }>) {
-    const { locale } = await params;
+    const { locale } = params;
 
     if (!routing.locales.includes(locale as Languges)) {
         return (
@@ -64,7 +64,7 @@ export default async function RootLayout({
                     <NextIntlClientProvider messages={await getMessages({ locale: routing.defaultLocale })}>
                         <ClientProviders>
                             <Navbar />
-                            <Error />
+                            <NotFound />
                             <ScrollToTop />
                             <ScrollCircle />
                             <Footer />

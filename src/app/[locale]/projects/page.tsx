@@ -112,8 +112,8 @@ export default function ProjectsPage() {
                 <p className="italic text-gray-700 dark:text-gray-500">{t('description')}</p>
                 <h2 className='text-4xl font-bold'>{t('projects')}</h2>
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
-                    {projects.map((project, index) => (
-                        <ProjectCard key={index} project={project} />
+                    {projects.map((project) => (
+                        <ProjectCard key={project.title} project={project} />
                     ))}
                 </div>
             </div>

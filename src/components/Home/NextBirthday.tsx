@@ -2,7 +2,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-export function NextBirthday({ birthdate }: { birthdate: Date }) {
+export function NextBirthday({ birthdate }: Readonly<{ birthdate: Date }>) {
     const t = useTranslations('NextBirthday');
 
     const [time, setTime] = useState(new Date());

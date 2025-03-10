@@ -73,8 +73,8 @@ export function MeCards() {
             <div className='flex flex-col space-y-4 dark:bg-black bg-gray-200 p-6 rounded-[2rem] nice-shadow items-center'>
                 <h3 className='text-xl font-semibold mb-4'>{t('contact')}</h3>
                 <div className='w-full flex flex-wrap justify-center items-center space-x-4'>
-                    {networks.map((network, index) => (
-                        <NetworkCard key={index} title={network.title} url={network.url} icon={network.icon} />
+                    {networks.map((network) => (
+                        <NetworkCard key={network.url} title={network.title} url={network.url} icon={network.icon} />
                     ))}
                 </div>
                 <Link href='/contact' className='bg-blue-500 text-white m-2 p-4 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300'>

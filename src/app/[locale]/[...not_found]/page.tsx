@@ -1,7 +1,7 @@
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
-export default function Error() {
+export default function NotFound() {
     const t = useTranslations('Error');
 
     return (

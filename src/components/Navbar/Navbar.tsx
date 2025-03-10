@@ -22,15 +22,12 @@ export function Navbar() {
         if (typeof window === 'undefined') return;
 
         const isMouseNearNavbar = mouse.x <= 40;
-        if (isMouseNearNavbar && !isShowingNavbar) {
+        if ((isMouseNearNavbar || onElement) && !isShowingNavbar) {
             setShowNavbar(true);
             setIsShowingNavbar(true);
         } else if (!isMouseNearNavbar && !onElement && isShowingNavbar) {
             setShowNavbar(false);
             setIsShowingNavbar(false);
-        } else if (onElement && !isShowingNavbar) {
-            setShowNavbar(true);
-            setIsShowingNavbar(true);
         }
     }, [onElement, isShowingNavbar, mouse]);
 

@@ -56,7 +56,7 @@ function getDominantColor(imageSrc: string, callback: (color: string) => void) {
     };
 }
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({ project }: Readonly<{ project: Project }>) {
     const t = useTranslations("ProjectsPage");
     const [dominantColor, setDominantColor] = useState<string>("dark");
 
@@ -84,8 +84,8 @@ export function ProjectCard({ project }: { project: Project }) {
                     )}
                 </div>
                 <div className='my-5 flex flex-row flex-wrap space-x-2'>
-                    {project.tags.map((tag, index) => (
-                        <span key={index} className='bg-gray-300 dark:bg-gray-700 rounded-full px-3 py-1 text-sm text-black dark:text-white'>#{tag}</span>
+                    {project.tags.map((tag) => (
+                        <span key={tag} className='bg-gray-300 dark:bg-gray-700 rounded-full px-3 py-1 text-sm text-black dark:text-white'>#{tag}</span>
                     ))}
                 </div>
             </div>
