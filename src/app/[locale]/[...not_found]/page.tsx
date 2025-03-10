@@ -22,5 +22,3 @@ export default function NotFound() {
         </div>
     );
 }
-
-// Ajout de l'animation fade-in dans le fichier CSS global
