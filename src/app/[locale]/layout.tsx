@@ -50,12 +50,12 @@ export const montserrat = Montserrat({
 
 export default async function RootLayout({
     children,
-    params,
+    params: paramsPromise,
 }: Readonly<{
     children: React.ReactNode;
-    params: { locale: string };
+    params: Promise<{ locale: string }>;
 }>) {
-    const { locale } = params;
+    const { locale } = await paramsPromise;
 
     if (!routing.locales.includes(locale as Languges)) {
         return (
