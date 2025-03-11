@@ -95,7 +95,7 @@ export function ContactForm() {
                 type='text'
                 id='name'
                 name='name'
-                className='bg-transparent p-4 border-b-2 border-gray-500 text-white outline-none focus:border-red-500 hover:border-red-500 transition-all duration-300'
+                className='bg-transparent p-4 border-b-2 border-gray-500 dark:text-white outline-none focus:border-red-500 hover:border-red-500 transition-all duration-300'
                 placeholder={t('name')}
                 onChange={handleNameChange}
                 value={name}
@@ -107,7 +107,7 @@ export function ContactForm() {
                 type='email'
                 id='email'
                 name='email'
-                className='bg-transparent p-4 border-b-2 border-gray-500 text-white outline-none focus:border-red-500 hover:border-red-500 transition-all duration-300'
+                className='bg-transparent p-4 border-b-2 border-gray-500 dark:text-white outline-none focus:border-red-500 hover:border-red-500 transition-all duration-300'
                 placeholder={t('email')}
                 onChange={handleEmailChange}
                 value={email}
@@ -118,7 +118,7 @@ export function ContactForm() {
             <motion.textarea
                 id='message'
                 name='message'
-                className='bg-transparent p-4 border-2 border-gray-500 text-white rounded-lg outline-none focus:border-red-500 hover:border-red-500 transition-all duration-300'
+                className='bg-transparent p-4 border-2 border-gray-500 dark:text-white rounded-lg outline-none focus:border-red-500 hover:border-red-500 transition-all duration-300'
                 onInput={handleInput}
                 onChange={handleMessageChange}
                 value={message}
@@ -128,7 +128,7 @@ export function ContactForm() {
                 required
             />
             <motion.button
-                className='bg-green-500 text-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300'
+                className='bg-green-500 dark:text-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300'
                 whileHover={{ scale: 1.05 }}
                 name='submit'
             >

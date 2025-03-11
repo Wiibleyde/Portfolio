@@ -40,7 +40,7 @@
 /* Dark theme for shadown */
 @media (prefers-color-scheme: dark) {
     .boxShadowHomepage {
-        box-shadow: 0 0 100px 110px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 100px 110px rgb(0, 0, 0);
     }
 
     .nice-shadow {

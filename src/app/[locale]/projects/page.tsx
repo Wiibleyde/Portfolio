@@ -108,7 +108,7 @@ export default function ProjectsPage() {
                     <ScrollButton />
                 </div>
             </div>
-            <div className='flex flex-col justify-center items-center bg-white dark:bg-black h-fit p-8 space-y-8 text-black dark:text-white' id='content'>
+            <div className='flex flex-col justify-center items-center bg-white dark:bg-black h-fit p-8 space-y-8 text-black dark:text-white boxShadowHomepage' id='content'>
                 <p className="italic text-gray-700 dark:text-gray-500">{t('description')}</p>
                 <h2 className='text-4xl font-bold'>{t('projects')}</h2>
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>

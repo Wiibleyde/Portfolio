@@ -13,7 +13,7 @@
     "@tailwindcss/postcss": "^4.0.12",
     "axios": "^1.8.2",
     "discord.js": "^14.18.0",
-    "framer-motion": "^12.4.10",
+    "framer-motion": "^12.4.11",
     "markdown-to-jsx": "^7.7.4",
     "next": "^15.2.1",
     "next-intl": "^3.26.5",
