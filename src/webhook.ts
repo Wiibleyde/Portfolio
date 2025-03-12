@@ -1,7 +1,7 @@
 import { EmbedBuilder, WebhookClient } from "discord.js";
 
 class Webhook {
-    private client: WebhookClient | null;
+    private readonly client: WebhookClient | null;
 
     constructor(url: string) {
         try {
@@ -55,4 +55,4 @@ class Webhook {
     }
 }
 
-export const webhook = new Webhook(process.env.DISCORD_WEBHOOK_URL || '');
+export const webhook = new Webhook(process.env.DISCORD_WEBHOOK_URL ?? '');

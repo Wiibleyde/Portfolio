@@ -73,47 +73,47 @@ export default function ContactPage() {
     return (
         <div className='flex flex-col min-h-screen bg-no-repeat bg-fixed overflow-x-hidden' style={{ backgroundImage: 'radial-gradient(circle, rgba(250, 86, 250, 0.8) 30%, rgba(0, 0, 0, 1) 80%)', backgroundSize: 'cover', backgroundPosition: 'top' }}>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
-                <div className='h-screen w-full bg-black/80 flex flex-col justify-center items-center'>
-                    <h1 className='text-white text-4xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
+                <div className='h-screen w-full bg-white/80 dark:bg-black/80 flex flex-col justify-center items-center'>
+                    <h1 className='text-black dark:text-white text-4xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-center justify-center'>{t('title')}</h1>
                     <ScrollButton />
                 </div>
             </div>
-            <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-8 text-white' id='content'>
+            <div className='flex flex-col justify-center items-center dark:bg-black bg-gray-100 h-fit p-8 space-y-8 dark:text-white boxShadowHomepage' id='content'>
                 <h2 className='text-2xl font-bold'>{t('description')}</h2>
-                <div className="flex flex-row space-x-4 p-4">
+                <div className="flex lg:space-x-4 space-y-4 p-4 flex-col lg:flex-row">
                     <div>
                         <form className="space-y-4">
                             <div className="flex flex-col space-y-1">
-                                <label htmlFor="text" className="text-sm font-medium text-gray-300">
+                                <label htmlFor="text" className="text-sm font-medium dark:text-gray-300 text-gray-800">
                                     {t('placeholders.text')}
                                 </label>
                                 <input
                                     type="text"
                                     value={text}
                                     onChange={handleChange}
-                                    className="w-full p-1 border border-gray-300 rounded-md bg-gray-800 text-white"
+                                    className="w-full p-1 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white"
                                 />
                             </div>
                             <div className="flex flex-col space-y-1">
-                                <label htmlFor="logo" className="text-sm font-medium text-gray-300">
+                                <label htmlFor="logo" className="text-sm font-medium dark:text-gray-300 text-gray-800">
                                     {t('placeholders.logo')}
                                 </label>
                                 <input
                                     type="file"
                                     accept="image/*"
                                     onChange={handleLogoChange}
-                                    className="w-full p-1 border border-gray-300 rounded-md bg-gray-800 text-white"
+                                    className="w-full p-1 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white"
                                 />
                             </div>
                             <div className="flex space-x-4">
                                 <div className="flex flex-col space-y-1 w-1/2">
-                                    <label htmlFor="dotType" className="text-sm font-medium text-gray-300">
+                                    <label htmlFor="dotType" className="text-sm font-medium dark:text-gray-300 text-gray-800">
                                         {t('placeholders.dotType')}
                                     </label>
                                     <select
                                         value={dotType}
                                         onChange={(e) => setDotType(e.target.value)}
-                                        className="w-full p-1 border border-gray-300 rounded-md bg-gray-800 text-white"
+                                        className="w-full p-1 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white"
                                     >
                                         {dotTypes.map((type) => (
                                             <option key={type} value={type}>
@@ -123,26 +123,26 @@ export default function ContactPage() {
                                     </select>
                                 </div>
                                 <div className="flex flex-col space-y-1 w-1/2">
-                                    <label htmlFor="dotColor" className="text-sm font-medium text-gray-300">
+                                    <label htmlFor="dotColor" className="text-sm font-medium dark:text-gray-300 text-gray-800">
                                         {t('placeholders.dotColor')}
                                     </label>
                                     <input
                                         type="color"
                                         value={dotColor}
                                         onChange={(e) => setDotColor(e.target.value)}
-                                        className="w-full h-full p-1 border border-gray-300 rounded-md bg-gray-800 text-white"
+                                        className="w-full h-full p-1 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white"
                                     />
                                 </div>
                             </div>
                             <div className="flex space-x-4">
                                 <div className="flex flex-col space-y-1 w-1/2">
-                                    <label htmlFor="cornerType" className="text-sm font-medium text-gray-300">
+                                    <label htmlFor="cornerType" className="text-sm font-medium dark:text-gray-300 text-gray-800">
                                         {t('placeholders.cornerType')}
                                     </label>
                                     <select
                                         value={cornerType}
                                         onChange={(e) => setCornerType(e.target.value)}
-                                        className="w-full p-1 border border-gray-300 rounded-md bg-gray-800 text-white"
+                                        className="w-full p-1 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white"
                                     >
                                         {cornerTypes.map((type) => (
                                             <option key={type} value={type}>
@@ -152,26 +152,26 @@ export default function ContactPage() {
                                     </select>
                                 </div>
                                 <div className="flex flex-col space-y-1 w-1/2">
-                                    <label htmlFor="cornerColor" className="text-sm font-medium text-gray-300">
+                                    <label htmlFor="cornerColor" className="text-sm font-medium dark:text-gray-300 text-gray-800">
                                         {t('placeholders.cornerColor')}
                                     </label>
                                     <input
                                         type="color"
                                         value={cornerColor}
                                         onChange={(e) => setCornerColor(e.target.value)}
-                                        className="w-full h-full p-1 border border-gray-300 rounded-md bg-gray-800 text-white"
+                                        className="w-full h-full p-1 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white"
                                     />
                                 </div>
                             </div>
                             <div className="flex flex-col space-y-1">
-                                <label htmlFor="lightColor" className="text-sm font-medium text-gray-300">
+                                <label htmlFor="lightColor" className="text-sm font-medium dark:text-gray-300 text-gray-800">
                                     {t('placeholders.lightColor')}
                                 </label>
                                 <input
                                     type="color"
                                     value={lightColor}
                                     onChange={(e) => setLightColor(e.target.value)}
-                                    className="w-full h-full p-1 border border-gray-300 rounded-md bg-gray-800 text-white"
+                                    className="w-full h-6 p-1 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white"
                                 />
                             </div>
                         </form>

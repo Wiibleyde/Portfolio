@@ -24,9 +24,6 @@
     background-color: #181818;
 }
 
-.nice-shadow {
-    box-shadow: 0px 0px 50px 3px #ffffff80;
-}
 
 @keyframes fade-in {
     from {
@@ -38,4 +35,26 @@
 }
 .animate-fade-in {
     animation: fade-in 1s ease-in-out;
+}
+
+/* Dark theme for shadown */
+@media (prefers-color-scheme: dark) {
+    .boxShadowHomepage {
+        box-shadow: 0 0 100px 110px rgb(0, 0, 0);
+    }
+
+    .nice-shadow {
+        box-shadow: 0px 0px 50px 3px #bbbbbb80;
+    }
+}
+
+/* Light theme for shadown */
+@media (prefers-color-scheme: light) {
+    .boxShadowHomepage {
+        box-shadow: 0 0 100px 110px var(--color-gray-100);
+    }
+
+    .nice-shadow {
+        box-shadow: 0px 0px 50px 3px #3a3a3a80;
+    }
 }

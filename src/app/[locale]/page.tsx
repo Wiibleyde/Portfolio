@@ -15,21 +15,21 @@ export default function Home() {
                 <source src={"/video/background.mp4"} type='video/mp4' />
             </video>
             <div className='flex-grow mb-auto flex flex-col bg-fixed'>
-            <div className='h-screen w-full bg-black/50 flex flex-col justify-start items-start'>
+                <div className='h-screen w-full bg-white/50 dark:bg-black/50 flex flex-col justify-start items-start'>
                     <div className="lg:mt-28 lg:ml-28 mt-32 ml-16">
                         <BlurText
                             text={t('title')}
                             delay={10}
                             animateBy="letters"
                             direction="top"
-                            className="text-white text-3xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-start justify-start"
+                            className="dark:text-white text-3xl md:text-6xl lg:text-8xl font-bold flex-grow flex items-start justify-start"
                         />
                         <BlurText
                             text={t('title-desc')}
                             delay={15}
                             animateBy="letters"
                             direction="bottom"
-                            className="text-white text-2xl font-bold flex-grow flex items-start justify-start"
+                            className="dark:text-white text-2xl font-bold flex-grow flex items-start justify-start"
                         />
                     </div>
                     {/* center */}
@@ -38,7 +38,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col justify-center items-center bg-black h-fit p-8 space-y-32 text-white' id='content' style={{ boxShadow: '0 0 100px 110px rgba(0, 0, 0, 1)' }}>
+            <div className='flex flex-col justify-center items-center dark:bg-black bg-gray-100 h-fit p-8 space-y-32 dark:text-white boxShadowHomepage' id='content'>
                 {/* <div className='w-full mb-24'>
                     <WordAnimation title={t('description')} />
                 </div> */}

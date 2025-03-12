@@ -9,7 +9,7 @@ import "@/app/globals.css"
 import { ScrollToTop } from "@/components/UI/ScrollToTop";
 import { Footer } from "@/components/Footer/Footer";
 import { ScrollCircle } from "@/components/UI/ScrollCircle";
-import Error from "./[...not_found]/page";
+import NotFound from "./[...not_found]/page";
 import { ClientProviders } from "./clientProviders";
 
 export const metadata: Metadata = {
@@ -50,12 +50,12 @@ export const montserrat = Montserrat({
 
 export default async function RootLayout({
     children,
-    params,
+    params: paramsPromise,
 }: Readonly<{
     children: React.ReactNode;
-    params: { locale: string };
+    params: Promise<{ locale: string }>;
 }>) {
-    const { locale } = await params;
+    const { locale } = await paramsPromise;
 
     if (!routing.locales.includes(locale as Languges)) {
         return (
@@ -64,7 +64,7 @@ export default async function RootLayout({
                     <NextIntlClientProvider messages={await getMessages({ locale: routing.defaultLocale })}>
                         <ClientProviders>
                             <Navbar />
-                            <Error />
+                            <NotFound />
                             <ScrollToTop />
                             <ScrollCircle />
                             <Footer />
@@ -80,7 +80,7 @@ export default async function RootLayout({
     return (
         <html lang={locale}>
             <meta name="google-site-verification" content="a4uoCtPLK4IRbmmpoko6el3U8PAeRUvlnEWAcBFi0NA" />
-            <body className={montserrat.className}>
+            <body className={montserrat.className + " dark:bg-black bg-gray-100 dark:text-white"}>
                 <NextIntlClientProvider messages={messages}>
                     <ClientProviders>
                         <Navbar />
