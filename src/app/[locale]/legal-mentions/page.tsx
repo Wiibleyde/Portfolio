@@ -6,17 +6,17 @@ export default function LegalMentions() {
     const locale = useLocale();
 
     return (
-        <div className='flex flex-col items-center justify-center py-12 bg-black text-white min-h-screen'>
+        <div className='flex flex-col items-center justify-center py-12 dark:bg-black bg-gray-100 dark:text-white min-h-screen'>
             {
                 locale === "fr" ? (
                     <div className='flex flex-col items-center justify-center'>
-                        <div className='w-full max-w-3xl p-8 bg-black rounded-lg shadow-lg border-2 markdownApplicable'>
+                        <div className='w-full max-w-3xl p-8 dark:bg-black bg-gray-100 rounded-lg shadow-lg border-2 markdownApplicable'>
                             <Markdown className='prose prose-lg prose-invert'>{frenchMd}</Markdown>
                         </div>
                     </div>
                 ) : locale === "en" ? (
                     <div className='flex flex-col items-center justify-center'>
-                        <div className='w-full max-w-3xl p-8 bg-black rounded-lg shadow-lg border-2 markdownApplicable'>
+                        <div className='w-full max-w-3xl p-8 dark:bg-black bg-gray-100 rounded-lg shadow-lg border-2 markdownApplicable'>
                             <Markdown className='prose prose-lg prose-invert'>{englishMd}</Markdown>
                         </div>
                     </div>

@@ -15,10 +15,10 @@ export function LocaleSelector() {
 
     return (
         <div className="flex flex-row space-x-2">
-            <button onClick={() => handleLanguageChange("fr")} className={`relative p-1 rounded-full transition duration-300 ${locale === "fr" ? "bg-green-500" : "bg-gray-700"} hover:bg-green-400`} name="Change to French">
+            <button onClick={() => handleLanguageChange("fr")} className={`relative p-1 rounded-full transition duration-300 ${locale === "fr" ? "bg-green-500 dark:bg-green-500" : "bg-gray-200 dark:bg-gray-700"} hover:bg-green-400 dark:hover:bg-green-400`} name="Change to French">
                 <Image src={FRFlag} alt="FR Flag" width={30} height={30} />
             </button>
-            <button onClick={() => handleLanguageChange("en")} className={`relative p-1 rounded-full transition duration-300 ${locale === "en" ? "bg-green-500" : "bg-gray-700"} hover:bg-green-400`} name="Change to English">
+            <button onClick={() => handleLanguageChange("en")} className={`relative p-1 rounded-full transition duration-300 ${locale === "en" ? "bg-green-500 dark:bg-green-500" : "bg-gray-200 dark:bg-gray-700"} hover:bg-green-400 dark:hover:bg-green-400`} name="Change to English">
                 <Image src={ENFlag} alt="EN Flag" width={30} height={30} />
             </button>
         </div>
