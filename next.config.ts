@@ -7,6 +7,7 @@ const isDocker = process.env.IS_DOCKER === 'true';
 
 const nextConfig: NextConfig = {
     output: isDocker ? 'standalone' : undefined,
+    reactStrictMode: false,
     webpack: (config) => {
         config.module.rules.push({
             test: /\.node/,

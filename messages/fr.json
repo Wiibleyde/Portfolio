@@ -203,5 +203,19 @@
         "description": "Voici une liste des outils développé que je mets à disposition.",
         "qrcode": "Générateur de QR Code",
         "vcard": "Carte de visite numérique"
+    },
+    "Power4Page": {
+        "title": "Puissance 4",
+        "playerName": "Nom du joueur",
+        "gameCode": "ID de la partie",
+        "description": "Jouez au célèbre jeu de Puissance 4 contre un adversaire ou contre l'ordinateur.",
+        "createGame": "Créer une partie",
+        "joinGame": "Rejoindre une partie",
+        "startGame": "Démarrer la partie",
+        "waitingForPlayers": "En attente d'un adversaire...",
+        "winner": "Gagnant",
+        "playerTurn": "C'est au tour de {player} de jouer.",
+        "turns": "Tours {turns}",
+        "playAgain": "Rejouer"
     }
 }
