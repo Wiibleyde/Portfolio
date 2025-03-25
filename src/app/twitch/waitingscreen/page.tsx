@@ -2,7 +2,7 @@
 import Iridescence from "@/components/UI/Iridescence";
 import ScrollVelocity from "@/components/UI/ScrollVelocity";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 export default function WaitingScreen() {
     const [scrollVelocityTexts, setScrollVelocityTexts] = useState([
@@ -10,6 +10,14 @@ export default function WaitingScreen() {
         'Écran de chargement - '
     ]);
 
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <Content setScrollVelocityTexts={setScrollVelocityTexts} scrollVelocityTexts={scrollVelocityTexts} />
+        </Suspense>
+    );
+}
+
+function Content({ setScrollVelocityTexts, scrollVelocityTexts }: { setScrollVelocityTexts: (texts: string[]) => void; scrollVelocityTexts: string[] }) {
     const params = useSearchParams();
     useEffect(() => {
         const newTexts = [];
