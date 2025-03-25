@@ -136,19 +136,15 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
       baseX.set(baseX.get() + moveBy);
     });
 
-    const spans = [];
-    const totalCopies = numCopies! * 10; // Increase the number of copies significantly
-    for (let i = 0; i < totalCopies; i++) {
-      spans.push(
-        <span
-          className={`flex-shrink-0 ${className}`}
-          key={i}
-          ref={i === 0 ? copyRef : null}
-        >
-          {children}
-        </span>
-      );
-    }
+    const spans = Array.from({ length: numCopies! * 10 }, (_, i) => (
+      <span
+        className={`flex-shrink-0 ${className}`}
+        key={i}
+        ref={i === 0 ? copyRef : null}
+      >
+        {children}
+      </span>
+    ));
 
     return (
       <div
