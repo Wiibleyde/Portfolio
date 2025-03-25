@@ -1,4 +1,3 @@
-
 "use client"
 import React, { useRef, useLayoutEffect, useState, RefObject } from "react";
 import {
@@ -119,7 +118,8 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
 
     const x = useTransform(baseX, (v) => {
       if (copyWidth === 0) return "0px";
-      return `${wrap(-copyWidth, 0, v)}px`;
+      const fullWidth = copyWidth * numCopies!;
+      return `${wrap(-fullWidth, fullWidth, v)}px`;
     });
 
     const directionFactor = useRef<number>(1);
@@ -137,7 +137,8 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
     });
 
     const spans = [];
-    for (let i = 0; i < numCopies!; i++) {
+    const totalCopies = numCopies! * 10; // Increase the number of copies significantly
+    for (let i = 0; i < totalCopies; i++) {
       spans.push(
         <span
           className={`flex-shrink-0 ${className}`}
@@ -189,3 +190,5 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
 };
 
 export default ScrollVelocity;
+
+// https://wiibleyde.github.io/WaitingScreen/index.html
