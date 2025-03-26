@@ -34,6 +34,7 @@ function Content({ setScrollVelocityTexts, scrollVelocityTexts }: { setScrollVel
             newTexts[1] = scrollVelocityTexts[1];
         }
         setScrollVelocityTexts(newTexts);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
 
     return (
@@ -47,6 +48,11 @@ function Content({ setScrollVelocityTexts, scrollVelocityTexts }: { setScrollVel
             <div className="absolute top-1/3">
                 <p className="text-8xl font-bold text-white">Wiibleyde</p>
             </div>
+            {/* <div className="absolute top-0 right-0 p-2 flex flex-row items-center">
+                <DateComponent />
+                <p className="text-2xl font-black text-white mx-4">-</p>
+                <Clock />
+            </div> */}
             <div className="absolute bottom-36">
                 <ScrollVelocity
                     texts={scrollVelocityTexts}
@@ -57,3 +63,37 @@ function Content({ setScrollVelocityTexts, scrollVelocityTexts }: { setScrollVel
         </div>
     );
 }
+
+// export function Clock() {
+//     const [time, setTime] = useState(new Date());
+
+//     useEffect(() => {
+//         const interval = setInterval(() => {
+//             setTime(new Date());
+//         }, 1000);
+//         return () => clearInterval(interval);
+//     }, []);
+
+//     return (
+//         <div className="text-2xl font-black text-white">
+//             {time.toLocaleTimeString()}
+//         </div>
+//     );
+// }
+
+// export function DateComponent() {
+//     const [date, setDate] = useState(new Date());
+
+//     useEffect(() => {
+//         const interval = setInterval(() => {
+//             setDate(new Date());
+//         }, 1000);
+//         return () => clearInterval(interval);
+//     }, []);
+
+//     return (
+//         <div className="text-2xl font-black text-white">
+//             {date.toLocaleDateString()}
+//         </div>
+//     );
+// }
