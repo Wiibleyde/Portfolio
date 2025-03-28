@@ -11,7 +11,7 @@ export default function WaitingScreen() {
     ]);
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Loading page...</div>}>
             <Content setScrollVelocityTexts={setScrollVelocityTexts} scrollVelocityTexts={scrollVelocityTexts} />
         </Suspense>
     );
