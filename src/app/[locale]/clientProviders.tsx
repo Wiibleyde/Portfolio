@@ -6,8 +6,8 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 export function ClientProviders({ children }: Readonly<{ children: ReactNode }>) {
     return (
         <>
-            <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID ?? ''} />
-            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ''} />
+            <GoogleTagManager gtmId='GTM-K7P344NG' />
+            <GoogleAnalytics gaId='G-YTXQPVERXL' />
             <GoogleReCaptchaProvider reCaptchaKey={'6LeMoT4aAAAAAMF6sWS-mo3hf757jjDrv7rPpmgs'}>
                 {children}
             </GoogleReCaptchaProvider>
