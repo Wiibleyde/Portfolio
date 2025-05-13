@@ -1,11 +1,12 @@
 import { Hero } from "@/components/HomePage/Hero";
-import { Landing } from "@/components/Landing";
+import { Presentation } from "@/components/HomePage/Presentation";
 
 export default function Home() {
   return (
-    <div className="">
-      <Landing />
+    <div className="min-h-screen snap-start">
+      {/* Background image */}
       <Hero />
+      <Presentation />
     </div>
   );
 }
