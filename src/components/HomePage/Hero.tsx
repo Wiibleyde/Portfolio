@@ -94,7 +94,7 @@ export function Hero() {
     }, []);
 
     return (
-        <div className="min-h-screen w-full snap-start" style={{ backgroundImage: `url(${Background.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="h-screen w-full snap-start" style={{ backgroundImage: `url(${Background.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <div className="flex flex-col md:flex-row items-center justify-between min-h-screen w-full bg-gradient-to-r from-black/80 via-black/70 to-black/20 px-12 md:px-20 lg:px-24">
                 <div
                     ref={containerRef}

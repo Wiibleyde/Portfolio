@@ -15,7 +15,8 @@ export function Landing() {
 
     // Vérification initiale séparée du localStorage
     useEffect(() => {
-        const hasSeenAnimation = localStorage.getItem('hasSeenWelcome') === 'true';
+        // const hasSeenAnimation = localStorage.getItem('hasSeenWelcome') === 'true';
+        const hasSeenAnimation = false; // For testing purposes, set to false to always show the animation
         setHasSeen(hasSeenAnimation);
     }, []);
 
