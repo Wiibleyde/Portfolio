@@ -67,12 +67,17 @@ export function Timeline() {
     ]
 
     return (
-        <div className="min-h-screen snap-start p-8">
-            <ol className="relative border-s-2 border-gray-600 ml-6">
-                {data.map((item) => (
-                    <TimelineItem key={item.title} item={item} index={data.indexOf(item)} />
-                ))}
-            </ol>
+        <div className="min-h-screen snap-start">
+            <div className="flex items-center justify-center min-h-screen p-4">
+                <div className="border border-blue-500/30 bg-gradient-to-b from-blue-500/30 to-purple-600/30 rounded-2xl shadow-lg p-8">
+                    <h2 className="text-3xl font-bold text-white mb-6">Mon Parcours</h2>
+                    <ol className="relative border-s-2 border-gray-600 ml-6">
+                        {data.map((item) => (
+                            <TimelineItem key={item.title} item={item} index={data.indexOf(item)} />
+                        ))}
+                    </ol>
+                </div>
+            </div>
         </div>
     );
 }
@@ -104,13 +109,13 @@ function TimelineItem({ item, index }: Readonly<{ item: Timeline; index: number 
     return (
         <li
             ref={itemRef}
-            className="mb-10 ml-6 relative"
+            className="mb-2 ml-6 relative"
         >
             <span className={`absolute flex items-center justify-center w-8 h-8 rounded-full -left-10 ring-4 ${item.ringColor} ${item.circleColor}`}>
                 {item.icon ? <item.icon className={"text-white w-4 h-4"} /> : <Calendar className={"text-white w-3 h-3"} />}
             </span>
             <div className="ml-6">
-                <h3 className="flex items-center mb-1 lg:text-lg text-sm font-semibold text-white">
+                <h3 className="flex items-center mb-1 text-base font-semibold text-white">
                     {item.title}
                     {index === 0 && (
                         <span className="bg-red-500 text-white text-xs font-medium ml-2 px-2.5 py-0.5 rounded">
@@ -118,11 +123,11 @@ function TimelineItem({ item, index }: Readonly<{ item: Timeline; index: number 
                         </span>
                     )}
                 </h3>
-                <time className="block mb-2 text-sm font-normal leading-none text-gray-400">
+                <time className="block mb-2 text-base font-normal leading-none text-gray-400">
                     {item.duration}
                 </time>
-                <p className="lg:text-lg text-sm text-white mb-2">{item.org}</p>
-                {item.description && <p className="lg:text-lg text-sm text-white mb-4">{item.description}</p>}
+                <p className="text-base text-white mb-2">{item.org}</p>
+                {item.description && <p className="text-base text-white mb-4">{item.description}</p>}
                 <div className="flex flex-wrap gap-2">
                     {item.skills.map((skill) => (
                         <span key={skill} className={item.class}>
