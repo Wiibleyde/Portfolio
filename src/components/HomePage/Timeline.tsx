@@ -1,11 +1,7 @@
 "use client"
 import { Book, Briefcase, Calendar, HeartFill, Icon } from "react-bootstrap-icons";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
 
 interface Timeline {
     title: string;
@@ -20,6 +16,8 @@ interface Timeline {
 }
 
 export function Timeline() {
+    const timelineRef = useRef<HTMLOListElement>(null);
+    const [isVisible, setIsVisible] = useState(false);
     const data: Timeline[] = [
         {
             "title": "Développeur Full Stack (alternance)",
@@ -66,12 +64,65 @@ export function Timeline() {
         },
     ]
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && !isVisible) {
+                        setIsVisible(true);
+                        
+                        const items = timelineRef.current?.querySelectorAll('.timeline-item');
+                        if (items) {
+                            gsap.fromTo(items, 
+                                { opacity: 0, y: 50 },
+                                {
+                                    opacity: 1,
+                                    y: 0,
+                                    duration: 0.6,
+                                    stagger: 0.15,
+                                    ease: "power2.out"
+                                }
+                            );
+                        }
+                    }
+                });
+            },
+            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+        );
+
+        if (timelineRef.current) {
+            observer.observe(timelineRef.current);
+        }
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [isVisible]);
+
+    // Set initial state
+    useEffect(() => {
+        if (timelineRef.current) {
+            const items = timelineRef.current.querySelectorAll('.timeline-item');
+            gsap.set(items, { opacity: 0, y: 50 });
+        }
+    }, []);
+
     return (
-        <div className="min-h-screen snap-start">
-            <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="min-h-screen snap-start relative bg-gray-900">
+            <div className="absolute inset-0 opacity-5">
+                <div className="w-full h-full" style={{
+                    backgroundImage: `linear-gradient(45deg, #374151 25%, transparent 25%), 
+                                     linear-gradient(-45deg, #374151 25%, transparent 25%), 
+                                     linear-gradient(45deg, transparent 75%, #374151 75%), 
+                                     linear-gradient(-45deg, transparent 75%, #374151 75%)`,
+                    backgroundSize: '20px 20px',
+                    backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+                }}></div>
+            </div>
+            <div className="flex items-center justify-center min-h-screen p-4 relative z-10">
                 <div className="border border-blue-500/30 bg-gradient-to-b from-blue-500/30 to-purple-600/30 rounded-2xl shadow-lg p-8">
                     <h2 className="text-3xl font-bold text-white mb-6">Mon Parcours</h2>
-                    <ol className="relative border-s-2 border-gray-600 ml-6">
+                    <ol ref={timelineRef} className="relative border-s-2 border-gray-600 ml-6">
                         {data.map((item) => (
                             <TimelineItem key={item.title} item={item} index={data.indexOf(item)} />
                         ))}
@@ -83,34 +134,8 @@ export function Timeline() {
 }
 
 function TimelineItem({ item, index }: Readonly<{ item: Timeline; index: number }>) {
-    const itemRef = useRef<HTMLLIElement>(null);
-
-    useEffect(() => {
-        if (itemRef.current) {
-            gsap.fromTo(
-                itemRef.current,
-                { opacity: 0, y: 50 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1.2,
-                    delay: index * 0.2,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: itemRef.current,
-                        start: "top 80%",
-                        toggleActions: "play none none none"
-                    }
-                }
-            );
-        }
-    }, [index]);
-
     return (
-        <li
-            ref={itemRef}
-            className="mb-2 ml-6 relative"
-        >
+        <li className="mb-2 ml-6 relative timeline-item">
             <span className={`absolute flex items-center justify-center w-8 h-8 rounded-full -left-10 ring-4 ${item.ringColor} ${item.circleColor}`}>
                 {item.icon ? <item.icon className={"text-white w-4 h-4"} /> : <Calendar className={"text-white w-3 h-3"} />}
             </span>

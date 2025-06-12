@@ -6,6 +6,13 @@ import { Landing } from "@/components/Landing";
 export const metadata: Metadata = {
   title: "Portfolio - Nathan Bonnell",
   description: "Site portfolio de Nathan Bonnell, développeur web fullstack.",
+  authors: [
+    {
+      name: "Nathan Bonnell",
+      url: "https://nathan.bonnell.fr",
+    },
+  ],
+  keywords: ["portfolio", "Nathan Bonnell", "développeur web", "fullstack"],
 };
 
 const montserrat = Montserrat({

@@ -13,6 +13,7 @@ export function Hero() {
     const containerRef = useRef(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const photoRef = useRef(null);
+    const scrollIndicatorRef = useRef(null);
 
     // Animation effect
     useEffect(() => {
@@ -20,7 +21,7 @@ export function Hero() {
         const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
         // Set initial states (invisible)
-        gsap.set([nameRef.current, titleRef.current, buttonRef.current, photoRef.current], { opacity: 0, y: 20 });
+        gsap.set([nameRef.current, titleRef.current, buttonRef.current, photoRef.current, scrollIndicatorRef.current], { opacity: 0, y: 20 });
 
         // Fade in the container first
         tl.to(containerRef.current, {
@@ -56,6 +57,13 @@ export function Hero() {
             duration: 1.5,
             delay: 0.2
         }, "-=0.7");
+
+        // Animate the scroll indicator
+        tl.to(scrollIndicatorRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+        }, "-=0.5");
 
         // Bouton hover animation
         const button = buttonRef.current;
@@ -94,7 +102,7 @@ export function Hero() {
     }, []);
 
     return (
-        <div className="h-screen w-full snap-start" style={{ backgroundImage: `url(${Background.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="h-screen w-full snap-start relative" style={{ backgroundImage: `url(${Background.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <div className="flex flex-col md:flex-row items-center justify-between min-h-screen w-full bg-gradient-to-r from-black/80 via-black/70 to-black/20 px-12 md:px-20 lg:px-24">
                 <div
                     ref={containerRef}
@@ -145,6 +153,19 @@ export function Hero() {
                             className="rounded-lg"
                             priority
                         />
+                    </div>
+                </div>
+            </div>
+            
+            {/* Scroll indicator */}
+            <div
+                ref={scrollIndicatorRef}
+                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white opacity-0"
+            >
+                <div className="flex flex-col items-center animate-bounce">
+                    <span className="text-sm font-medium mb-2 tracking-wide">Découvrir</span>
+                    <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+                        <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
                     </div>
                 </div>
             </div>
