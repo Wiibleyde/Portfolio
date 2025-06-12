@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+.rainbow-background {
+    background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+    background-size: 1400% 1400%;
+    animation: rainbowbg 15s ease infinite;
+}
+
+@keyframes rainbowbg {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.rainbow-text {
+    background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+    background-size: 1400% 1400%;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: rainbowtext 15s ease infinite;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes rainbowtext {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.mlg-effects {
+    animation: shake 0.5s infinite;
+    filter: contrast(1.5) brightness(1.2) saturate(2);
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.glitch {
+    position: relative;
+    color: white;
+    font-size: 4rem;
+    font-weight: bold;
+    animation: glitch 1s infinite;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    overflow: hidden;
+    clip: rect(0, 900px, 0, 0);
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 red;
+    animation: glitch-before 1s infinite;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 blue;
+    animation: glitch-after 1.5s infinite;
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+@keyframes glitch-before {
+    0% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    20% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    40% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    60% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    80% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    100% {
+        clip: rect(0, 900px, 0, 0);
+    }
+}
+
+@keyframes glitch-after {
+    0% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    20% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    40% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    60% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    80% {
+        clip: rect(0, 900px, 0, 0);
+    }
+    100% {
+        clip: rect(0, 900px, 0, 0);
+    }
+}
