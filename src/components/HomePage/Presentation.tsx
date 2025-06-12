@@ -162,7 +162,7 @@ export function Presentation() {
                     </section>
 
                     {/* Quote Section */}
-                    <blockquote ref={quoteRef} className="relative w-full max-w-4xl mx-auto">
+                    <blockquote ref={quoteRef} className="relative w-full mx-auto">
                         <div className="relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl overflow-hidden">
                             {/* Decorative background elements */}
                             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
