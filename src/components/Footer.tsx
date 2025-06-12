@@ -102,6 +102,11 @@ export function Footer() {
                         <Heart className="w-4 h-4 text-red-400 fill-current" />
                         à Bordeaux
                     </p>
+
+                    <p className="text-sm text-gray-500 mt-4">
+                        Retrouvez aussi une <a href="/lyp" className="hover:text-gray-400 underline decoration-dotted">petite blague</a> et 
+                        les <a href="/hope_pictures" className="hover:text-gray-400 underline decoration-dotted">photos de Hope</a>.
+                    </p>
                 </div>
             </div>
         </footer>
