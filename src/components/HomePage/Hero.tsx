@@ -1,9 +1,9 @@
 "use client";
+import { useScroll } from '@/hooks/useScroll';
 import Background from '@public/img/background.jpg';
 import Me from '@public/img/pp.webp';
 import gsap from 'gsap';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 
 export function Hero() {
@@ -14,6 +14,8 @@ export function Hero() {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const photoRef = useRef(null);
     const scrollIndicatorRef = useRef(null);
+
+    const { scrollToTarget } = useScroll({ targetId: 'contact' });
 
     // Animation effect
     useEffect(() => {
@@ -122,15 +124,14 @@ export function Hero() {
                     </h2>
 
                     <div className="mt-10">
-                        <Link href="/contact">
-                            <button
-                                ref={buttonRef}
-                                className="text-white py-4 px-8 rounded-full border-2 border-white hover:text-black transition-colors duration-400 ease-in-out font-medium tracking-wide relative overflow-hidden group"
-                            >
-                                <span className="relative z-10">Contactez-moi</span>
-                                <span className="absolute bottom-0 left-0 w-0 h-full bg-white group-hover:w-full transition-all duration-400 ease-in-out -z-1 opacity-80"></span>
-                            </button>
-                        </Link>
+                        <button
+                            ref={buttonRef}
+                            onClick={scrollToTarget}
+                            className="text-white py-4 px-8 rounded-full border-2 border-white hover:text-black transition-colors duration-400 ease-in-out font-medium tracking-wide relative overflow-hidden group"
+                        >
+                            <span className="relative z-10">Contactez-moi</span>
+                            <span className="absolute bottom-0 left-0 w-0 h-full bg-white group-hover:w-full transition-all duration-400 ease-in-out -z-1 opacity-80"></span>
+                        </button>
                     </div>
                 </div>
 
@@ -156,14 +157,14 @@ export function Hero() {
                     </div>
                 </div>
             </div>
-            
+
             {/* Scroll indicator */}
             <div
                 ref={scrollIndicatorRef}
                 className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white opacity-0"
             >
                 <div className="flex flex-col items-center animate-bounce">
-                    <span className="text-sm font-medium mb-2 tracking-wide">Découvrir</span>
+                    <span className="text-sm font-medium mb-2 tracking-wide">Lire la suite...</span>
                     <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
                         <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
                     </div>
