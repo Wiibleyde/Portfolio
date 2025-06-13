@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
+const isDocker = process.env.IS_DOCKER === 'true';
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: isDocker ? 'standalone' : undefined,
 };
 
 export default nextConfig;
