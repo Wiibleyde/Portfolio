@@ -9,11 +9,12 @@ import Twitch from "@public/img/projects/twitch.webp";
 import Bro from "@public/img/projects/bro.png";
 import FurutsuGame from "@public/img/projects/furutsugame.png";
 import Me from "@public/img/pp.webp";
+import F1 from "@public/img/projects/f1.png";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Filter, ChevronLeft, ChevronRight } from "react-bootstrap-icons";
-import { ProjectType, Project } from "./types";
 import { ProjectCard } from "./ProjectCard";
+import { Project, ProjectType } from "@/types";
 
 
 export function Projects() {
@@ -109,6 +110,14 @@ export function Projects() {
             repoUrl: "https://github.com/Wiibleyde/FurutsuGame",
             image: FurutsuGame.src,
             tags: ["Unity", "C#", "Game", "Suika Game", "Ynov"],
+        },
+        {
+            title: "F1 App",
+            description: "F1 App est une application web pour suivre les courses de Formule 1.",
+            type: ProjectType.School,
+            repoUrl: "https://github.com/Wiibleyde/f1-app",
+            image: F1.src,
+            tags: ["F1", "Open-F1 API", "React-Native", "Typescript", "Expo"],
         }
     ]
 

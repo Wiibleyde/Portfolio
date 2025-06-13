@@ -9,6 +9,10 @@ body {
   scroll-behavior: smooth;
 }
 
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
+
 @keyframes fadeInScale {
   0% {
     opacity: 0;

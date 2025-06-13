@@ -1,6 +1,8 @@
 "use client"
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { verifyCaptchaAction } from '@/captcha';
 
 interface FormData {
     name: string;
@@ -23,6 +25,9 @@ export function Contact() {
     const [isVisible, setIsVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const { executeRecaptcha } = useGoogleReCaptcha();
+
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -69,8 +74,22 @@ export function Contact() {
 
         setIsSubmitting(true);
 
+        if (!executeRecaptcha) {
+            return
+        }
+        const token = await executeRecaptcha("onSubmit")
+        const verified = await verifyCaptchaAction(token)
+
+        if (!verified) {
+            setIsSubmitting(false);
+            setErrors(prev => ({ ...prev, captcha: 'Vérification CAPTCHA échouée. Veuillez réessayer.' }));
+            console.error('CAPTCHA verification failed');
+            return
+        }
+
+
         try {
-            // Send to /api/v1/contact
+            // Send to /api/v1/contact/send
             const response = await fetch('/api/v1/contact', {
                 method: 'POST',
                 headers: {
@@ -197,7 +216,7 @@ export function Contact() {
                             {/* Name Field */}
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2">
-                                    Nom & Prénom *
+                                    NOM & Prénom *
                                 </label>
                                 <input
                                     type="text"

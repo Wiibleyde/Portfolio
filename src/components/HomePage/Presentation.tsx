@@ -8,9 +8,12 @@ export function Presentation() {
     const descriptionRef = useRef<HTMLElement>(null);
     const birthRef = useRef<HTMLElement>(null);
     const cvRef = useRef<HTMLElement>(null);
+    const modalRef = useRef<HTMLDivElement>(null);
+    const modalContentRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
     const [age, setAge] = useState(0);
     const [daysUntilBirthday, setDaysUntilBirthday] = useState(0);
+    const [showPreview, setShowPreview] = useState(false);
 
     // Calculate age and days until birthday
     const calculateAgeAndCountdown = () => {
@@ -125,6 +128,62 @@ export function Presentation() {
         document.body.removeChild(link);
     };
 
+    const handlePreviewCV = () => {
+        setShowPreview(true);
+    };
+
+    const closePreview = () => {
+        if (modalRef.current && modalContentRef.current) {
+            const tl = gsap.timeline({
+                onComplete: () => setShowPreview(false)
+            });
+
+            tl.to(modalContentRef.current, {
+                scale: 0.8,
+                opacity: 0,
+                y: 50,
+                duration: 0.3,
+                ease: "back.in(1.7)"
+            })
+            .to(modalRef.current, {
+                opacity: 0,
+                duration: 0.2,
+                ease: "power2.in"
+            }, "-=0.1");
+        } else {
+            setShowPreview(false);
+        }
+    };
+
+    // Animation pour l'ouverture de la modal
+    useEffect(() => {
+        if (showPreview && modalRef.current && modalContentRef.current) {
+            // Set initial state
+            gsap.set(modalRef.current, { opacity: 0 });
+            gsap.set(modalContentRef.current, { 
+                scale: 0.8, 
+                opacity: 0, 
+                y: 30
+            });
+
+            // Animation timeline optimisée
+            const tl = gsap.timeline();
+
+            tl.to(modalRef.current, {
+                opacity: 1,
+                duration: 0.2,
+                ease: "power2.out"
+            })
+            .to(modalContentRef.current, {
+                scale: 1,
+                opacity: 1,
+                y: 0,
+                duration: 0.4,
+                ease: "back.out(1.2)"
+            }, "-=0.1");
+        }
+    }, [showPreview]);
+
     return (
         <div className="snap-start min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-16">
             {/* Distinctive background pattern */}
@@ -229,18 +288,88 @@ export function Presentation() {
                         </section>
 
                         {/* CV Section */}
-                        <section ref={cvRef} className="flex justify-center lg:justify-start">
-                            <button className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105" onClick={handleDownloadCV}>
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-                                <svg className="w-4 h-4 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <span className="relative z-10 text-base">Télécharger mon CV</span>
-                            </button>
+                        <section ref={cvRef} className="flex justify-center items-center">
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <button 
+                                    className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105" 
+                                    onClick={handlePreviewCV}
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                                    <svg className="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <span className="relative z-10 text-base whitespace-nowrap">Prévisualiser</span>
+                                </button>
+                                <button 
+                                    className="group relative bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:shadow-green-500/25 transform hover:scale-105" 
+                                    onClick={handleDownloadCV}
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                                    <svg className="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <span className="relative z-10 text-base whitespace-nowrap">Télécharger</span>
+                                </button>
+                            </div>
                         </section>
                     </div>
                 </div>
             </div>
+
+            {/* CV Preview Modal */}
+            {showPreview && (
+                <div 
+                    ref={modalRef}
+                    className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                    style={{ willChange: 'opacity' }}
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) closePreview();
+                    }}
+                >
+                    <div 
+                        ref={modalContentRef}
+                        className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                        style={{ willChange: 'transform, opacity' }}
+                    >
+                        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+                            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                Prévisualisation du CV
+                            </h3>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={handleDownloadCV}
+                                    className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-blue-500/25 transform hover:scale-105"
+                                >
+                                    <svg className="w-4 h-4 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Télécharger
+                                </button>
+                                <button
+                                    onClick={closePreview}
+                                    className="group bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-2 rounded-lg transition-all duration-200 transform hover:scale-105"
+                                >
+                                    <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div className="p-4 h-[calc(90vh-80px)] bg-gradient-to-br from-gray-50 to-gray-100">
+                            <div className="relative w-full h-full rounded-lg overflow-hidden shadow-inner">
+                                <iframe
+                                    src="/files/CV Nathan Bonnell.pdf"
+                                    className="w-full h-full border-0"
+                                    title="Prévisualisation du CV"
+                                />
+                                <div className="absolute inset-0 pointer-events-none border-2 border-blue-200/50 rounded-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

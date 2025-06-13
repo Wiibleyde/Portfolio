@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { Github, BoxArrowUpRight } from "react-bootstrap-icons";
 import Image from "next/image";
-import { Project, ProjectType } from "./types";
+import { Project, ProjectType } from "@/types";
 
 interface ProjectCardProps {
     project: Project;

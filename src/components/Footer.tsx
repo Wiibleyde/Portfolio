@@ -104,8 +104,11 @@ export function Footer() {
                     </p>
 
                     <p className="text-sm text-gray-500 mt-4">
-                        Retrouvez aussi une <a href="/lyp" className="hover:text-gray-400 underline decoration-dotted">petite blague</a> et 
-                        les <a href="/hope_pictures" className="hover:text-gray-400 underline decoration-dotted">photos de Hope</a>.
+                        Retrouvez aussi les <a href="/hope_pictures" className="hover:text-gray-400 underline decoration-dotted">photos de Hope</a>.
+                    </p>
+
+                    <p className="text-xs text-gray-500 mt-4">
+                        This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" className="hover:text-gray-400 underline">Privacy Policy</a> and <a href="https://policies.google.com/terms" className="hover:text-gray-400 underline">Terms of Service</a> apply.
                     </p>
                 </div>
             </div>
