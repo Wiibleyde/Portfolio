@@ -5,6 +5,3 @@ npm-debug.log
 README.md
 .next
 .git
-!.env
-!.next
-!node_modules

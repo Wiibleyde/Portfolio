@@ -1,6 +1,6 @@
-import { Montserrat } from 'next/font/google'
+import { Montserrat } from 'next/font/google';
 import { Metadata } from 'next';
-import "@/app/globals.css"
+import "@/app/globals.css";
 
 const montserrat = Montserrat({
     subsets: ['latin'],
@@ -18,10 +18,8 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang='fr'>
-            <body className={montserrat.className + ' bg-black'}>
-                {children}
-            </body>
-        </html>
+        <div className={montserrat.className + ' bg-black min-h-screen'}>
+            {children}
+        </div>
     );
 }

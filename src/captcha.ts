@@ -1,12 +1,15 @@
 "use server"
-import axios from "axios"
 
 export async function verifyCaptchaAction(token: string) {
-    const res = await axios.post(
-        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`
+    const res = await fetch(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+        {
+            method: 'POST'
+        }
     )
-    console.log(res.data)
-    if (res.data.score > 0.5) {
+    const data = await res.json()
+    console.log(data)
+    if (data.score > 0.5) {
         return true
     } else {
         return false

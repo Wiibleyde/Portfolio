@@ -1,62 +1,25 @@
-/* Import tailwind */
 @import "tailwindcss";
 
+html,
+body {
+  scroll-snap-type: y mandatory;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
 .grecaptcha-badge {
-    visibility: hidden !important;
+  visibility: hidden !important;
 }
 
-/* Custom scrollbar styles */
-::-webkit-scrollbar {
-    width: 12px;
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-
-::-webkit-scrollbar-track {
-    background: #000000;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #000000;
-    border-radius: 100px;
-    border: 1px solid rgb(34 197 94);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: #181818;
-}
-
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-.animate-fade-in {
-    animation: fade-in 1s ease-in-out;
-}
-
-/* Dark theme for shadown */
-@media (prefers-color-scheme: dark) {
-    .boxShadowHomepage {
-        box-shadow: 0 0 100px 110px rgb(0, 0, 0);
-    }
-
-    .nice-shadow {
-        box-shadow: 0px 0px 50px 3px #bbbbbb80;
-    }
-}
-
-/* Light theme for shadown */
-@media (prefers-color-scheme: light) {
-    .boxShadowHomepage {
-        box-shadow: 0 0 100px 110px var(--color-gray-100);
-    }
-
-    .nice-shadow {
-        box-shadow: 0px 0px 50px 3px #3a3a3a80;
-    }
-}
-
-/*  */
