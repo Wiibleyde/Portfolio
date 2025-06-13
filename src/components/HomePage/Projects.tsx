@@ -9,7 +9,7 @@ import Twitch from "@public/img/projects/twitch.webp";
 import Bro from "@public/img/projects/bro.png";
 import FurutsuGame from "@public/img/projects/furutsugame.png";
 import Me from "@public/img/pp.webp";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Filter, ChevronLeft, ChevronRight } from "react-bootstrap-icons";
 import { ProjectType, Project } from "./types";
@@ -40,14 +40,14 @@ export function Projects() {
         },
         {
             title: "Hope - GTARP (Fermé)",
-            description: "Hope - GTARP est (était 😢) un serveur de jeu en ligne sur la plateforme FiveM.",
+            description: "Hope - GTARP est (était 😢) un serveur de jeu sur la plateforme FiveM.",
             type: ProjectType.Personal,
             image: HopeLogo.src,
             tags: ["GTAV", "Hope", "FiveM", "Typescript", "Lua", "C#", "Go", "MariaDB", "InfluxDB", "C++", "Grafana", "Discord.js"],
         },
         {
             title: "RPlace Analyser",
-            description: "RPlace Analyzer est un outil d'analyse des données de l'événement RPlace 2017. Il permet de visualiser les données de l'événement.",
+            description: "RPlace Analyzer est un résultat d'analyse de l'événement RPlace 2017.",
             type: ProjectType.School,
             repoUrl: "https://github.com/Wiibleyde/RPlaceAnalyzer",
             image: RPlaceLogo.src,
@@ -55,7 +55,7 @@ export function Projects() {
         },
         {
             title: "Site du cartel de camion Lex-Port",
-            description: "Site web du cartel de camion pour l'action collective du cabinet d'avocats Lex-Port.",
+            description: "Site web pour l'action collective du cabinet d'avocats Lex-Port.",
             type: ProjectType.Professional,
             url: "https://cartel.lex-port.com",
             image: LexPortLogo.src,
@@ -63,7 +63,7 @@ export function Projects() {
         },
         {
             title: "Eve",
-            description: "Eve est un bot Discord multifonctionnel pour les serveurs Discord fait en Typescript.",
+            description: "Eve est un bot Discord pour les serveurs Discord fait en Typescript.",
             type: ProjectType.Personal,
             repoUrl: "https://github.com/Wiibleyde/Eve",
             image: EveBanner.src,
@@ -71,7 +71,7 @@ export function Projects() {
         },
         {
             title: "Script Caméra pour FiveM (GTA)",
-            description: "Fivem Cam Script est une ressource à ajouter à votre serveur FiveM (GTA-RP) qui vous permet de passer en mode caméraman à pied ou en hélicoptère, écrite en Lua.",
+            description: "Fivem Cam Script est une ressource FiveM (GTA).",
             type: ProjectType.Personal,
             repoUrl: "https://github.com/Wiibleyde/Fivem-Cam-Script",
             image: WeazelNewsLogo.src,
@@ -79,7 +79,7 @@ export function Projects() {
         },
         {
             title: "TwitchStreamRetrievers",
-            description: "TwitchStreamRetrievers est une API et websocket pour récupérer les informations de streams Twitch.",
+            description: "TwitchStreamRetrievers est une API et un WS pour notifier de streams Twitch.",
             type: ProjectType.Personal,
             repoUrl: "https://github.com/Wiibleyde/TwitchStreamRetrievers",
             image: Twitch.src,
@@ -96,7 +96,7 @@ export function Projects() {
         },
         {
             title: "Régie Black Room Orchestra",
-            description: "Régie vidéo du concert de Black Room Orchestra sur le serveur FailyV (ainsi que d'autres sur le même serveur).",
+            description: "Régie vidéo du concert de Black Room Orchestra sur le serveur FailyV.",
             type: ProjectType.Personal,
             url: "https://youtu.be/otioMSFKVi0",
             image: Bro.src,
@@ -163,7 +163,7 @@ export function Projects() {
         animateTransition();
     };
 
-    const animateTransition = () => {
+    const animateTransition = useCallback(() => {
         if (gridRef.current && !isAnimating) {
             gsap.to(gridRef.current, {
                 x: -currentIndex * (320 + 24),
@@ -171,7 +171,7 @@ export function Projects() {
                 ease: "power2.out"
             });
         }
-    };
+    }, [currentIndex, isAnimating]);
 
     // Initial setup - set all elements to invisible
     useEffect(() => {
@@ -269,7 +269,7 @@ export function Projects() {
         if (isVisible && !isAnimating) {
             animateTransition();
         }
-    }, [currentIndex, isVisible, isAnimating]);
+    }, [currentIndex, isVisible, isAnimating, animateTransition]);
 
     // Sync displayedFilter with activeFilter on initial load
     useEffect(() => {
@@ -287,15 +287,6 @@ export function Projects() {
             default: return type;
         }
     };
-
-    // const getTypeColor = (type: ProjectType) => {
-    //     switch (type) {
-    //         case ProjectType.Personal: return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
-    //         case ProjectType.School: return 'bg-green-500/20 text-green-300 border-green-500/30';
-    //         case ProjectType.Professional: return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
-    //         default: return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
-    //     }
-    // };
 
     return (
         <div ref={containerRef} className="snap-start h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 flex flex-col">
@@ -326,8 +317,8 @@ export function Projects() {
                                 onClick={() => handleFilterChange(filter)}
                                 disabled={isAnimating}
                                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 flex items-center gap-2 ${activeFilter === filter
-                                        ? 'bg-blue-500 text-white shadow-lg'
-                                        : 'text-gray-300 hover:text-white hover:bg-white/10'
+                                    ? 'bg-blue-500 text-white shadow-lg'
+                                    : 'text-gray-300 hover:text-white hover:bg-white/10'
                                     } ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 <Filter className="w-3 h-3" />
@@ -345,8 +336,8 @@ export function Projects() {
                             onClick={prevProjects}
                             disabled={currentIndex === 0 || isAnimating}
                             className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full transition-all duration-300 ${currentIndex === 0 || isAnimating
-                                    ? 'bg-white/5 text-gray-500 cursor-not-allowed'
-                                    : 'bg-white/10 hover:bg-white/20 text-white hover:scale-110'
+                                ? 'bg-white/5 text-gray-500 cursor-not-allowed'
+                                : 'bg-white/10 hover:bg-white/20 text-white hover:scale-110'
                                 }`}
                         >
                             <ChevronLeft className="w-6 h-6" />
@@ -356,8 +347,8 @@ export function Projects() {
                             onClick={nextProjects}
                             disabled={currentIndex >= maxIndex || isAnimating}
                             className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full transition-all duration-300 ${currentIndex >= maxIndex || isAnimating
-                                    ? 'bg-white/5 text-gray-500 cursor-not-allowed'
-                                    : 'bg-white/10 hover:bg-white/20 text-white hover:scale-110'
+                                ? 'bg-white/5 text-gray-500 cursor-not-allowed'
+                                : 'bg-white/10 hover:bg-white/20 text-white hover:scale-110'
                                 }`}
                         >
                             <ChevronRight className="w-6 h-6" />
@@ -392,8 +383,8 @@ export function Projects() {
                                     onClick={() => goToPage(i)}
                                     disabled={isAnimating}
                                     className={`w-3 h-3 rounded-full transition-all duration-300 ${Math.floor(currentIndex / projectsPerView) === i
-                                            ? 'bg-blue-500 scale-125'
-                                            : 'bg-white/30 hover:bg-white/50'
+                                        ? 'bg-blue-500 scale-125'
+                                        : 'bg-white/30 hover:bg-white/50'
                                         } ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 />
                             ))}
