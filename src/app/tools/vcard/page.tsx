@@ -2,7 +2,10 @@
 import { useState, useEffect, useRef } from "react";
 import { gsap } from 'gsap';
 import QrCodeWithLogo from 'qrcode-with-logos';
-import { BaseOptions } from "qrcode-with-logos/types/src/core/types";
+import { BaseOptions, CornerType, DotType } from "qrcode-with-logos/types/src/core/types";
+
+const dotTypes: DotType[] = ['dot', 'dot-small', 'tile', 'rounded', 'square', 'diamond', 'star', 'fluid', 'fluid-line', 'stripe', 'stripe-row', 'stripe-column'];
+const cornerTypes: CornerType[] = ['square', 'rounded', 'circle', 'rounded-circle', 'circle-rounded', 'circle-star', 'circle-diamond'];
 
 interface VCardData {
     firstName: string;
@@ -27,6 +30,7 @@ export default function VCardPage() {
     const [isGenerating, setIsGenerating] = useState(false);
     const [hasGenerated, setHasGenerated] = useState(false);
 
+    // VCard data
     const [vCardData, setVCardData] = useState<VCardData>({
         firstName: '',
         lastName: '',
@@ -41,9 +45,28 @@ export default function VCardPage() {
         country: ''
     });
 
+    // QR Code customization options
+    const [logo, setLogo] = useState<string>('');
+    const [dotType, setDotType] = useState<string>('rounded');
+    const [cornerType, setCornerType] = useState<string>('rounded');
+    const [dotColor, setDotColor] = useState<string>('#1e40af');
+    const [cornerColor, setCornerColor] = useState<string>('#1e40af');
+    const [lightColor, setLightColor] = useState<string>('#FFFFFF');
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setVCardData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setLogo(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const generateVCardString = (): string => {
@@ -106,17 +129,18 @@ export default function VCardPage() {
                 width: 900,
                 nodeQrCodeOptions: {
                     color: {
-                        light: '#FFFFFF',
+                        light: lightColor,
                     },
                 },
                 dotsOptions: {
-                    type: 'rounded',
-                    color: '#1e40af',
+                    type: dotType as DotType,
+                    color: dotColor,
                 },
                 cornersOptions: {
-                    type: 'rounded',
-                    color: '#1e40af',
+                    type: cornerType as CornerType,
+                    color: cornerColor,
                 },
+                logo: logo ? { src: logo, logoRadius: 1 } : undefined,
             }
 
             const qrCode = new QrCodeWithLogo(qrCodeOptions)
@@ -464,6 +488,110 @@ export default function VCardPage() {
                                         onChange={handleInputChange}
                                         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
                                         placeholder="France"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* QR Code Customization Section */}
+                            <div className="form-field border-t border-white/20 pt-5">
+                                <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                                    </svg>
+                                    Personnalisation du QR Code
+                                </h4>
+
+                                {/* Logo Upload */}
+                                <div className="mb-4">
+                                    <label htmlFor="logo" className="block text-sm font-medium text-gray-200 mb-2">
+                                        Logo (optionnel)
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="logo"
+                                        accept="image/*"
+                                        onChange={handleLogoChange}
+                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:font-medium hover:file:bg-blue-700 file:transition-colors"
+                                    />
+                                </div>
+
+                                {/* Dot Type and Color */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label htmlFor="dotType" className="block text-sm font-medium text-gray-200 mb-2">
+                                            Type de point
+                                        </label>
+                                        <select
+                                            id="dotType"
+                                            value={dotType}
+                                            onChange={(e) => setDotType(e.target.value)}
+                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
+                                        >
+                                            {dotTypes.map((type) => (
+                                                <option key={type} value={type} className="bg-gray-800">
+                                                    {type}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="dotColor" className="block text-sm font-medium text-gray-200 mb-2">
+                                            Couleur du point
+                                        </label>
+                                        <input
+                                            type="color"
+                                            id="dotColor"
+                                            value={dotColor}
+                                            onChange={(e) => setDotColor(e.target.value)}
+                                            className="w-full h-12 px-2 bg-white/10 border border-white/20 rounded-xl cursor-pointer focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Corner Type and Color */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label htmlFor="cornerType" className="block text-sm font-medium text-gray-200 mb-2">
+                                            Type de coin
+                                        </label>
+                                        <select
+                                            id="cornerType"
+                                            value={cornerType}
+                                            onChange={(e) => setCornerType(e.target.value)}
+                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
+                                        >
+                                            {cornerTypes.map((type) => (
+                                                <option key={type} value={type} className="bg-gray-800">
+                                                    {type}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="cornerColor" className="block text-sm font-medium text-gray-200 mb-2">
+                                            Couleur du coin
+                                        </label>
+                                        <input
+                                            type="color"
+                                            id="cornerColor"
+                                            value={cornerColor}
+                                            onChange={(e) => setCornerColor(e.target.value)}
+                                            className="w-full h-12 px-2 bg-white/10 border border-white/20 rounded-xl cursor-pointer focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Background Color */}
+                                <div>
+                                    <label htmlFor="lightColor" className="block text-sm font-medium text-gray-200 mb-2">
+                                        Couleur de fond
+                                    </label>
+                                    <input
+                                        type="color"
+                                        id="lightColor"
+                                        value={lightColor}
+                                        onChange={(e) => setLightColor(e.target.value)}
+                                        className="w-full h-12 px-2 bg-white/10 border border-white/20 rounded-xl cursor-pointer focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
                                     />
                                 </div>
                             </div>
