@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Envelope, Github, Linkedin, Heart } from 'react-bootstrap-icons';
+import Link from 'next/link';
 
 export function Footer() {
     const footerRef = useRef<HTMLElement>(null);
@@ -104,7 +105,11 @@ export function Footer() {
                     </p>
 
                     <p className="text-sm text-gray-500 mt-4">
-                        Retrouvez aussi les <a href="/hope_pictures" className="hover:text-gray-400 underline decoration-dotted">photos de Hope</a>, un <a href='/tools/qrcode' className="hover:text-gray-400 underline decoration-dotted">générateur de QR Code</a> et un <a href='/tools/vcard' className="hover:text-gray-400 underline decoration-dotted">générateur de carte de visite</a> que j&apos;ai réalisé.
+                        Retrouvez aussi les <a href="/hope_pictures" className="hover:text-gray-400 underline decoration-dotted">photos de Hope</a>, un <a href='/tools/pdfAssembler' className="hover:text-gray-400 underline decoration-dotted">outil de fusion de PDF</a>, un <a href='/tools/qrcode' className="hover:text-gray-400 underline decoration-dotted">générateur de QR Code</a> et un <a href='/tools/vcard' className="hover:text-gray-400 underline decoration-dotted">générateur de carte de visite</a> que j&apos;ai réalisé.
+                    </p>
+
+                    <p className="text-sm text-gray-500 mt-4">
+                        Pour accèder aux <Link href="/legal-mentions" className="hover:text-gray-400 underline decoration-dotted">mentions légales</Link>, cliquez sur les liens.
                     </p>
 
                     <p className="text-xs text-gray-500 mt-4">
