@@ -33,6 +33,19 @@ export default function PdfAssemblerPage() {
     const [dragOver, setDragOver] = useState(false);
     const [draggedFileId, setDraggedFileId] = useState<string | null>(null);
     const [dragOverFileId, setDragOverFileId] = useState<string | null>(null);
+    const [previewModal, setPreviewModal] = useState<{
+        isOpen: boolean;
+        file: UploadedFile | null;
+        currentPage: number;
+        totalPages: number;
+        pageImages: string[];
+    }>({
+        isOpen: false,
+        file: null,
+        currentPage: 1,
+        totalPages: 0,
+        pageImages: []
+    });
 
     // Load PDF.js dynamically
     useEffect(() => {
@@ -470,6 +483,85 @@ export default function PdfAssemblerPage() {
         }
     }, [files.length, isVisible]);
 
+    // New function to render all pages of a PDF
+    const renderAllPages = useCallback(async (file: File): Promise<string[]> => {
+        try {
+            while (!window.pdfjsLib) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            const arrayBuffer = await file.arrayBuffer();
+            const loadingTask = window.pdfjsLib.getDocument(arrayBuffer);
+            const pdfDoc = await loadingTask.promise;
+            const pageImages: string[] = [];
+
+            for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+                const page = await pdfDoc.getPage(pageNum);
+                const viewport = page.getViewport({ scale: 1.5 });
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                await page.render(renderContext).promise;
+                pageImages.push(canvas.toDataURL('image/png'));
+            }
+
+            return pageImages;
+        } catch (error) {
+            console.error('Error rendering all pages:', error);
+            return [];
+        }
+    }, []);
+
+    // Function to open preview modal
+    const openPreviewModal = useCallback(async (file: UploadedFile) => {
+        setPreviewModal({
+            isOpen: true,
+            file,
+            currentPage: 1,
+            totalPages: file.pageCount || 0,
+            pageImages: []
+        });
+
+        // Render all pages
+        const pageImages = await renderAllPages(file.file);
+        setPreviewModal(prev => ({
+            ...prev,
+            pageImages,
+            totalPages: pageImages.length
+        }));
+    }, [renderAllPages]);
+
+    // Function to close preview modal
+    const closePreviewModal = useCallback(() => {
+        setPreviewModal({
+            isOpen: false,
+            file: null,
+            currentPage: 1,
+            totalPages: 0,
+            pageImages: []
+        });
+    }, []);
+
+    // Function to navigate pages in modal
+    const navigateModalPage = useCallback((direction: 'prev' | 'next') => {
+        setPreviewModal(prev => {
+            if (direction === 'prev' && prev.currentPage > 1) {
+                return { ...prev, currentPage: prev.currentPage - 1 };
+            } else if (direction === 'next' && prev.currentPage < prev.totalPages) {
+                return { ...prev, currentPage: prev.currentPage + 1 };
+            }
+            return prev;
+        });
+    }, []);
+
     return (
         <div ref={containerRef} className="min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12">
             {/* Background pattern */}
@@ -479,6 +571,109 @@ export default function PdfAssemblerPage() {
                                      radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`
                 }}></div>
             </div>
+
+            {/* Preview Modal */}
+            {previewModal.isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                    <div className="relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl max-w-4xl max-h-[90vh] w-full overflow-hidden">
+                        {/* Modal Header */}
+                        <div className="flex items-center justify-between p-6 border-b border-white/20">
+                            <div>
+                                <h3 className="text-xl font-bold text-white mb-1">
+                                    {previewModal.file?.name}
+                                </h3>
+                                <p className="text-gray-400 text-sm">
+                                    Page {previewModal.currentPage} sur {previewModal.totalPages}
+                                </p>
+                            </div>
+                            <button
+                                onClick={closePreviewModal}
+                                className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Modal Content */}
+                        <div className="flex flex-col h-full max-h-[calc(90vh-140px)]">
+                            {/* PDF Viewer */}
+                            <div className="flex-1 flex items-center justify-center p-6 overflow-auto">
+                                {previewModal.pageImages.length > 0 ? (
+                                    <div className="relative max-w-full max-h-full">
+                                        <Image
+                                            src={previewModal.pageImages[previewModal.currentPage - 1]}
+                                            alt={`Page ${previewModal.currentPage} de ${previewModal.file?.name}`}
+                                            width={800}
+                                            height={1000}
+                                            className="max-w-full max-h-full object-contain rounded-xl shadow-lg"
+                                            style={{
+                                                transform: `rotate(${previewModal.file?.rotation || 0}deg)`,
+                                                transformOrigin: 'center center'
+                                            }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center p-12">
+                                        <div className="animate-spin mb-4">
+                                            <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            </svg>
+                                        </div>
+                                        <p className="text-gray-400">Chargement du document...</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Navigation Controls */}
+                            {previewModal.totalPages > 1 && (
+                                <div className="flex items-center justify-between p-6 border-t border-white/20">
+                                    <button
+                                        onClick={() => navigateModalPage('prev')}
+                                        disabled={previewModal.currentPage === 1}
+                                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-200"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                        Précédent
+                                    </button>
+
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-gray-400 text-sm">Page</span>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max={previewModal.totalPages}
+                                            value={previewModal.currentPage}
+                                            onChange={(e) => {
+                                                const page = parseInt(e.target.value);
+                                                if (page >= 1 && page <= previewModal.totalPages) {
+                                                    setPreviewModal(prev => ({ ...prev, currentPage: page }));
+                                                }
+                                            }}
+                                            className="w-16 px-2 py-1 bg-white/10 border border-white/20 rounded-lg text-white text-center text-sm"
+                                        />
+                                        <span className="text-gray-400 text-sm">/ {previewModal.totalPages}</span>
+                                    </div>
+
+                                    <button
+                                        onClick={() => navigateModalPage('next')}
+                                        disabled={previewModal.currentPage === previewModal.totalPages}
+                                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-200"
+                                    >
+                                        Suivant
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="relative z-10 px-6 max-w-5xl mx-auto">
                 {/* Title Section */}
@@ -626,19 +821,34 @@ export default function PdfAssemblerPage() {
 
                                                 {/* PDF Preview */}
                                                 <div className="relative mb-4">
-                                                    <div className="w-full aspect-[3/4] bg-white rounded-xl border-2 border-gray-200 shadow-lg overflow-hidden mx-auto max-w-[120px]">
+                                                    <div 
+                                                        className="w-full aspect-[3/4] bg-white rounded-xl border-2 border-gray-200 shadow-lg overflow-hidden mx-auto max-w-[120px] cursor-pointer hover:border-blue-400 transition-all duration-200 group"
+                                                        onClick={() => openPreviewModal(file)}
+                                                        title="Cliquer pour prévisualiser le document"
+                                                    >
                                                         {file.preview ? (
-                                                            <Image
-                                                                src={file.preview}
-                                                                alt={`Aperçu de ${file.name}`}
-                                                                width={120}
-                                                                height={160}
-                                                                className={`preview-image w-full h-full object-contain bg-white transition-transform duration-300`}
-                                                                style={{
-                                                                    transform: `rotate(${file.rotation || 0}deg)`,
-                                                                    transformOrigin: 'center center'
-                                                                }}
-                                                            />
+                                                            <>
+                                                                <Image
+                                                                    src={file.preview}
+                                                                    alt={`Aperçu de ${file.name}`}
+                                                                    width={120}
+                                                                    height={160}
+                                                                    className={`preview-image w-full h-full object-contain bg-white transition-all duration-300 group-hover:scale-105`}
+                                                                    style={{
+                                                                        transform: `rotate(${file.rotation || 0}deg)`,
+                                                                        transformOrigin: 'center center'
+                                                                    }}
+                                                                />
+                                                                {/* Preview Overlay */}
+                                                                <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                                                                    <div className="bg-blue-600 text-white p-2 rounded-full shadow-lg">
+                                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                </div>
+                                                            </>
                                                         ) : (
                                                             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
                                                                 <div className="animate-spin mb-2">
