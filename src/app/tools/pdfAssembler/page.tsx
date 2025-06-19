@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, RotationTypes } from 'pdf-lib';
 import { gsap } from 'gsap';
 import Image from 'next/image';
 
@@ -19,6 +19,7 @@ interface UploadedFile {
     name: string;
     preview?: string;
     pageCount?: number;
+    rotation?: number; // Add rotation property (0, 90, 180, 270)
 }
 
 export default function PdfAssemblerPage() {
@@ -120,7 +121,8 @@ export default function PdfAssemblerPage() {
         const loadingFiles: UploadedFile[] = pdfFiles.map(file => ({
             id: crypto.randomUUID(),
             file,
-            name: file.name
+            name: file.name,
+            rotation: 0 // Initialize rotation to 0
         }));
 
         setFiles(prev => [...prev, ...loadingFiles]);
@@ -297,6 +299,30 @@ export default function PdfAssemblerPage() {
         setDraggedFileId(null);
     }, [files, moveFile]);
 
+    const rotateFile = useCallback((fileId: string, direction: 'left' | 'right') => {
+        setFiles(prev => prev.map(file => {
+            if (file.id === fileId) {
+                const currentRotation = file.rotation || 0;
+                const newRotation = direction === 'right'
+                    ? (currentRotation + 90) % 360
+                    : (currentRotation - 90 + 360) % 360;
+
+                // Animate rotation by setting the absolute value instead of incrementing
+                const fileElement = document.querySelector(`[data-file-id="${fileId}"] .preview-image`);
+                if (fileElement) {
+                    gsap.set(fileElement, {
+                        rotation: newRotation,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                }
+
+                return { ...file, rotation: newRotation };
+            }
+            return file;
+        }));
+    }, []);
+
     const assemblePDFs = useCallback(async () => {
         if (files.length === 0) return;
 
@@ -316,11 +342,18 @@ export default function PdfAssemblerPage() {
         try {
             const mergedPdf = await PDFDocument.create();
 
-            for (const { file } of files) {
+            for (const { file, rotation = 0 } of files) {
                 const arrayBuffer = await file.arrayBuffer();
                 const pdf = await PDFDocument.load(arrayBuffer);
                 const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                pages.forEach(page => mergedPdf.addPage(page));
+
+                pages.forEach(page => {
+                    // Apply rotation if needed
+                    if (rotation > 0) {
+                        page.setRotation({ angle: rotation, type: RotationTypes.Degrees });
+                    }
+                    mergedPdf.addPage(page);
+                });
             }
 
             const pdfBytes = await mergedPdf.save();
@@ -531,31 +564,49 @@ export default function PdfAssemblerPage() {
                                         onDragOver={(e) => handleFileDragOver(e, file.id)}
                                         onDragLeave={(e) => handleFileDragLeave(e)}
                                         onDrop={(e) => handleFileDrop(e, file.id)}
-                                        className={`file-item group relative cursor-move transition-all duration-300 transform hover:scale-[1.02] ${
-                                            draggedFileId === file.id
-                                                ? 'scale-95 opacity-60 rotate-2'
-                                                : dragOverFileId === file.id
+                                        className={`file-item group relative cursor-move transition-all duration-300 transform hover:scale-[1.02] ${draggedFileId === file.id
+                                            ? 'scale-95 opacity-60 rotate-2'
+                                            : dragOverFileId === file.id
                                                 ? 'scale-105 rotate-1'
                                                 : ''
-                                        }`}
+                                            }`}
                                     >
                                         {/* Card Container */}
-                                        <div className={`relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl ${
-                                            draggedFileId === file.id
-                                                ? 'border-blue-400/70 bg-blue-500/10 shadow-blue-500/25'
-                                                : dragOverFileId === file.id
+                                        <div className={`relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl ${draggedFileId === file.id
+                                            ? 'border-blue-400/70 bg-blue-500/10 shadow-blue-500/25'
+                                            : dragOverFileId === file.id
                                                 ? 'border-green-400/70 bg-green-500/10 shadow-green-500/25'
                                                 : 'border-white/20 hover:border-white/40 hover:bg-white/20'
-                                        }`}>
+                                            }`}>
                                             {/* Card Header with Order Number */}
                                             <div className="relative p-4 pb-2">
                                                 <div className="flex items-center justify-between mb-3">
                                                     <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-500/40 to-purple-500/40 rounded-xl border border-blue-400/50 text-sm font-bold text-blue-200 shadow-lg">
                                                         #{index + 1}
                                                     </div>
-                                                    
+
                                                     {/* Actions */}
                                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                        {/* Rotation Controls */}
+                                                        <button
+                                                            onClick={() => rotateFile(file.id, 'left')}
+                                                            className="p-1.5 text-gray-400 hover:text-blue-300 rounded-lg hover:bg-blue-500/20 transition-all duration-200"
+                                                            title="Rotation 90° gauche"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                                                            </svg>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => rotateFile(file.id, 'right')}
+                                                            className="p-1.5 text-gray-400 hover:text-blue-300 rounded-lg hover:bg-blue-500/20 transition-all duration-200"
+                                                            title="Rotation 90° droite"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10H11a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6" />
+                                                            </svg>
+                                                        </button>
+                                                        <div className="w-px h-4 bg-white/20 mx-1"></div>
                                                         <div className="p-1.5 text-gray-400 hover:text-gray-300 rounded-lg hover:bg-white/10 transition-all duration-200" title="Drag to reorder">
                                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
@@ -582,7 +633,11 @@ export default function PdfAssemblerPage() {
                                                                 alt={`Aperçu de ${file.name}`}
                                                                 width={120}
                                                                 height={160}
-                                                                className="w-full h-full object-contain bg-white"
+                                                                className={`preview-image w-full h-full object-contain bg-white transition-transform duration-300`}
+                                                                style={{
+                                                                    transform: `rotate(${file.rotation || 0}deg)`,
+                                                                    transformOrigin: 'center center'
+                                                                }}
                                                             />
                                                         ) : (
                                                             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
@@ -595,11 +650,21 @@ export default function PdfAssemblerPage() {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    
+
                                                     {/* Page Count Badge */}
                                                     {file.pageCount && (
                                                         <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs px-2.5 py-1 rounded-full shadow-lg border-2 border-white/20 font-semibold">
                                                             {file.pageCount}p
+                                                        </div>
+                                                    )}
+
+                                                    {/* Rotation Indicator */}
+                                                    {(file.rotation ?? 0) > 0 && (
+                                                        <div className="absolute -top-2 -left-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full shadow-lg border-2 border-white/20 font-semibold flex items-center gap-1">
+                                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10H11a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6" />
+                                                            </svg>
+                                                            {file.rotation}°
                                                         </div>
                                                     )}
                                                 </div>
@@ -608,10 +673,17 @@ export default function PdfAssemblerPage() {
                                             {/* Card Footer with File Info */}
                                             <div className="px-4 pb-4">
                                                 <div className="text-center">
-                                                    <h4 className="font-semibold text-white text-sm mb-2 truncate group-hover:text-blue-200 transition-colors" title={file.name}>
-                                                        {file.name}
-                                                    </h4>
-                                                    
+                                                    <div className="flex items-center justify-center gap-1 mb-2">
+                                                        <h4 className="font-semibold text-white text-sm truncate group-hover:text-blue-200 transition-colors flex-1" title={file.name}>
+                                                            {file.name}
+                                                        </h4>
+                                                        {(file.rotation ?? 0) > 0 && (
+                                                            <div className="text-xs bg-orange-500/20 text-orange-300 px-2 py-0.5 rounded-md border border-orange-400/30 font-medium">
+                                                                {file.rotation}°
+                                                            </div>
+                                                        )}
+                                                    </div>
+
                                                     <div className="flex items-center justify-center gap-3 text-xs text-gray-400">
                                                         <span className="flex items-center gap-1">
                                                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -672,7 +744,12 @@ export default function PdfAssemblerPage() {
                                         </div>
                                         <div>
                                             <h4 className="text-white font-semibold mb-1">Document final</h4>
-                                            <p className="text-gray-400 text-sm">Prêt à être assemblé</p>
+                                            <p className="text-gray-400 text-sm">
+                                                Prêt à être assemblé
+                                                {files.some(f => (f.rotation ?? 0) > 0) && (
+                                                    <span className="text-orange-300"> • Rotations appliquées</span>
+                                                )}
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-6 text-center">
@@ -689,6 +766,17 @@ export default function PdfAssemblerPage() {
                                             </div>
                                             <div className="text-xs text-gray-400 uppercase tracking-wide">MB</div>
                                         </div>
+                                        {files.some(f => (f.rotation ?? 0) > 0) && (
+                                            <>
+                                                <div className="w-px h-10 bg-white/20"></div>
+                                                <div>
+                                                    <div className="text-2xl font-bold text-orange-300">
+                                                        {files.filter(f => (f.rotation ?? 0) > 0).length}
+                                                    </div>
+                                                    <div className="text-xs text-gray-400 uppercase tracking-wide">Rotations</div>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
