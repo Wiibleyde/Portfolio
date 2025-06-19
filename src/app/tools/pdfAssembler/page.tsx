@@ -522,6 +522,9 @@ export default function PdfAssemblerPage() {
 
     // Function to open preview modal
     const openPreviewModal = useCallback(async (file: UploadedFile) => {
+        // Lock body scroll
+        document.body.style.overflow = 'hidden';
+
         setPreviewModal({
             isOpen: true,
             file,
@@ -541,6 +544,9 @@ export default function PdfAssemblerPage() {
 
     // Function to close preview modal
     const closePreviewModal = useCallback(() => {
+        // Restore body scroll
+        document.body.style.overflow = 'unset';
+
         setPreviewModal({
             isOpen: false,
             file: null,
@@ -549,6 +555,13 @@ export default function PdfAssemblerPage() {
             pageImages: []
         });
     }, []);
+
+    // Function to handle backdrop click
+    const handleBackdropClick = useCallback((e: React.MouseEvent) => {
+        if (e.target === e.currentTarget) {
+            closePreviewModal();
+        }
+    }, [closePreviewModal]);
 
     // Function to navigate pages in modal
     const navigateModalPage = useCallback((direction: 'prev' | 'next') => {
@@ -560,6 +573,13 @@ export default function PdfAssemblerPage() {
             }
             return prev;
         });
+    }, []);
+
+    // Cleanup effect to restore scroll on unmount
+    useEffect(() => {
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
     }, []);
 
     return (
@@ -574,10 +594,16 @@ export default function PdfAssemblerPage() {
 
             {/* Preview Modal */}
             {previewModal.isOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                    <div className="relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl max-w-4xl max-h-[90vh] w-full overflow-hidden">
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-hidden"
+                    onClick={handleBackdropClick}
+                >
+                    <div
+                        className="relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl max-w-4xl max-h-[90vh] w-full flex flex-col overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         {/* Modal Header */}
-                        <div className="flex items-center justify-between p-6 border-b border-white/20">
+                        <div className="flex items-center justify-between p-6 border-b border-white/20 flex-shrink-0">
                             <div>
                                 <h3 className="text-xl font-bold text-white mb-1">
                                     {previewModal.file?.name}
@@ -597,38 +623,48 @@ export default function PdfAssemblerPage() {
                         </div>
 
                         {/* Modal Content */}
-                        <div className="flex flex-col h-full max-h-[calc(90vh-140px)]">
+                        <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
                             {/* PDF Viewer */}
-                            <div className="flex-1 flex items-center justify-center p-6 overflow-auto">
-                                {previewModal.pageImages.length > 0 ? (
-                                    <div className="relative max-w-full max-h-full">
-                                        <Image
-                                            src={previewModal.pageImages[previewModal.currentPage - 1]}
-                                            alt={`Page ${previewModal.currentPage} de ${previewModal.file?.name}`}
-                                            width={800}
-                                            height={1000}
-                                            className="max-w-full max-h-full object-contain rounded-xl shadow-lg"
-                                            style={{
-                                                transform: `rotate(${previewModal.file?.rotation || 0}deg)`,
-                                                transformOrigin: 'center center'
-                                            }}
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-col items-center justify-center p-12">
-                                        <div className="animate-spin mb-4">
-                                            <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                            </svg>
+                            <div className="flex-1 overflow-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+                                <div className="min-h-full min-w-full p-6">
+                                    {previewModal.pageImages.length > 0 ? (
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <div className="relative inline-block">
+                                                <Image
+                                                    src={previewModal.pageImages[previewModal.currentPage - 1]}
+                                                    alt={`Page ${previewModal.currentPage} de ${previewModal.file?.name}`}
+                                                    width={800}
+                                                    height={1000}
+                                                    className="object-contain rounded-xl shadow-lg"
+                                                    style={{
+                                                        transform: `rotate(${previewModal.file?.rotation || 0}deg)`,
+                                                        transformOrigin: 'center center',
+                                                        maxWidth: 'none',
+                                                        maxHeight: 'none',
+                                                        width: 'auto',
+                                                        height: 'auto',
+                                                        minWidth: '100%',
+                                                        minHeight: '100%'
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
-                                        <p className="text-gray-400">Chargement du document...</p>
-                                    </div>
-                                )}
+                                    ) : (
+                                        <div className="w-full h-full flex flex-col items-center justify-center p-12">
+                                            <div className="animate-spin mb-4">
+                                                <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                </svg>
+                                            </div>
+                                            <p className="text-gray-400">Chargement du document...</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Navigation Controls */}
                             {previewModal.totalPages > 1 && (
-                                <div className="flex items-center justify-between p-6 border-t border-white/20">
+                                <div className="flex items-center justify-between p-6 border-t border-white/20 flex-shrink-0">
                                     <button
                                         onClick={() => navigateModalPage('prev')}
                                         disabled={previewModal.currentPage === 1}
@@ -821,7 +857,7 @@ export default function PdfAssemblerPage() {
 
                                                 {/* PDF Preview */}
                                                 <div className="relative mb-4">
-                                                    <div 
+                                                    <div
                                                         className="w-full aspect-[3/4] bg-white rounded-xl border-2 border-gray-200 shadow-lg overflow-hidden mx-auto max-w-[120px] cursor-pointer hover:border-blue-400 transition-all duration-200 group"
                                                         onClick={() => openPreviewModal(file)}
                                                         title="Cliquer pour prévisualiser le document"
