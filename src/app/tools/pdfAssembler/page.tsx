@@ -3,11 +3,22 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import { gsap } from 'gsap';
+import Image from 'next/image';
+
+// Add PDF.js import
+declare global {
+    interface Window {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        pdfjsLib: any;
+    }
+}
 
 interface UploadedFile {
     id: string;
     file: File;
     name: string;
+    preview?: string;
+    pageCount?: number;
 }
 
 export default function PdfAssemblerPage() {
@@ -19,29 +30,127 @@ export default function PdfAssemblerPage() {
     const [files, setFiles] = useState<UploadedFile[]>([]);
     const [isAssembling, setIsAssembling] = useState(false);
     const [dragOver, setDragOver] = useState(false);
+    const [draggedFileId, setDraggedFileId] = useState<string | null>(null);
+    const [dragOverFileId, setDragOverFileId] = useState<string | null>(null);
 
-    const handleFileUpload = useCallback((uploadedFiles: FileList | null) => {
+    // Load PDF.js dynamically
+    useEffect(() => {
+        const loadPdfJs = async () => {
+            if (!window.pdfjsLib) {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                script.onload = () => {
+                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                };
+                document.head.appendChild(script);
+            }
+        };
+        loadPdfJs();
+    }, []);
+
+    // Enhanced preview generation function
+    const generatePreview = useCallback(async (file: File): Promise<{ preview: string; pageCount: number }> => {
+        try {
+            // Wait for PDF.js to load
+            while (!window.pdfjsLib) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            // Create separate ArrayBuffers to avoid detachment issues
+            const arrayBuffer1 = await file.arrayBuffer();
+            const arrayBuffer2 = await file.arrayBuffer();
+
+            // Load PDF with PDF.js for rendering
+            const loadingTask = window.pdfjsLib.getDocument(arrayBuffer1);
+            const pdfDoc = await loadingTask.promise;
+
+            // Get first page
+            const page = await pdfDoc.getPage(1);
+            const viewport = page.getViewport({ scale: 0.5 }); // Scale down for thumbnail
+
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // Render PDF page to canvas
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+
+            await page.render(renderContext).promise;
+
+            // Get page count using pdf-lib with separate ArrayBuffer
+            const pdfLibDoc = await PDFDocument.load(arrayBuffer2);
+            const pageCount = pdfLibDoc.getPageCount();
+
+            return {
+                preview: canvas.toDataURL('image/png'),
+                pageCount: pageCount
+            };
+        } catch (error) {
+            console.error('Error generating preview:', error);
+
+            // Fallback: just get page count without preview
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await PDFDocument.load(arrayBuffer);
+                return {
+                    preview: '',
+                    pageCount: pdf.getPageCount()
+                };
+            } catch (fallbackError) {
+                console.error('Fallback error:', fallbackError);
+                return {
+                    preview: '',
+                    pageCount: 0
+                };
+            }
+        }
+    }, []);
+
+    const handleFileUpload = useCallback(async (uploadedFiles: FileList | null) => {
         if (!uploadedFiles) return;
 
-        const newFiles: UploadedFile[] = Array.from(uploadedFiles)
-            .filter(file => file.type === 'application/pdf')
-            .map(file => ({
-                id: crypto.randomUUID(),
-                file,
-                name: file.name
-            }));
+        const pdfFiles = Array.from(uploadedFiles).filter(file => file.type === 'application/pdf');
 
-        setFiles(prev => [...prev, ...newFiles]);
+        // Show loading state
+        const loadingFiles: UploadedFile[] = pdfFiles.map(file => ({
+            id: crypto.randomUUID(),
+            file,
+            name: file.name
+        }));
+
+        setFiles(prev => [...prev, ...loadingFiles]);
+
+        // Generate previews asynchronously
+        for (let i = 0; i < pdfFiles.length; i++) {
+            const file = pdfFiles[i];
+            const fileId = loadingFiles[i].id;
+
+            try {
+                const { preview, pageCount } = await generatePreview(file);
+                setFiles(prev => prev.map(f =>
+                    f.id === fileId
+                        ? { ...f, preview, pageCount }
+                        : f
+                ));
+            } catch (error) {
+                console.error('Error processing file:', error);
+            }
+        }
 
         // Animate new files
         setTimeout(() => {
             const newFileElements = document.querySelectorAll('.file-item:last-child');
             gsap.fromTo(newFileElements,
-                { opacity: 0, x: -20, scale: 0.9 },
-                { opacity: 1, x: 0, scale: 1, duration: 0.5, ease: "back.out(1.7)" }
+                { opacity: 0, y: 20, scale: 0.9 },
+                { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.7)", stagger: 0.1 }
             );
         }, 100);
-    }, []);
+    }, [generatePreview]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -118,6 +227,75 @@ export default function PdfAssemblerPage() {
             ease: "power2.inOut"
         });
     }, []);
+
+    const handleFileDragStart = useCallback((e: React.DragEvent, fileId: string) => {
+        setDraggedFileId(fileId);
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', fileId);
+
+        // Add visual feedback
+        setTimeout(() => {
+            const draggedElement = document.querySelector(`[data-file-id="${fileId}"]`);
+            if (draggedElement) {
+                gsap.to(draggedElement, {
+                    opacity: 0.7,
+                    scale: 0.95,
+                    duration: 0.2,
+                    ease: "power2.out"
+                });
+            }
+        }, 0);
+    }, []);
+
+    const handleFileDragEnd = useCallback((e: React.DragEvent, fileId: string) => {
+        setDraggedFileId(null);
+        setDragOverFileId(null);
+
+        // Reset visual feedback
+        const draggedElement = document.querySelector(`[data-file-id="${fileId}"]`);
+        if (draggedElement) {
+            gsap.to(draggedElement, {
+                opacity: 1,
+                scale: 1,
+                duration: 0.2,
+                ease: "power2.out"
+            });
+        }
+    }, []);
+
+    const handleFileDragOver = useCallback((e: React.DragEvent, fileId: string) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+
+        if (draggedFileId && draggedFileId !== fileId) {
+            setDragOverFileId(fileId);
+        }
+    }, [draggedFileId]);
+
+    const handleFileDragLeave = useCallback((e: React.DragEvent) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+            setDragOverFileId(null);
+        }
+    }, []);
+
+    const handleFileDrop = useCallback((e: React.DragEvent, targetFileId: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const draggedId = e.dataTransfer.getData('text/plain');
+
+        if (draggedId && draggedId !== targetFileId) {
+            const draggedIndex = files.findIndex(f => f.id === draggedId);
+            const targetIndex = files.findIndex(f => f.id === targetFileId);
+
+            if (draggedIndex !== -1 && targetIndex !== -1) {
+                moveFile(draggedIndex, targetIndex);
+            }
+        }
+
+        setDragOverFileId(null);
+        setDraggedFileId(null);
+    }, [files, moveFile]);
 
     const assemblePDFs = useCallback(async () => {
         if (files.length === 0) return;
@@ -269,7 +447,7 @@ export default function PdfAssemblerPage() {
                 }}></div>
             </div>
 
-            <div className="relative z-10 px-6 max-w-4xl mx-auto">
+            <div className="relative z-10 px-6 max-w-5xl mx-auto">
                 {/* Title Section */}
                 <div ref={titleRef} className="text-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
@@ -285,8 +463,8 @@ export default function PdfAssemblerPage() {
                 <div ref={uploadRef} className="mb-8">
                     <div
                         className={`relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl border-2 border-dashed transition-all duration-300 p-8 text-center shadow-2xl ${dragOver
-                                ? 'border-blue-400 bg-blue-500/10 shadow-blue-500/25'
-                                : 'border-white/30 hover:border-white/50'
+                            ? 'border-blue-400 bg-blue-500/10 shadow-blue-500/25'
+                            : 'border-white/30 hover:border-white/50'
                             }`}
                         onDrop={handleDrop}
                         onDragOver={handleDragOver}
@@ -324,7 +502,7 @@ export default function PdfAssemblerPage() {
                     </div>
                 </div>
 
-                {/* File List */}
+                {/* Enhanced File List with Card Layout */}
                 {files.length > 0 && (
                     <div ref={fileListRef} className="mb-8">
                         <div className="bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl">
@@ -332,61 +510,187 @@ export default function PdfAssemblerPage() {
                                 <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                                Fichiers à assembler ({files.length})
+                                Documents à assembler ({files.length})
                             </h3>
-                            <div className="space-y-3">
+                            <div className="text-sm text-gray-400 mb-6 flex items-center gap-2">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+                                Glissez-déposez les cartes pour réorganiser • Aperçu automatique généré
+                            </div>
+
+                            {/* Card Grid Layout */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {files.map((file, index) => (
                                     <div
                                         key={file.id}
                                         data-file-id={file.id}
-                                        className="file-item flex items-center justify-between bg-white/10 border border-white/20 p-4 rounded-2xl backdrop-blur-sm hover:bg-white/15 transition-all duration-300"
+                                        draggable
+                                        onDragStart={(e) => handleFileDragStart(e, file.id)}
+                                        onDragEnd={(e) => handleFileDragEnd(e, file.id)}
+                                        onDragOver={(e) => handleFileDragOver(e, file.id)}
+                                        onDragLeave={(e) => handleFileDragLeave(e)}
+                                        onDrop={(e) => handleFileDrop(e, file.id)}
+                                        className={`file-item group relative cursor-move transition-all duration-300 transform hover:scale-[1.02] ${
+                                            draggedFileId === file.id
+                                                ? 'scale-95 opacity-60 rotate-2'
+                                                : dragOverFileId === file.id
+                                                ? 'scale-105 rotate-1'
+                                                : ''
+                                        }`}
                                     >
-                                        <div className="flex items-center space-x-4">
-                                            <div className="flex items-center justify-center w-10 h-10 bg-blue-500/20 rounded-xl border border-blue-400/30">
-                                                <span className="text-sm font-bold text-blue-300">#{index + 1}</span>
+                                        {/* Card Container */}
+                                        <div className={`relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl ${
+                                            draggedFileId === file.id
+                                                ? 'border-blue-400/70 bg-blue-500/10 shadow-blue-500/25'
+                                                : dragOverFileId === file.id
+                                                ? 'border-green-400/70 bg-green-500/10 shadow-green-500/25'
+                                                : 'border-white/20 hover:border-white/40 hover:bg-white/20'
+                                        }`}>
+                                            {/* Card Header with Order Number */}
+                                            <div className="relative p-4 pb-2">
+                                                <div className="flex items-center justify-between mb-3">
+                                                    <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-500/40 to-purple-500/40 rounded-xl border border-blue-400/50 text-sm font-bold text-blue-200 shadow-lg">
+                                                        #{index + 1}
+                                                    </div>
+                                                    
+                                                    {/* Actions */}
+                                                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                        <div className="p-1.5 text-gray-400 hover:text-gray-300 rounded-lg hover:bg-white/10 transition-all duration-200" title="Drag to reorder">
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                                                            </svg>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => removeFile(file.id)}
+                                                            className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-all duration-200"
+                                                            title="Supprimer"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* PDF Preview */}
+                                                <div className="relative mb-4">
+                                                    <div className="w-full aspect-[3/4] bg-white rounded-xl border-2 border-gray-200 shadow-lg overflow-hidden mx-auto max-w-[120px]">
+                                                        {file.preview ? (
+                                                            <Image
+                                                                src={file.preview}
+                                                                alt={`Aperçu de ${file.name}`}
+                                                                width={120}
+                                                                height={160}
+                                                                className="w-full h-full object-contain bg-white"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+                                                                <div className="animate-spin mb-2">
+                                                                    <svg className="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                                    </svg>
+                                                                </div>
+                                                                <span className="text-xs text-slate-500 font-medium text-center px-2">Génération<br />aperçu...</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    
+                                                    {/* Page Count Badge */}
+                                                    {file.pageCount && (
+                                                        <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs px-2.5 py-1 rounded-full shadow-lg border-2 border-white/20 font-semibold">
+                                                            {file.pageCount}p
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div>
-                                                <span className="font-medium text-white block">{file.name}</span>
-                                                <span className="text-sm text-gray-400">
-                                                    {(file.file.size / 1024 / 1024).toFixed(2)} MB
-                                                </span>
+
+                                            {/* Card Footer with File Info */}
+                                            <div className="px-4 pb-4">
+                                                <div className="text-center">
+                                                    <h4 className="font-semibold text-white text-sm mb-2 truncate group-hover:text-blue-200 transition-colors" title={file.name}>
+                                                        {file.name}
+                                                    </h4>
+                                                    
+                                                    <div className="flex items-center justify-center gap-3 text-xs text-gray-400">
+                                                        <span className="flex items-center gap-1">
+                                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                                                            </svg>
+                                                            {(file.file.size / 1024 / 1024).toFixed(1)} MB
+                                                        </span>
+                                                        {file.pageCount && (
+                                                            <span className="flex items-center gap-1">
+                                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                                </svg>
+                                                                {file.pageCount} page{file.pageCount > 1 ? 's' : ''}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            {index > 0 && (
-                                                <button
-                                                    onClick={() => moveFile(index, index - 1)}
-                                                    className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors duration-200"
-                                                    title="Monter"
-                                                >
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                                                    </svg>
-                                                </button>
+
+                                            {/* Drop Indicator Overlay */}
+                                            {dragOverFileId === file.id && (
+                                                <div className="absolute inset-0 bg-green-500/20 border-2 border-green-400 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                                                    <div className="bg-green-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg flex items-center gap-2">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                        </svg>
+                                                        Déposer ici
+                                                    </div>
+                                                </div>
                                             )}
-                                            {index < files.length - 1 && (
-                                                <button
-                                                    onClick={() => moveFile(index, index + 1)}
-                                                    className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors duration-200"
-                                                    title="Descendre"
-                                                >
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                    </svg>
-                                                </button>
+
+                                            {/* Loading Overlay */}
+                                            {!file.preview && !file.pageCount && (
+                                                <div className="absolute inset-0 bg-blue-500/10 rounded-2xl border border-blue-400/30 flex items-center justify-center backdrop-blur-sm">
+                                                    <div className="text-center">
+                                                        <div className="animate-pulse mb-2">
+                                                            <svg className="w-6 h-6 text-blue-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                            </svg>
+                                                        </div>
+                                                        <div className="text-xs text-blue-400 font-medium">Traitement...</div>
+                                                    </div>
+                                                </div>
                                             )}
-                                            <button
-                                                onClick={() => removeFile(file.id)}
-                                                className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors duration-200"
-                                                title="Supprimer"
-                                            >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+
+                            {/* Summary Card */}
+                            <div className="mt-8 p-6 bg-gradient-to-r from-blue-500/15 to-purple-500/15 rounded-2xl border border-blue-400/30 backdrop-blur-sm">
+                                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-3 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-xl">
+                                            <svg className="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-white font-semibold mb-1">Document final</h4>
+                                            <p className="text-gray-400 text-sm">Prêt à être assemblé</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-6 text-center">
+                                        <div>
+                                            <div className="text-2xl font-bold text-blue-300">
+                                                {files.reduce((sum, file) => sum + (file.pageCount || 0), 0)}
+                                            </div>
+                                            <div className="text-xs text-gray-400 uppercase tracking-wide">Pages</div>
+                                        </div>
+                                        <div className="w-px h-10 bg-white/20"></div>
+                                        <div>
+                                            <div className="text-2xl font-bold text-purple-300">
+                                                {(files.reduce((sum, file) => sum + file.file.size, 0) / 1024 / 1024).toFixed(1)}
+                                            </div>
+                                            <div className="text-xs text-gray-400 uppercase tracking-wide">MB</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
