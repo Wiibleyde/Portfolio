@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@theme {
+  --color-sabs-gradient-1: #85527E;
+  --color-sabs-gradient-2: #754974;
+  --color-sabs-gradient-3: #3D2845;
+
+  --color-sabs-primary: #7373B4;
+}
+
 html,
 body {
   scroll-snap-type: y mandatory;
