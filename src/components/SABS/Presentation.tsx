@@ -93,7 +93,7 @@ export function Presentation() {
     }, []);
 
     return (
-        <div className="snap-start h-screen relative bg-gradient-to-br from-slate-50 via-gray-100 to-slate-200 py-12" style={{ fontFamily: BeVietnam.style.fontFamily }}>
+        <div className="snap-start h-screen relative bg-gradient-to-br from-slate-50 via-gray-100 to-slate-200 py-12" style={{ fontFamily: BeVietnam.style.fontFamily }} id="presentation">
             {/* Subtle background pattern */}
             <div className="absolute inset-0 opacity-[0.02]">
                 <div className="absolute inset-0" style={{
