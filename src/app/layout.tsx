@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description: "Portfolio de Nathan Bonnell, développeur web fullstack en alternance. Réalisé avec React, Next.js, TailwindCSS et TypeScript, disponible en français et en anglais ce site présente mes projets, mes compétences et mon parcours.",
     images: [
       {
-        url: "https://nathan.bonnell.fr/img/picture/pp.png",
+        url: "https://nathan.bonnell.fr/img/pp.webp",
         width: 1200,
         height: 630,
         alt: "Portfolio - Nathan Bonnell",
