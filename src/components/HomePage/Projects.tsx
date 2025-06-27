@@ -118,6 +118,14 @@ export function Projects() {
             repoUrl: "https://github.com/Wiibleyde/f1-app",
             image: F1.src,
             tags: ["F1", "Open-F1 API", "React-Native", "Typescript", "Expo"],
+        },
+        {
+            title: "Site du cabinet d'avocats Lex-Port",
+            description: "Site vitrine du cabinet d'avocats Lex-Port.",
+            type: ProjectType.Professional,
+            url: "https://lex-port.com",
+            image: LexPortLogo.src,
+            tags: ["Lex-Port", "Alternance", "Next.js", "Typescript", "TailwindCSS", "Prisma", "i18n", "SEO"],
         }
     ]
 

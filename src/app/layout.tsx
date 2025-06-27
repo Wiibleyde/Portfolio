@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Montserrat } from "next/font/google";
-import { Landing } from "@/components/Landing";
 import { ClientLayout } from "@/app/clientLayout";
 
 export const metadata: Metadata = {
@@ -51,7 +50,6 @@ export default function RootLayout({
       <body
         className={`antialiased ${montserrat.className} bg-black`}
       >
-        <Landing />
         <ClientLayout>
           {children}
         </ClientLayout>
