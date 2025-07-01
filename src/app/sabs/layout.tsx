@@ -4,7 +4,7 @@ import Logo from '@public/img/sabs/sabs-logo-small.png';
 
 export const metadata: Metadata = {
     title: "SABS - Page d'accueil",
-    description: "Page d'accueil du site SABS, le site de l'association SABS.",
+    description: "Page d'accueil du site SABS, le site de la micro entreprise SABS.",
     icons: {
         icon: Logo.src,
     },
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
         type: "website",
         url: "https://nathan.bonnell.fr/sabs",
         title: "SABS - Page d'accueil",
-        description: "Page d'accueil du site SABS, le site de l'association SABS.",
+        description: "Page d'accueil du site SABS, le site de la micro entreprise SABS.",
         images: [
             {
                 url: "https://nathan.bonnell.fr/img/sabs/sabs-logo.png",
