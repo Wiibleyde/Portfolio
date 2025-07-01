@@ -75,15 +75,15 @@ export function Footer() {
 
                 {/* Social links */}
                 <div className="flex justify-center gap-6 mb-12">
-                    <a href="https://github.com/Wiibleyde" target="_blank" rel="noopener noreferrer"
+                    <a href="https://github.com/Wiibleyde" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"
                         className="group bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all duration-300 hover:scale-110">
                         <Github className="w-6 h-6 text-gray-300 group-hover:text-white" />
                     </a>
-                    <a href="https://www.linkedin.com/in/nathan-bonnell-57736926a" target="_blank" rel="noopener noreferrer"
+                    <a href="https://www.linkedin.com/in/nathan-bonnell-57736926a" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"
                         className="group bg-white/10 hover:bg-blue-500/50 p-4 rounded-full transition-all duration-300 hover:scale-110">
                         <Linkedin className="w-6 h-6 text-gray-300 group-hover:text-white" />
                     </a>
-                    <a href="mailto:nathan@bonnell.fr"
+                    <a href="mailto:nathan@bonnell.fr" aria-label="Envoyer un email à Nathan Bonnell"
                         className="group bg-white/10 hover:bg-purple-500/50 p-4 rounded-full transition-all duration-300 hover:scale-110">
                         <Envelope className="w-6 h-6 text-gray-300 group-hover:text-white" />
                     </a>
@@ -105,15 +105,15 @@ export function Footer() {
                     </p>
 
                     <p className="text-sm text-gray-500 mt-4">
-                        Retrouvez aussi les <a href="/hope_pictures" className="hover:text-gray-400 underline decoration-dotted">photos de Hope</a>, un <a href='/tools/pdfAssembler' className="hover:text-gray-400 underline decoration-dotted">outil de fusion de PDF</a>, un <a href='/tools/qrcode' className="hover:text-gray-400 underline decoration-dotted">générateur de QR Code</a> et un <a href='/tools/vcard' className="hover:text-gray-400 underline decoration-dotted">générateur de carte de visite</a> que j&apos;ai réalisé.
+                        Retrouvez aussi les <a href="/hope_pictures" className="hover:text-gray-400 underline decoration-dotted" aria-label='Photos de Hope'>photos de Hope</a>, un <a href='/tools/pdfAssembler' className="hover:text-gray-400 underline decoration-dotted" aria-label='Outil de fusion de PDF'>outil de fusion de PDF</a>, un <a href='/tools/qrcode' className="hover:text-gray-400 underline decoration-dotted" aria-label='Générateur de QR Code'>générateur de QR Code</a> et un <a href='/tools/vcard' className="hover:text-gray-400 underline decoration-dotted" aria-label='Générateur de carte de visite'>générateur de carte de visite</a> que j&apos;ai réalisé.
                     </p>
 
                     <p className="text-sm text-gray-500 mt-4">
-                        Pour accèder aux <Link href="/legal-mentions" className="hover:text-gray-400 underline decoration-dotted">mentions légales</Link>, cliquez sur les liens.
+                        Pour accèder aux <Link href="/legal-mentions" className="hover:text-gray-400 underline decoration-dotted" aria-label='Mentions légales'>mentions légales</Link>, cliquez sur les liens.
                     </p>
 
                     <p className="text-xs text-gray-500 mt-4">
-                        This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" className="hover:text-gray-400 underline">Privacy Policy</a> and <a href="https://policies.google.com/terms" className="hover:text-gray-400 underline">Terms of Service</a> apply.
+                        This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" className="hover:text-gray-400 underline" aria-label='Politique de confidentialité'>Privacy Policy</a> and <a href="https://policies.google.com/terms" className="hover:text-gray-400 underline" aria-label="Conditions d'utilisation">Terms of Service</a> apply.
                     </p>
                 </div>
             </div>
