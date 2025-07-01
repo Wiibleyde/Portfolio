@@ -292,6 +292,7 @@ export function Presentation() {
                             <div className="flex flex-col sm:flex-row gap-3">
                                 <button 
                                     className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105" 
+                                    aria-label="Prévisualiser le CV"
                                     onClick={handlePreviewCV}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
@@ -302,6 +303,7 @@ export function Presentation() {
                                     <span className="relative z-10 text-base whitespace-nowrap">Prévisualiser</span>
                                 </button>
                                 <button 
+                                    aria-label="Télécharger le CV"
                                     className="group relative bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:shadow-green-500/25 transform hover:scale-105" 
                                     onClick={handleDownloadCV}
                                 >
@@ -340,6 +342,7 @@ export function Presentation() {
                             <div className="flex gap-2">
                                 <button
                                     onClick={handleDownloadCV}
+                                    aria-label="Télécharger le CV"
                                     className="group bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-blue-500/25 transform hover:scale-105"
                                 >
                                     <svg className="w-4 h-4 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,6 +352,7 @@ export function Presentation() {
                                 </button>
                                 <button
                                     onClick={closePreview}
+                                    aria-label="Fermer la prévisualisation"
                                     className="group bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-2 rounded-lg transition-all duration-200 transform hover:scale-105"
                                 >
                                     <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
