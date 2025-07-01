@@ -331,6 +331,7 @@ export function Projects() {
                         {(['all', ProjectType.Personal, ProjectType.School, ProjectType.Professional] as (ProjectType | 'all')[]).map((filter) => (
                             <button
                                 key={filter}
+                                aria-label={`Filtrer par ${getFilterLabel(filter)}`}
                                 onClick={() => handleFilterChange(filter)}
                                 disabled={isAnimating}
                                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 flex items-center gap-2 ${activeFilter === filter
@@ -350,6 +351,7 @@ export function Projects() {
                     <div className="relative">
                         {/* Navigation Buttons */}
                         <button
+                            aria-label="Projet précédent"
                             onClick={prevProjects}
                             disabled={currentIndex === 0 || isAnimating}
                             className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full transition-all duration-300 ${currentIndex === 0 || isAnimating
@@ -362,6 +364,7 @@ export function Projects() {
 
                         <button
                             onClick={nextProjects}
+                            aria-label="Projet suivant"
                             disabled={currentIndex >= maxIndex || isAnimating}
                             className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full transition-all duration-300 ${currentIndex >= maxIndex || isAnimating
                                 ? 'bg-white/5 text-gray-500 cursor-not-allowed'
@@ -399,6 +402,7 @@ export function Projects() {
                                     key={i}
                                     onClick={() => goToPage(i)}
                                     disabled={isAnimating}
+                                    aria-label={`Aller à la page ${i + 1}`}
                                     className={`w-3 h-3 rounded-full transition-all duration-300 ${Math.floor(currentIndex / projectsPerView) === i
                                         ? 'bg-blue-500 scale-125'
                                         : 'bg-white/30 hover:bg-white/50'

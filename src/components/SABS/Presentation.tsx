@@ -113,7 +113,7 @@ export function Presentation() {
 
                     <div className="text-lg md:text-xl text-gray-700 leading-relaxed space-y-6 font-light">
                         <p ref={firstParagraphRef} className="max-w-4xl mx-auto">
-                            <span className="text-sabs-primary font-medium">SABS</span> est une association spécialisée dans la gestion de
+                            <span className="text-sabs-primary font-medium">SABS</span> est une micro entreprise spécialisée dans la gestion de
                             <span className="text-sabs-primary font-medium"> rediffusions en direct multicaméra</span> pour
                             tout type d&apos;événement.
                         </p>

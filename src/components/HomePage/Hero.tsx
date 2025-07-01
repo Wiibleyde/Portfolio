@@ -127,6 +127,7 @@ export function Hero() {
                         <button
                             ref={buttonRef}
                             onClick={scrollToTarget}
+                            aria-label="Contactez-moi"
                             className="text-white py-4 px-8 rounded-full border-2 border-white hover:text-black transition-colors duration-400 ease-in-out font-medium tracking-wide relative overflow-hidden group"
                         >
                             <span className="relative z-10">Contactez-moi</span>

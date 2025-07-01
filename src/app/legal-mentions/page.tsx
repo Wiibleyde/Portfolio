@@ -151,6 +151,7 @@ export default function LegalMentions() {
                                                 className="group relative text-blue-400 hover:text-blue-300 transition-colors duration-200 font-medium"
                                                 target={href?.startsWith('http') ? '_blank' : undefined}
                                                 rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                                aria-label={href?.startsWith('http') ? `Lien externe vers ${children}` : undefined}
                                             >
                                                 {children}
                                                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 group-hover:w-full transition-all duration-300"></span>
@@ -197,6 +198,7 @@ export default function LegalMentions() {
                                 vous pouvez me contacter à l&apos;adresse{' '}
                                 <a 
                                     href="mailto:nathan@bonnell.fr" 
+                                    aria-label="Envoyer un email à Nathan Bonnell"
                                     className="group relative text-blue-400 hover:text-blue-300 transition-colors duration-200 font-medium"
                                 >
                                     nathan@bonnell.fr
