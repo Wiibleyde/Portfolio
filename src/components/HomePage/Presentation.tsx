@@ -185,7 +185,7 @@ export function Presentation() {
     }, [showPreview]);
 
     return (
-        <div className="snap-start min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-16">
+        <div id="presentation" className="snap-start min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-16">
             {/* Distinctive background pattern */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute inset-0" style={{

@@ -49,7 +49,7 @@ export function Footer() {
     }, []);
 
     return (
-        <footer ref={footerRef} className="min-h-screen snap-start relative bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center">
+        <footer id="contact" ref={footerRef} className="min-h-screen snap-start relative bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center">
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div className="w-full h-full" style={{
