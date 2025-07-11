@@ -24,7 +24,7 @@ export function Timeline() {
             "duration": "Septembre 2024 - Aujourd'hui",
             "org": "Lex-Port",
             "icon": Briefcase,
-            "description":"Développement de sites web pour les clients du cabinet.",
+            "description": "Développement de sites web pour les clients du cabinet.",
             "skills": ["Next.js", "TypeScript", "Tailwind CSS", "Prisma", "Mariadb", "Node.js"],
             "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300",
             "circleColor": "bg-red-900",
@@ -70,10 +70,10 @@ export function Timeline() {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting && !isVisible) {
                         setIsVisible(true);
-                        
+
                         const items = timelineRef.current?.querySelectorAll('.timeline-item');
                         if (items) {
-                            gsap.fromTo(items, 
+                            gsap.fromTo(items,
                                 { opacity: 0, y: 50 },
                                 {
                                     opacity: 1,
@@ -108,7 +108,7 @@ export function Timeline() {
     }, []);
 
     return (
-        <div className="min-h-screen snap-start relative bg-gray-900">
+        <div id="timeline" className="min-h-screen snap-start relative bg-gray-900">
             <div className="absolute inset-0 opacity-5">
                 <div className="w-full h-full" style={{
                     backgroundImage: `linear-gradient(45deg, #374151 25%, transparent 25%), 
