@@ -1,15 +1,15 @@
-import { Contact } from "@/components/SABS/Contact";
-import { Footer } from "@/components/SABS/Footer";
-import { Hero } from "@/components/SABS/Hero";
-import { Presentation } from "@/components/SABS/Presentation";
+'use client'
+
+import { useEffect } from 'react'
 
 export default function SabsPage() {
-    return (
-        <div className="scroll-smooth snap-y snap-mandatory overflow-y-scroll h-screen">
-            <Hero />
-            <Presentation />
-            <Contact />
-            <Footer />
-        </div>
-    );
+  useEffect(() => {
+    window.location.href = 'https://sabs.vercel.app'
+  }, [])
+
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <p>Redirection vers SABS...</p>
+    </div>
+  )
 }
