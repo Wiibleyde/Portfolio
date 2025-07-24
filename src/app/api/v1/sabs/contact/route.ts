@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!request.body) {
@@ -18,28 +18,30 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            embeds: [{
-                title: '📬 Nouveau message de contact',
-                description: `**Nom :** ${nom}  \n**Prénom :** ${prenom}`,
-                color: 0x1abc9c, // Teal color
-                thumbnail: {
-                    url: 'https://nathan.bonnell.fr/img/sabs/sabs-logo-small.png',
+            embeds: [
+                {
+                    title: '📬 Nouveau message de contact',
+                    description: `**Nom :** ${nom}  \n**Prénom :** ${prenom}`,
+                    color: 0x1abc9c, // Teal color
+                    thumbnail: {
+                        url: 'https://nathan.bonnell.fr/img/sabs/sabs-logo-small.png',
+                    },
+                    fields: [
+                        { name: '✉️ Email', value: email, inline: true },
+                        { name: "🎉 Type d'événement", value: typeEvent, inline: true },
+                        { name: '📌 Objet', value: objet },
+                        { name: '💬 Message', value: message },
+                    ],
+                    timestamp: new Date().toISOString(),
+                    footer: {
+                        text: 'SABS Requests',
+                        icon_url: 'https://nathan.bonnell.fr/img/sabs/sabs-logo-small.png',
+                    },
+                    image: {
+                        url: 'https://nathan.bonnell.fr/img/sabs/sabs-logo.png',
+                    },
                 },
-                fields: [
-                    { name: '✉️ Email', value: email, inline: true },
-                    { name: '🎉 Type d\'événement', value: typeEvent, inline: true },
-                    { name: '📌 Objet', value: objet },
-                    { name: '💬 Message', value: message },
-                ],
-                timestamp: new Date().toISOString(),
-                footer: {
-                    text: 'SABS Requests',
-                    icon_url: 'https://nathan.bonnell.fr/img/sabs/sabs-logo-small.png',
-                },
-                image: {
-                    url: 'https://nathan.bonnell.fr/img/sabs/sabs-logo.png',
-                },
-            }],
+            ],
             username: 'SABS Requests',
             avatar_url: 'https://nathan.bonnell.fr/img/sabs/sabs-logo-small.png',
         }),

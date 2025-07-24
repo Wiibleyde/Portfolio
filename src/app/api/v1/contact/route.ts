@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -19,14 +19,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const myEmail = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
 
     const transporter = nodemailer.createTransport({
-        host: "ssl0.ovh.net",
+        host: 'ssl0.ovh.net',
         port: 587,
         secure: false,
         authMethod: 'LOGIN',
         auth: {
             user: username,
-            pass: password
-        }
+            pass: password,
+        },
     });
 
     try {
@@ -34,15 +34,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             name: name,
             from: email,
             subject: subject,
-            message: message
+            message: message,
         };
 
         await transporter.sendMail({
             from: username,
             to: myEmail,
             replyTo: data.from,
-            subject: "Portfolio : " + data.subject,
-            text: data.message
+            subject: 'Portfolio : ' + data.subject,
+            text: data.message,
         });
     } catch (error) {
         console.error('Error sending email:', error);

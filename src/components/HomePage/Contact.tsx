@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
@@ -28,12 +28,11 @@ export function Contact() {
 
     const { executeRecaptcha } = useGoogleReCaptcha();
 
-
     const [formData, setFormData] = useState<FormData>({
         name: '',
         email: '',
         subject: '',
-        message: ''
+        message: '',
     });
 
     const [errors, setErrors] = useState<FormErrors>({});
@@ -47,13 +46,13 @@ export function Contact() {
         }
 
         if (!formData.email.trim()) {
-            newErrors.email = 'L\'email est requis';
+            newErrors.email = "L'email est requis";
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = 'Format d\'email invalide';
+            newErrors.email = "Format d'email invalide";
         }
 
         if (!formData.subject.trim()) {
-            newErrors.subject = 'L\'objet est requis';
+            newErrors.subject = "L'objet est requis";
         }
 
         if (!formData.message.trim()) {
@@ -75,31 +74,30 @@ export function Contact() {
         setIsSubmitting(true);
 
         if (!executeRecaptcha) {
-            return
+            return;
         }
-        const token = await executeRecaptcha("onSubmit")
-        const verified = await verifyCaptchaAction(token)
+        const token = await executeRecaptcha('onSubmit');
+        const verified = await verifyCaptchaAction(token);
 
         if (!verified) {
             setIsSubmitting(false);
-            setErrors(prev => ({ ...prev, captcha: 'Vérification CAPTCHA échouée. Veuillez réessayer.' }));
+            setErrors((prev) => ({ ...prev, captcha: 'Vérification CAPTCHA échouée. Veuillez réessayer.' }));
             console.error('CAPTCHA verification failed');
-            return
+            return;
         }
-
 
         try {
             // Send to /api/v1/contact/send
             const response = await fetch('/api/v1/contact', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
             });
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Erreur lors de l\'envoi du message');
+                throw new Error(errorData.message || "Erreur lors de l'envoi du message");
             }
             setIsSubmitted(true);
             setFormData({ name: '', email: '', subject: '', message: '' }); // Reset form
@@ -114,11 +112,11 @@ export function Contact() {
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
 
         // Clear error when user starts typing
         if (errors[name as keyof FormErrors]) {
-            setErrors(prev => ({ ...prev, [name]: undefined }));
+            setErrors((prev) => ({ ...prev, [name]: undefined }));
         }
     };
 
@@ -136,14 +134,17 @@ export function Contact() {
                             opacity: 1,
                             y: 0,
                             duration: 0.8,
-                            ease: "power2.out"
-                        })
-                            .to(formRef.current, {
+                            ease: 'power2.out',
+                        }).to(
+                            formRef.current,
+                            {
                                 opacity: 1,
                                 y: 0,
                                 duration: 0.8,
-                                ease: "power2.out"
-                            }, "-=0.4");
+                                ease: 'power2.out',
+                            },
+                            '-=0.4'
+                        );
                     }
                 });
             },
@@ -163,7 +164,7 @@ export function Contact() {
     useEffect(() => {
         gsap.set([titleRef.current, formRef.current], {
             opacity: 0,
-            y: 50
+            y: 50,
         });
     }, []);
 
@@ -178,21 +179,25 @@ export function Contact() {
     }, [isSubmitted]);
 
     return (
-        <div className="snap-start min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12" id="contact">
+        <div
+            className="snap-start min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12"
+            id="contact"
+        >
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0" style={{
-                    backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
-                                     radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`
-                }}></div>
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
+                                     radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
+                    }}
+                ></div>
             </div>
 
             <div ref={containerRef} className="relative z-10 px-10 max-w-4xl mx-auto">
                 {/* Title Section */}
                 <div ref={titleRef} className="text-center mb-8">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                        Contactez-moi
-                    </h2>
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Contactez-moi</h2>
                     <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3"></div>
                     <p className="text-gray-300 text-lg">
                         Une idée, un projet, une question ? N&apos;hésitez pas à me contacter !
@@ -204,8 +209,18 @@ export function Contact() {
                     {isSubmitted ? (
                         <div className="text-center py-8">
                             <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                <svg
+                                    className="w-8 h-8 text-green-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M5 13l4 4L19 7"
+                                    />
                                 </svg>
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-2">Message envoyé !</h3>
@@ -227,9 +242,7 @@ export function Contact() {
                                     className={`w-full px-4 py-3 bg-white/10 border ${errors.name ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors`}
                                     placeholder="Votre nom complet"
                                 />
-                                {errors.name && (
-                                    <p className="mt-1 text-sm text-red-400">{errors.name}</p>
-                                )}
+                                {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
                             </div>
 
                             {/* Email Field */}
@@ -246,9 +259,7 @@ export function Contact() {
                                     className={`w-full px-4 py-3 bg-white/10 border ${errors.email ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors`}
                                     placeholder="votre.email@exemple.com"
                                 />
-                                {errors.email && (
-                                    <p className="mt-1 text-sm text-red-400">{errors.email}</p>
-                                )}
+                                {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
                             </div>
 
                             {/* Subject Field */}
@@ -265,9 +276,7 @@ export function Contact() {
                                     className={`w-full px-4 py-3 bg-white/10 border ${errors.subject ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors`}
                                     placeholder="Sujet de votre message"
                                 />
-                                {errors.subject && (
-                                    <p className="mt-1 text-sm text-red-400">{errors.subject}</p>
-                                )}
+                                {errors.subject && <p className="mt-1 text-sm text-red-400">{errors.subject}</p>}
                             </div>
 
                             {/* Message Field */}
@@ -284,9 +293,7 @@ export function Contact() {
                                     className={`w-full px-4 py-3 bg-white/10 border ${errors.message ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors resize-none`}
                                     placeholder="Décrivez votre projet ou votre demande..."
                                 />
-                                {errors.message && (
-                                    <p className="mt-1 text-sm text-red-400">{errors.message}</p>
-                                )}
+                                {errors.message && <p className="mt-1 text-sm text-red-400">{errors.message}</p>}
                             </div>
 
                             {/* Submit Button */}
@@ -301,15 +308,35 @@ export function Contact() {
 
                                     {isSubmitting ? (
                                         <>
-                                            <svg className="w-5 h-5 relative z-10 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            <svg
+                                                className="w-5 h-5 relative z-10 animate-spin"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                                />
                                             </svg>
                                             <span className="relative z-10">Envoi en cours...</span>
                                         </>
                                     ) : (
                                         <>
-                                            <svg className="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                            <svg
+                                                className="w-5 h-5 relative z-10"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                                />
                                             </svg>
                                             <span className="relative z-10">Envoyer le message</span>
                                         </>

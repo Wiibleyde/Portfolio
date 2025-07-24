@@ -1,9 +1,9 @@
-"use client";
-import { useEffect, useRef, useState, useCallback } from "react";
-import { gsap } from "gsap";
-import { Github, BoxArrowUpRight } from "react-bootstrap-icons";
-import Image from "next/image";
-import { Project, ProjectType } from "@/types";
+'use client';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { gsap } from 'gsap';
+import { Github, BoxArrowUpRight } from 'react-bootstrap-icons';
+import Image from 'next/image';
+import { Project, ProjectType } from '@/types';
 
 interface ProjectCardProps {
     project: Project;
@@ -14,7 +14,7 @@ enum TooltipState {
     HIDDEN = 'hidden',
     SHOWING = 'showing',
     VISIBLE = 'visible',
-    HIDING = 'hiding'
+    HIDING = 'hiding',
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
@@ -22,7 +22,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     const tooltipRef = useRef<HTMLDivElement>(null);
     const tagsContainerRef = useRef<HTMLDivElement>(null);
     const [tooltipState, setTooltipState] = useState<TooltipState>(TooltipState.HIDDEN);
-    const [shouldAnimateTags, setShouldAnimateTags] = useState(false);
+    const [, setShouldAnimateTags] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const animationRef = useRef<gsap.core.Timeline | gsap.core.Tween | null>(null);
 
@@ -31,8 +31,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
             y: -5,
             scale: 1.01,
             duration: 0.3,
-            ease: "power2.out",
-            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)"
+            ease: 'power2.out',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
         });
     };
 
@@ -61,91 +61,92 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         killCurrentAnimation();
         setTooltipState(TooltipState.SHOWING);
-        setShouldAnimateTags(false); // Reset animation state
 
         // Highlight tags container
         gsap.to(tagsContainerRef.current, {
-            backgroundColor: "rgba(59, 130, 246, 0.1)",
-            borderColor: "rgba(59, 130, 246, 0.3)",
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderColor: 'rgba(59, 130, 246, 0.3)',
             duration: 0.2,
-            ease: "power2.out"
+            ease: 'power2.out',
         });
 
         // Setup and animate tooltip
-        gsap.set(tooltipRef.current, { pointerEvents: "auto" });
+        gsap.set(tooltipRef.current, { pointerEvents: 'auto' });
 
         const tl = gsap.timeline({
             onComplete: () => {
                 setTooltipState(TooltipState.VISIBLE);
-                setShouldAnimateTags(true); // Trigger tag animations after tooltip is visible
                 animationRef.current = null;
-            }
+            },
         });
 
         tl.to(tooltipRef.current, {
             opacity: 1,
             y: 0,
-            duration: 0.4,
-            ease: "back.out(1.7)"
+            duration: 0.3,
+            ease: 'power2.out',
         });
 
         animationRef.current = tl;
     }, [tooltipState, clearAllTimeouts, killCurrentAnimation]);
 
-    const hideTooltip = useCallback((immediate = false) => {
-        clearAllTimeouts();
+    const hideTooltip = useCallback(
+        (immediate = false) => {
+            clearAllTimeouts();
 
-        // Only proceed if visible or showing
-        if (tooltipState === TooltipState.HIDDEN || tooltipState === TooltipState.HIDING) {
-            return;
-        }
+            // Only proceed if visible or showing
+            if (tooltipState === TooltipState.HIDDEN || tooltipState === TooltipState.HIDING) {
+                return;
+            }
 
-        const performHide = () => {
-            killCurrentAnimation();
-            setTooltipState(TooltipState.HIDING);
-            setShouldAnimateTags(false); // Reset animation state immediately
+            const performHide = () => {
+                killCurrentAnimation();
+                setTooltipState(TooltipState.HIDING);
+                setShouldAnimateTags(false); // Reset animation state immediately
 
-            // Remove highlight from tags container
-            gsap.to(tagsContainerRef.current, {
-                backgroundColor: "transparent",
-                borderColor: "transparent",
-                duration: 0.2,
-                ease: "power2.out"
-            });
+                // Remove highlight from tags container
+                gsap.to(tagsContainerRef.current, {
+                    backgroundColor: 'transparent',
+                    borderColor: 'transparent',
+                    duration: 0.2,
+                    ease: 'power2.out',
+                });
 
-            // Animate tooltip out
-            const tl = gsap.timeline({
-                onComplete: () => {
-                    gsap.set(tooltipRef.current, { pointerEvents: "none" });
-                    setTooltipState(TooltipState.HIDDEN);
-                    animationRef.current = null;
-                }
-            });
+                // Animate tooltip out
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        gsap.set(tooltipRef.current, { pointerEvents: 'none' });
+                        setTooltipState(TooltipState.HIDDEN);
+                        animationRef.current = null;
+                    },
+                });
 
-            tl.to(tooltipRef.current, {
-                opacity: 0,
-                y: 10,
-                duration: 0.2,
-                ease: "power2.inOut"
-            });
+                tl.to(tooltipRef.current, {
+                    opacity: 0,
+                    y: 10,
+                    duration: 0.2,
+                    ease: 'power2.inOut',
+                });
 
-            animationRef.current = tl;
-        };
+                animationRef.current = tl;
+            };
 
-        if (immediate) {
-            performHide();
-        } else {
-            timeoutRef.current = setTimeout(performHide, 100);
-        }
-    }, [tooltipState, clearAllTimeouts, killCurrentAnimation]);
+            if (immediate) {
+                performHide();
+            } else {
+                timeoutRef.current = setTimeout(performHide, 100);
+            }
+        },
+        [tooltipState, clearAllTimeouts, killCurrentAnimation]
+    );
 
     const handleCardMouseLeave = useCallback(() => {
         gsap.to(cardRef.current, {
             y: 0,
             scale: 1,
             duration: 0.3,
-            ease: "power2.out",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            ease: 'power2.out',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         });
 
         // Force hide tooltip when leaving card entirely
@@ -180,10 +181,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
     const getTypeColor = (type: ProjectType) => {
         switch (type) {
-            case ProjectType.Personal: return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
-            case ProjectType.School: return 'bg-green-500/20 text-green-300 border-green-500/30';
-            case ProjectType.Professional: return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
-            default: return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
+            case ProjectType.Personal:
+                return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+            case ProjectType.School:
+                return 'bg-green-500/20 text-green-300 border-green-500/30';
+            case ProjectType.Professional:
+                return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+            default:
+                return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
         }
     };
 
@@ -197,16 +202,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
         >
             {/* Image */}
             <div className="relative h-48 overflow-hidden rounded-t-2xl">
-                <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover"
-                />
+                <Image src={project.image} alt={project.title} fill className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
                 {/* Type badge */}
-                <div className={`absolute top-3 left-3 px-3 py-1 rounded-lg text-xs font-medium border ${getTypeColor(project.type)}`}>
+                <div
+                    className={`absolute top-3 left-3 px-3 py-1 rounded-lg text-xs font-medium border ${getTypeColor(project.type)}`}
+                >
                     {project.type}
                 </div>
 
@@ -237,12 +239,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
             {/* Content */}
             <div className="p-6 flex flex-col h-48">
-                <h3 className="text-xl font-semibold text-white mb-3 line-clamp-1">
-                    {project.title}
-                </h3>
-                <p className="text-sm text-gray-300 mb-4 line-clamp-2 flex-grow">
-                    {project.description}
-                </p>
+                <h3 className="text-xl font-semibold text-white mb-3 line-clamp-1">{project.title}</h3>
+                <p className="text-sm text-gray-300 mb-4 line-clamp-2 flex-grow">{project.description}</p>
 
                 {/* Tags */}
                 <div
@@ -292,15 +290,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     </div>
 
                     <div className="flex flex-wrap gap-1.5">
-                        {project.tags.map((tag, index) => (
+                        {project.tags.map((tag) => (
                             <span
                                 key={tag}
-                                className="px-2.5 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-xs text-white rounded-md border border-blue-400/30 font-medium transform hover:scale-105 transition-transform duration-200"
-                                style={{
-                                    animationDelay: shouldAnimateTags ? `${index * 0.001}s` : '0s',
-                                    animation: shouldAnimateTags ? 'fadeInScale 0.3s ease-out forwards' : 'none',
-                                    opacity: shouldAnimateTags ? undefined : 0
-                                }}
+                                className="px-2.5 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-xs text-white rounded-md border border-blue-400/30 font-medium hover:scale-105 transition-transform duration-200"
                             >
                                 {tag}
                             </span>
