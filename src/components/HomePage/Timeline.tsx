@@ -1,5 +1,5 @@
 "use client"
-import { Book, Briefcase, Calendar, HeartFill, Icon } from "react-bootstrap-icons";
+import { Book, Briefcase, Calendar, HeartFill, Icon, CodeSlash } from "react-bootstrap-icons";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
@@ -21,14 +21,25 @@ export function Timeline() {
     const data: Timeline[] = [
         {
             "title": "Développeur Full Stack (alternance)",
-            "duration": "Septembre 2024 - Aujourd'hui",
+            "duration": "Septembre 2025 - Aujourd'hui",
+            "org": "Orange Business",
+            "icon": CodeSlash,
+            "description": "Développement pour Orange Business.",
+            "skills": ["React", ".NET"],
+            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-orange-400 text-orange-100",
+            "circleColor": "bg-orange-400",
+            "ringColor": "ring-orange-400/45"
+        },
+        {
+            "title": "Développeur Full Stack (alternance)",
+            "duration": "Septembre 2024 - Août 2025",
             "org": "Lex-Port",
             "icon": Briefcase,
-            "description": "Développement de sites web pour les clients du cabinet.",
+            "description": "Développement de sites web pour le cabinet.",
             "skills": ["Next.js", "TypeScript", "Tailwind CSS", "Prisma", "Mariadb", "Node.js"],
-            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300",
-            "circleColor": "bg-red-900",
-            "ringColor": "ring-red-900/45"
+            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-blue-900 text-blue-300",
+            "circleColor": "bg-blue-800",
+            "ringColor": "ring-blue-800/45"
         },
         {
             "title": "Mastère Informatique",
@@ -36,9 +47,9 @@ export function Timeline() {
             "org": "Ynov Campus (Actuellement en B3)",
             "description": "Développement d'applications web, mobile et logiciel (apprentissage néanmoins de technologies d'infrastructures et de réseaux).",
             "skills": ["Développement Web", "Développement Mobile", "Développement Logiciel", "Infrastructures et Réseaux", "Cybersécurité", "Data Science"],
-            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-blue-900 text-blue-300",
-            "circleColor": "bg-blue-900",
-            "ringColor": "ring-blue-900/45"
+            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-teal-900 text-teal-300",
+            "circleColor": "bg-teal-300",
+            "ringColor": "ring-teal-300/45"
         },
         {
             "title": "Maraude de l'Ordre de Malte",
@@ -47,9 +58,9 @@ export function Timeline() {
             "icon": HeartFill,
             "description": "Aide aux sans-abris de Bordeaux.",
             "skills": ["Écoute", "Aide", "Partage"],
-            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-yellow-900 text-yellow-300",
-            "circleColor": "bg-yellow-900",
-            "ringColor": "ring-yellow-900/45"
+            "class": "text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-red-700 text-red-300",
+            "circleColor": "bg-red-500",
+            "ringColor": "ring-red-500/45"
         },
         {
             "title": "Scolarité (Maternelle, Primaire, Collège, Lycée)",
@@ -123,8 +134,8 @@ export function Timeline() {
                 <div className="border border-blue-500/30 bg-gradient-to-b from-blue-500/30 to-purple-600/30 rounded-2xl shadow-lg p-8">
                     <h2 className="text-3xl font-bold text-white mb-6">Mon Parcours</h2>
                     <ol ref={timelineRef} className="relative border-s-2 border-gray-600 ml-6">
-                        {data.map((item) => (
-                            <TimelineItem key={item.title} item={item} index={data.indexOf(item)} />
+                        {data.map((item, index) => (
+                            <TimelineItem key={`${item.title}-${item.org}`} item={item} index={index} />
                         ))}
                     </ol>
                 </div>
@@ -135,7 +146,7 @@ export function Timeline() {
 
 function TimelineItem({ item, index }: Readonly<{ item: Timeline; index: number }>) {
     return (
-        <li className="mb-2 ml-6 relative timeline-item">
+        <li className="mb-8 ml-6 relative timeline-item">
             <span className={`absolute flex items-center justify-center w-8 h-8 rounded-full -left-10 ring-4 ${item.ringColor} ${item.circleColor}`}>
                 {item.icon ? <item.icon className={"text-white w-4 h-4"} /> : <Calendar className={"text-white w-3 h-3"} />}
             </span>

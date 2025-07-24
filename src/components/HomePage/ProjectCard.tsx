@@ -22,7 +22,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     const tooltipRef = useRef<HTMLDivElement>(null);
     const tagsContainerRef = useRef<HTMLDivElement>(null);
     const [tooltipState, setTooltipState] = useState<TooltipState>(TooltipState.HIDDEN);
-    const [shouldAnimateTags, setShouldAnimateTags] = useState(false);
+    const [, setShouldAnimateTags] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const animationRef = useRef<gsap.core.Timeline | gsap.core.Tween | null>(null);
 
@@ -61,7 +61,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         killCurrentAnimation();
         setTooltipState(TooltipState.SHOWING);
-        setShouldAnimateTags(false); // Reset animation state
 
         // Highlight tags container
         gsap.to(tagsContainerRef.current, {
@@ -77,7 +76,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
         const tl = gsap.timeline({
             onComplete: () => {
                 setTooltipState(TooltipState.VISIBLE);
-                setShouldAnimateTags(true); // Trigger tag animations after tooltip is visible
                 animationRef.current = null;
             }
         });
@@ -85,8 +83,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
         tl.to(tooltipRef.current, {
             opacity: 1,
             y: 0,
-            duration: 0.4,
-            ease: "back.out(1.7)"
+            duration: 0.3,
+            ease: "power2.out"
         });
 
         animationRef.current = tl;
@@ -292,15 +290,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     </div>
 
                     <div className="flex flex-wrap gap-1.5">
-                        {project.tags.map((tag, index) => (
+                        {project.tags.map((tag) => (
                             <span
                                 key={tag}
-                                className="px-2.5 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-xs text-white rounded-md border border-blue-400/30 font-medium transform hover:scale-105 transition-transform duration-200"
-                                style={{
-                                    animationDelay: shouldAnimateTags ? `${index * 0.001}s` : '0s',
-                                    animation: shouldAnimateTags ? 'fadeInScale 0.3s ease-out forwards' : 'none',
-                                    opacity: shouldAnimateTags ? undefined : 0
-                                }}
+                                className="px-2.5 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-xs text-white rounded-md border border-blue-400/30 font-medium hover:scale-105 transition-transform duration-200"
                             >
                                 {tag}
                             </span>
