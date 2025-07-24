@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Envelope, Github, Linkedin, Heart } from 'react-bootstrap-icons';
@@ -18,14 +18,15 @@ export function Footer() {
 
                         const elements = contentRef.current?.children;
                         if (elements) {
-                            gsap.fromTo(elements,
+                            gsap.fromTo(
+                                elements,
                                 { opacity: 0, y: 30 },
                                 {
                                     opacity: 1,
                                     y: 0,
                                     duration: 0.8,
                                     stagger: 0.2,
-                                    ease: "power2.out"
+                                    ease: 'power2.out',
                                 }
                             );
                         }
@@ -49,21 +50,26 @@ export function Footer() {
     }, []);
 
     return (
-        <footer id="contact" ref={footerRef} className="min-h-screen snap-start relative bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center">
+        <footer
+            id="contact"
+            ref={footerRef}
+            className="min-h-screen snap-start relative bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center"
+        >
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
-                <div className="w-full h-full" style={{
-                    backgroundImage: `radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), 
+                <div
+                    className="w-full h-full"
+                    style={{
+                        backgroundImage: `radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 80% 20%, #8b5cf6 0%, transparent 50%)`,
-                }}></div>
+                    }}
+                ></div>
             </div>
 
             <div ref={contentRef} className="relative z-10 max-w-4xl mx-auto px-6 text-center">
                 {/* Main heading */}
                 <div className="mb-12">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                        Restons en contact
-                    </h2>
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Restons en contact</h2>
                     <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
                 </div>
 
@@ -75,16 +81,29 @@ export function Footer() {
 
                 {/* Social links */}
                 <div className="flex justify-center gap-6 mb-12">
-                    <Link href="https://github.com/Wiibleyde" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"
-                        className="group bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all duration-300 hover:scale-110">
+                    <Link
+                        href="https://github.com/Wiibleyde"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub Profile"
+                        className="group bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all duration-300 hover:scale-110"
+                    >
                         <Github className="w-6 h-6 text-gray-300 group-hover:text-white" />
                     </Link>
-                    <Link href="https://www.linkedin.com/in/nathan-bonnell-57736926a" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"
-                        className="group bg-white/10 hover:bg-blue-500/50 p-4 rounded-full transition-all duration-300 hover:scale-110">
+                    <Link
+                        href="https://www.linkedin.com/in/nathan-bonnell-57736926a"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn Profile"
+                        className="group bg-white/10 hover:bg-blue-500/50 p-4 rounded-full transition-all duration-300 hover:scale-110"
+                    >
                         <Linkedin className="w-6 h-6 text-gray-300 group-hover:text-white" />
                     </Link>
-                    <Link href="mailto:nathan@bonnell.fr" aria-label="Envoyer un email à Nathan Bonnell"
-                        className="group bg-white/10 hover:bg-purple-500/50 p-4 rounded-full transition-all duration-300 hover:scale-110">
+                    <Link
+                        href="mailto:nathan@bonnell.fr"
+                        aria-label="Envoyer un email à Nathan Bonnell"
+                        className="group bg-white/10 hover:bg-purple-500/50 p-4 rounded-full transition-all duration-300 hover:scale-110"
+                    >
                         <Envelope className="w-6 h-6 text-gray-300 group-hover:text-white" />
                     </Link>
                 </div>
@@ -100,20 +119,75 @@ export function Footer() {
                 <div className="border-t border-white/20 pt-8">
                     <p className="text-gray-400 text-sm flex items-center justify-center gap-2">
                         © 2025 Nathan Bonnell. Fait avec
-                        <Heart className="w-4 h-4 text-red-400 fill-current" />
-                        à Bordeaux
+                        <Heart className="w-4 h-4 text-red-400 fill-current" />à Bordeaux
                     </p>
 
                     <p className="text-sm text-gray-500 mt-4">
-                        Retrouvez aussi les <Link href="/hope_pictures" className="hover:text-gray-400 underline decoration-dotted" aria-label='Photos de Hope'>photos de Hope</Link>, un <Link href='/tools/pdfAssembler' className="hover:text-gray-400 underline decoration-dotted" aria-label='Outil de fusion de PDF'>outil de fusion de PDF</Link>, un <Link href='/tools/qrcode' className="hover:text-gray-400 underline decoration-dotted" aria-label='Générateur de QR Code'>générateur de QR Code</Link> et un <Link href='/tools/vcard' className="hover:text-gray-400 underline decoration-dotted" aria-label='Générateur de carte de visite'>générateur de carte de visite</Link> que j&apos;ai réalisé.
+                        Retrouvez aussi les{' '}
+                        <Link
+                            href="/hope_pictures"
+                            className="hover:text-gray-400 underline decoration-dotted"
+                            aria-label="Photos de Hope"
+                        >
+                            photos de Hope
+                        </Link>
+                        , un{' '}
+                        <Link
+                            href="/tools/pdfAssembler"
+                            className="hover:text-gray-400 underline decoration-dotted"
+                            aria-label="Outil de fusion de PDF"
+                        >
+                            outil de fusion de PDF
+                        </Link>
+                        , un{' '}
+                        <Link
+                            href="/tools/qrcode"
+                            className="hover:text-gray-400 underline decoration-dotted"
+                            aria-label="Générateur de QR Code"
+                        >
+                            générateur de QR Code
+                        </Link>{' '}
+                        et un{' '}
+                        <Link
+                            href="/tools/vcard"
+                            className="hover:text-gray-400 underline decoration-dotted"
+                            aria-label="Générateur de carte de visite"
+                        >
+                            générateur de carte de visite
+                        </Link>{' '}
+                        que j&apos;ai réalisé.
                     </p>
 
                     <p className="text-sm text-gray-500 mt-4">
-                        Pour accèder aux <Link href="/legal-mentions" className="hover:text-gray-400 underline decoration-dotted" aria-label='Mentions légales'>mentions légales</Link>, cliquez sur les liens.
+                        Pour accèder aux{' '}
+                        <Link
+                            href="/legal-mentions"
+                            className="hover:text-gray-400 underline decoration-dotted"
+                            aria-label="Mentions légales"
+                        >
+                            mentions légales
+                        </Link>
+                        , cliquez sur les liens.
                     </p>
 
                     <p className="text-xs text-gray-500 mt-4">
-                        This site is protected by reCAPTCHA and the Google <Link href="https://policies.google.com/privacy" className="hover:text-gray-400 underline" aria-label='Politique de confidentialité'>Privacy Policy</Link> and <Link href="https://policies.google.com/terms" className="hover:text-gray-400 underline" aria-label="Conditions d'utilisation">Terms of Service</Link> apply.
+                        This site is protected by reCAPTCHA and the Google{' '}
+                        <Link
+                            href="https://policies.google.com/privacy"
+                            className="hover:text-gray-400 underline"
+                            aria-label="Politique de confidentialité"
+                        >
+                            Privacy Policy
+                        </Link>{' '}
+                        and{' '}
+                        <Link
+                            href="https://policies.google.com/terms"
+                            className="hover:text-gray-400 underline"
+                            aria-label="Conditions d'utilisation"
+                        >
+                            Terms of Service
+                        </Link>{' '}
+                        apply.
                     </p>
                 </div>
             </div>

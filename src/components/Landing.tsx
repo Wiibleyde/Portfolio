@@ -1,6 +1,6 @@
-"use client"
-import { useState, useEffect, useRef } from "react";
-import gsap from "gsap";
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 export function Landing() {
     // Utiliser un état initial null pour différencier le premier chargement
@@ -26,40 +26,44 @@ export function Landing() {
 
         timeline.fromTo(
             logoRef.current,
-            { scale: 0.5, filter: "brightness(0.5)", opacity: 0 },
-            { scale: 1, filter: "brightness(1.2)", opacity: 1, duration: 0.5, ease: "back.out(1.7)" } // Réduit de 0.9 à 0.5s
+            { scale: 0.5, filter: 'brightness(0.5)', opacity: 0 },
+            { scale: 1, filter: 'brightness(1.2)', opacity: 1, duration: 0.5, ease: 'back.out(1.7)' } // Réduit de 0.9 à 0.5s
         );
 
-        timeline.to(logoRef.current, {
-            scale: 1.05,
-            duration: 0.5,
-            repeat: 1,
-            yoyo: true,
-            ease: "power1.inOut"
-        }, "-=0.1");
+        timeline.to(
+            logoRef.current,
+            {
+                scale: 1.05,
+                duration: 0.5,
+                repeat: 1,
+                yoyo: true,
+                ease: 'power1.inOut',
+            },
+            '-=0.1'
+        );
 
         timeline.fromTo(
             welcomeTextRef.current,
             { opacity: 0, y: 20, scale: 0.95 },
-            { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power2.out" },
-            "-=0.4"
+            { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out' },
+            '-=0.4'
         );
 
         timeline.fromTo(
             taglineRef.current,
-            { opacity: 0, y: 10, letterSpacing: "0.2em" },
-            { opacity: 0.9, y: 0, letterSpacing: "0.3em", duration: 0.6, ease: "power2.out" },
-            "-=0.4"
+            { opacity: 0, y: 10, letterSpacing: '0.2em' },
+            { opacity: 0.9, y: 0, letterSpacing: '0.3em', duration: 0.6, ease: 'power2.out' },
+            '-=0.4'
         );
 
         timeline.fromTo(
             progressBarRef.current,
-            { width: "0%", opacity: 0.5 },
+            { width: '0%', opacity: 0.5 },
             {
-                width: "100%",
+                width: '100%',
                 opacity: 1,
                 duration: 2.2,
-                ease: "power2.inOut",
+                ease: 'power2.inOut',
                 onUpdate: function () {
                     const progress = Math.round(this.progress() * 100);
                     setLoadingPercentage(progress);
@@ -69,30 +73,26 @@ export function Landing() {
                         gsap.to(logoRef.current, {
                             scale: 1 + pulseIntensity,
                             filter: `brightness(${1 + pulseIntensity * 2})`,
-                            duration: 0.1
+                            duration: 0.1,
                         });
                     }
-                }
+                },
             },
-            "-=0.6"
+            '-=0.6'
         );
 
-        timeline.to(
-            percentageRef.current,
-            { opacity: 0, duration: 0.4, ease: "power2.in" },
-            "-=0.2"
-        );
+        timeline.to(percentageRef.current, { opacity: 0, duration: 0.4, ease: 'power2.in' }, '-=0.2');
 
         // Séquence de sortie
         timeline.to(
             [welcomeTextRef.current, taglineRef.current],
-            { opacity: 0, y: -25, filter: "blur(5px)", duration: 0.6, ease: "power3.in", stagger: 0.1 },
-            "-=0.1"
+            { opacity: 0, y: -25, filter: 'blur(5px)', duration: 0.6, ease: 'power3.in', stagger: 0.1 },
+            '-=0.1'
         );
         timeline.to(
             logoRef.current,
-            { opacity: 0, scale: 1.2, rotation: 5, duration: 0.6, ease: "power3.in" },
-            "-=0.4"
+            { opacity: 0, scale: 1.2, rotation: 5, duration: 0.6, ease: 'power3.in' },
+            '-=0.4'
         );
 
         timeline.to(
@@ -100,13 +100,13 @@ export function Landing() {
             {
                 opacity: 0,
                 duration: 0.6,
-                ease: "power2.inOut",
+                ease: 'power2.inOut',
                 onComplete: () => {
                     localStorage.setItem('hasSeenWelcome', 'true');
                     setHasSeen(true);
-                }
+                },
             },
-            "-=0.3"
+            '-=0.3'
         );
     }, [hasSeen]);
 
@@ -133,10 +133,7 @@ export function Landing() {
                 Bonjour
             </h1>
 
-            <p
-                ref={taglineRef}
-                className="text-lg font-light tracking-[0.3em] text-gray-300 mb-16"
-            >
+            <p ref={taglineRef} className="text-lg font-light tracking-[0.3em] text-gray-300 mb-16">
                 BIENVENUE SUR MON PORTFOLIO
             </p>
 
@@ -145,14 +142,11 @@ export function Landing() {
                     <div
                         ref={progressBarRef}
                         className="h-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 shadow-[0_0_8px_rgba(167,139,250,0.6)]"
-                        style={{ width: "0%" }}
+                        style={{ width: '0%' }}
                     ></div>
                 </div>
 
-                <div 
-                    ref={percentageRef}
-                    className="text-sm font-light tracking-widest text-gray-400"
-                >
+                <div ref={percentageRef} className="text-sm font-light tracking-widest text-gray-400">
                     {loadingPercentage}%
                 </div>
             </div>

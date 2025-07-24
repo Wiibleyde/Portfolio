@@ -1,14 +1,11 @@
-"use client";
-import Iridescence from "@/components/UI/Iridescence";
-import ScrollVelocity from "@/components/UI/ScrollVelocity";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+'use client';
+import Iridescence from '@/components/UI/Iridescence';
+import ScrollVelocity from '@/components/UI/ScrollVelocity';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
 
 export default function WaitingScreen() {
-    const [scrollVelocityTexts, setScrollVelocityTexts] = useState([
-        'Wiibleyde Stream - ',
-        'Écran de chargement - '
-    ]);
+    const [scrollVelocityTexts, setScrollVelocityTexts] = useState(['Wiibleyde Stream - ', 'Écran de chargement - ']);
 
     return (
         <Suspense fallback={<div>Loading page...</div>}>
@@ -17,7 +14,13 @@ export default function WaitingScreen() {
     );
 }
 
-function Content({ setScrollVelocityTexts, scrollVelocityTexts }: { setScrollVelocityTexts: (texts: string[]) => void; scrollVelocityTexts: string[] }) {
+function Content({
+    setScrollVelocityTexts,
+    scrollVelocityTexts,
+}: {
+    setScrollVelocityTexts: (texts: string[]) => void;
+    scrollVelocityTexts: string[];
+}) {
     const params = useSearchParams();
     useEffect(() => {
         const newTexts = [];
@@ -34,17 +37,12 @@ function Content({ setScrollVelocityTexts, scrollVelocityTexts }: { setScrollVel
             newTexts[1] = scrollVelocityTexts[1];
         }
         setScrollVelocityTexts(newTexts);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
 
     return (
         <div className="flex items-center justify-center h-screen w-screen">
-            <Iridescence
-                color={[0.5, 0.5, 0.8]}
-                mouseReact={false}
-                amplitude={0.1}
-                speed={1.0}
-            />
+            <Iridescence color={[0.5, 0.5, 0.8]} mouseReact={false} amplitude={0.1} speed={1.0} />
             <div className="absolute top-1/3">
                 <p className="text-8xl font-bold text-white">Wiibleyde</p>
             </div>
@@ -54,11 +52,7 @@ function Content({ setScrollVelocityTexts, scrollVelocityTexts }: { setScrollVel
                 <Clock />
             </div> */}
             <div className="absolute bottom-36">
-                <ScrollVelocity
-                    texts={scrollVelocityTexts}
-                    velocity={130} 
-                    className="text-white"
-                />
+                <ScrollVelocity texts={scrollVelocityTexts} velocity={130} className="text-white" />
             </div>
         </div>
     );

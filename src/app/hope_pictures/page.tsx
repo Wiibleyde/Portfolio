@@ -1,7 +1,7 @@
-"use client";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import { Folder, ImageAlt } from "react-bootstrap-icons";
+'use client';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import { Folder, ImageAlt } from 'react-bootstrap-icons';
 
 interface Contents {
     folders: string[];
@@ -9,9 +9,9 @@ interface Contents {
 }
 
 export default function Home() {
-    const [path, setPath] = useState("");
+    const [path, setPath] = useState('');
     const [contents, setContents] = useState<Contents>({ folders: [], files: [] });
-    const [selectedImage, setSelectedImage] = useState("");
+    const [selectedImage, setSelectedImage] = useState('');
 
     useEffect(() => {
         fetch(`/api/v1/hope/pictures/find?path=${path}`)
@@ -28,7 +28,7 @@ export default function Home() {
     };
 
     const handleBackClick = () => {
-        setPath((prevPath) => prevPath.split("/").slice(0, -1).join("/"));
+        setPath((prevPath) => prevPath.split('/').slice(0, -1).join('/'));
     };
 
     return (
@@ -38,9 +38,7 @@ export default function Home() {
             <div className="w-full max-w-5xl">
                 {selectedImage && (
                     <div className="mb-8">
-                        <h2 className="text-3xl font-semibold mb-4 text-center">
-                            Selected Image
-                        </h2>
+                        <h2 className="text-3xl font-semibold mb-4 text-center">Selected Image</h2>
                         <div className="flex flex-col items-center">
                             <Image
                                 src={selectedImage}
@@ -48,9 +46,11 @@ export default function Home() {
                                 width={500}
                                 height={500}
                                 className="rounded-lg shadow-lg border border-gray-700"
-                                onClick={() => window.open(selectedImage, "_blank")}
+                                onClick={() => window.open(selectedImage, '_blank')}
                             />
-                            <p className="text-sm mt-2 text-gray-600">Cliquez sur l&apos;image pour l&apos;ouvrir dans un nouvel onglet</p>
+                            <p className="text-sm mt-2 text-gray-600">
+                                Cliquez sur l&apos;image pour l&apos;ouvrir dans un nouvel onglet
+                            </p>
                         </div>
                     </div>
                 )}
@@ -91,7 +91,7 @@ export default function Home() {
                                     onClick={() => handleFileClick(file)}
                                 >
                                     {/* End of filename */}
-                                    <ImageAlt className="mr-2" /> {file.split("_").pop()}
+                                    <ImageAlt className="mr-2" /> {file.split('_').pop()}
                                 </li>
                             ))}
                         </ul>

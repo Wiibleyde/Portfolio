@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import Link from 'next/link';
@@ -21,10 +21,13 @@ export default function NotFound() {
 
         if (mounted) {
             // Set initial states
-            gsap.set([titleRef.current, subtitleRef.current, descriptionRef.current, buttonsRef.current, quoteRef.current], {
-                opacity: 0,
-                y: 30
-            });
+            gsap.set(
+                [titleRef.current, subtitleRef.current, descriptionRef.current, buttonsRef.current, quoteRef.current],
+                {
+                    opacity: 0,
+                    y: 30,
+                }
+            );
 
             // Main animation timeline
             const tl = gsap.timeline({ delay: 0.2 });
@@ -33,41 +36,57 @@ export default function NotFound() {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
-                ease: "power2.out"
+                ease: 'power2.out',
             })
-                .to(subtitleRef.current, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "power2.out"
-                }, "-=0.6")
-                .to(descriptionRef.current, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "power2.out"
-                }, "-=0.4")
-                .to(buttonsRef.current, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "back.out(1.7)"
-                }, "-=0.3")
-                .to(quoteRef.current, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "power2.out"
-                }, "-=0.2");
+                .to(
+                    subtitleRef.current,
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'power2.out',
+                    },
+                    '-=0.6'
+                )
+                .to(
+                    descriptionRef.current,
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'power2.out',
+                    },
+                    '-=0.4'
+                )
+                .to(
+                    buttonsRef.current,
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'back.out(1.7)',
+                    },
+                    '-=0.3'
+                )
+                .to(
+                    quoteRef.current,
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'power2.out',
+                    },
+                    '-=0.2'
+                );
 
             // Floating animation for buttons
             gsap.to(buttonsRef.current, {
                 y: -5,
                 duration: 2,
-                ease: "power1.inOut",
+                ease: 'power1.inOut',
                 yoyo: true,
                 repeat: -1,
-                delay: 2
+                delay: 2,
             });
         }
     }, [mounted]);
@@ -94,13 +113,13 @@ export default function NotFound() {
                     // Smooth scroll to the target position
                     scrollContainer.scrollTo({
                         top: targetPosition,
-                        behavior: 'smooth'
+                        behavior: 'smooth',
                     });
                 } else {
                     // Fallback to regular scroll if container not found
                     element.scrollIntoView({
                         behavior: 'smooth',
-                        block: 'start'
+                        block: 'start',
                     });
                 }
             }
@@ -111,15 +130,21 @@ export default function NotFound() {
         <div className="min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 flex items-center justify-center">
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
-                <div className="w-full h-full" style={{
-                    backgroundImage: `radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), 
+                <div
+                    className="w-full h-full"
+                    style={{
+                        backgroundImage: `radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 80% 20%, #8b5cf6 0%, transparent 50%)`,
-                }}></div>
+                    }}
+                ></div>
             </div>
 
             <div ref={containerRef} className="relative z-10 max-w-4xl mx-auto px-6 text-center">
                 {/* 404 Title */}
-                <h1 ref={titleRef} className="text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-4">
+                <h1
+                    ref={titleRef}
+                    className="text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-4"
+                >
                     404
                 </h1>
 
@@ -130,13 +155,14 @@ export default function NotFound() {
 
                 {/* Description */}
                 <p ref={descriptionRef} className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                    Oops ! Il semble que cette page n&apos;existe pas ou ait été déplacée.
-                    Mais ne vous inquiétez pas, explorons d&apos;autres possibilités !
+                    Oops ! Il semble que cette page n&apos;existe pas ou ait été déplacée. Mais ne vous inquiétez pas,
+                    explorons d&apos;autres possibilités !
                 </p>
 
                 {/* Navigation buttons */}
                 <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                    <Link href="/"
+                    <Link
+                        href="/"
                         className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>

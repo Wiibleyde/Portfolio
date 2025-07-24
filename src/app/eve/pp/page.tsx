@@ -3,14 +3,14 @@ import '../markdown.css';
 
 export default function PrivacyPolicy() {
     return (
-        <div className='flex flex-col items-center justify-center py-12 dark:bg-black bg-gray-100 dark:text-white min-h-screen'>
-            <div className='flex flex-col items-center justify-center'>
-                <div className='w-full max-w-3xl p-8 dark:bg-black bg-gray-100 rounded-lg shadow-lg border-2 markdownApplicable'>
-                    <Markdown className='prose prose-lg prose-invert'>{frenchMd}</Markdown>
+        <div className="flex flex-col items-center justify-center py-12 dark:bg-black bg-gray-100 dark:text-white min-h-screen">
+            <div className="flex flex-col items-center justify-center">
+                <div className="w-full max-w-3xl p-8 dark:bg-black bg-gray-100 rounded-lg shadow-lg border-2 markdownApplicable">
+                    <Markdown className="prose prose-lg prose-invert">{frenchMd}</Markdown>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 const frenchMd = `
@@ -38,4 +38,4 @@ Les données collectées sont utilisées uniquement pour le bon fonctionnement d
 
 ## 5. Contact
 Si vous avez des questions concernant ces politiques, veuillez nous contacter à **nathan@bonnell.fr**.
-`
+`;

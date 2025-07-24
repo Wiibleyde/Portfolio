@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useScroll } from '@/hooks/useScroll';
 import Background from '@public/img/background.jpg';
 import Me from '@public/img/pp.webp';
@@ -20,52 +20,75 @@ export function Hero() {
     // Animation effect
     useEffect(() => {
         // Create a timeline
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
         // Set initial states (invisible)
-        gsap.set([nameRef.current, titleRef.current, buttonRef.current, photoRef.current, scrollIndicatorRef.current], { opacity: 0, y: 20 });
+        gsap.set([nameRef.current, titleRef.current, buttonRef.current, photoRef.current, scrollIndicatorRef.current], {
+            opacity: 0,
+            y: 20,
+        });
 
         // Fade in the container first
         tl.to(containerRef.current, {
             opacity: 1,
-            duration: 1.2
+            duration: 1.2,
         });
 
         // Animate the name
-        tl.to(nameRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2
-        }, "-=0.8");
+        tl.to(
+            nameRef.current,
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+            },
+            '-=0.8'
+        );
 
         // Animate the title with a slight delay
-        tl.to(titleRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2
-        }, "-=0.9");
+        tl.to(
+            titleRef.current,
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+            },
+            '-=0.9'
+        );
 
         // Animate the button with a slight delay
-        tl.to(buttonRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-        }, "-=0.7");
+        tl.to(
+            buttonRef.current,
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+            },
+            '-=0.7'
+        );
 
         // Animate the photo with a slight delay
-        tl.to(photoRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 1.5,
-            delay: 0.2
-        }, "-=0.7");
+        tl.to(
+            photoRef.current,
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 0.2,
+            },
+            '-=0.7'
+        );
 
         // Animate the scroll indicator
-        tl.to(scrollIndicatorRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-        }, "-=0.5");
+        tl.to(
+            scrollIndicatorRef.current,
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+            },
+            '-=0.5'
+        );
 
         // Bouton hover animation
         const button = buttonRef.current;
@@ -76,7 +99,7 @@ export function Hero() {
                 scale: 1.03,
                 boxShadow: '0 0 8px rgba(255, 255, 255, 0.3)',
                 duration: 0.4,
-                ease: "power1.out"
+                ease: 'power1.out',
             });
         };
 
@@ -85,7 +108,7 @@ export function Hero() {
                 scale: 1,
                 boxShadow: 'none',
                 duration: 0.4,
-                ease: "power1.out"
+                ease: 'power1.out',
             });
         };
 
@@ -104,22 +127,16 @@ export function Hero() {
     }, []);
 
     return (
-        <div className="h-screen w-full snap-start relative" style={{ backgroundImage: `url(${Background.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div
+            className="h-screen w-full snap-start relative"
+            style={{ backgroundImage: `url(${Background.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
             <div className="flex flex-col md:flex-row items-center justify-between min-h-screen w-full bg-gradient-to-r from-black/80 via-black/70 to-black/20 px-12 md:px-20 lg:px-24">
-                <div
-                    ref={containerRef}
-                    className="text-left text-white max-w-2xl w-full md:w-1/2"
-                >
-                    <h1
-                        ref={nameRef}
-                        className="text-7xl md:text-8xl font-black mb-4 text-white"
-                    >
+                <div ref={containerRef} className="text-left text-white max-w-2xl w-full md:w-1/2">
+                    <h1 ref={nameRef} className="text-7xl md:text-8xl font-black mb-4 text-white">
                         Nathan Bonnell
                     </h1>
-                    <h2
-                        ref={titleRef}
-                        className="text-2xl md:text-3xl font-bold text-gray-300 mb-8"
-                    >
+                    <h2 ref={titleRef} className="text-2xl md:text-3xl font-bold text-gray-300 mb-8">
                         Développeur Fullstack
                     </h2>
 
@@ -137,16 +154,15 @@ export function Hero() {
                 </div>
 
                 {/* Photo container - avec animation d'apparition */}
-                <div
-                    ref={photoRef}
-                    className="hidden md:block w-2/7 mt-10 md:mt-0 opacity-0"
-                >
-                    <div className="relative w-full aspect-square max-w-md mx-auto"
+                <div ref={photoRef} className="hidden md:block w-2/7 mt-10 md:mt-0 opacity-0">
+                    <div
+                        className="relative w-full aspect-square max-w-md mx-auto"
                         style={{
                             boxShadow: '0 20px 40px -12px rgba(0, 0, 0, 0.6)',
                             borderRadius: '20px',
-                            overflow: 'hidden'
-                        }}>
+                            overflow: 'hidden',
+                        }}
+                    >
                         <Image
                             src={Me}
                             alt="Nathan Bonnell"
@@ -172,5 +188,5 @@ export function Hero() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

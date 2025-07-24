@@ -1,4 +1,4 @@
-import { MetadataRoute } from "next";
+import { MetadataRoute } from 'next';
 
 export const BASE_URL = 'https://nathan.bonnell.fr';
 
@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: '/legal-mentions', lastModified: new Date() },
     ];
 
-    return pages.map(page => {
+    return pages.map((page) => {
         return {
             url: page.url,
             lastModified: page.lastModified.toISOString(),

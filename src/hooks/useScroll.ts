@@ -6,9 +6,9 @@ export const useScroll = ({ targetId }: { targetId: string }) => {
         } else {
             console.warn(`Element with ID ${targetId} not found.`);
         }
-    }
+    };
 
     return {
         scrollToTarget,
     };
-}
+};
