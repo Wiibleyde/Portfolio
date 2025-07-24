@@ -10,6 +10,7 @@ import Bro from "@public/img/projects/bro.png";
 import FurutsuGame from "@public/img/projects/furutsugame.png";
 import Me from "@public/img/pp.webp";
 import F1 from "@public/img/projects/f1.png";
+import SABSLogo from "@public/img/projects/sabs-logo.png";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Filter, ChevronLeft, ChevronRight } from "react-bootstrap-icons";
@@ -31,6 +32,23 @@ export function Projects() {
 
     const projects: Project[] = [
         {
+            title: "Site SABS",
+            description: "Site vitrine du projet SABS.",
+            type: ProjectType.Personal,
+            url: "https://sabs.vercel.app",
+            repoUrl: "https://github.com/Wiibleyde/sabs",
+            image: SABSLogo.src,
+            tags: ["Next.js", "TailwindCSS", "Typescript", "MindCityRP"],
+        },
+        {
+            title: "F1 App",
+            description: "F1 App est une application web pour suivre les courses de Formule 1.",
+            type: ProjectType.School,
+            repoUrl: "https://github.com/Wiibleyde/f1-app",
+            image: F1.src,
+            tags: ["F1", "Open-F1 API", "React-Native", "Typescript", "Expo"],
+        },
+        {
             title: "Portfolio",
             description: "Portfolio de Nathan Bonnell, développeur web fullstack.",
             type: ProjectType.Personal,
@@ -43,8 +61,17 @@ export function Projects() {
             title: "Hope - GTARP (Fermé)",
             description: "Hope - GTARP est (était 😢) un serveur de jeu sur la plateforme FiveM.",
             type: ProjectType.Personal,
+            url: "https://youtu.be/Q8jP5BC0cXM",
             image: HopeLogo.src,
             tags: ["GTAV", "Hope", "FiveM", "Typescript", "Lua", "C#", "Go", "MariaDB", "InfluxDB", "C++", "Grafana", "Discord.js"],
+        },
+        {
+            title: "Site du cabinet d'avocats Lex-Port",
+            description: "Site vitrine du cabinet d'avocats Lex-Port.",
+            type: ProjectType.Professional,
+            url: "https://lex-port.com",
+            image: LexPortLogo.src,
+            tags: ["Lex-Port", "Alternance", "Next.js", "Typescript", "TailwindCSS", "Prisma", "i18n", "SEO"],
         },
         {
             title: "RPlace Analyser",
@@ -111,22 +138,6 @@ export function Projects() {
             image: FurutsuGame.src,
             tags: ["Unity", "C#", "Game", "Suika Game", "Ynov"],
         },
-        {
-            title: "F1 App",
-            description: "F1 App est une application web pour suivre les courses de Formule 1.",
-            type: ProjectType.School,
-            repoUrl: "https://github.com/Wiibleyde/f1-app",
-            image: F1.src,
-            tags: ["F1", "Open-F1 API", "React-Native", "Typescript", "Expo"],
-        },
-        {
-            title: "Site du cabinet d'avocats Lex-Port",
-            description: "Site vitrine du cabinet d'avocats Lex-Port.",
-            type: ProjectType.Professional,
-            url: "https://lex-port.com",
-            image: LexPortLogo.src,
-            tags: ["Lex-Port", "Alternance", "Next.js", "Typescript", "TailwindCSS", "Prisma", "i18n", "SEO"],
-        }
     ]
 
     // Use displayedFilter for actual filtering to ensure sync with animations
