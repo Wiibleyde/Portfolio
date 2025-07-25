@@ -20,6 +20,7 @@ interface UploadedFile {
     preview?: string;
     pageCount?: number;
     rotation?: number; // Add rotation property (0, 90, 180, 270)
+    type: 'pdf' | 'image'; // Add file type
 }
 
 export default function PdfAssemblerPage() {
@@ -64,9 +65,24 @@ export default function PdfAssemblerPage() {
     }, []);
 
     // Enhanced preview generation function
-    const generatePreview = useCallback(async (file: File): Promise<{ preview: string; pageCount: number }> => {
+    const generatePreview = useCallback(async (file: File): Promise<{ preview: string; pageCount: number; type: 'pdf' | 'image' }> => {
         try {
-            // Wait for PDF.js to load
+            // Check if it's an image file
+            if (file.type.startsWith('image/')) {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        resolve({
+                            preview: e.target?.result as string,
+                            pageCount: 1, // Images are always 1 page
+                            type: 'image'
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // Wait for PDF.js to load for PDF files
             while (!window.pdfjsLib) {
                 await new Promise((resolve) => setTimeout(resolve, 100));
             }
@@ -104,25 +120,36 @@ export default function PdfAssemblerPage() {
             return {
                 preview: canvas.toDataURL('image/png'),
                 pageCount: pageCount,
+                type: 'pdf'
             };
         } catch (error) {
             console.error('Error generating preview:', error);
 
-            // Fallback: just get page count without preview
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await PDFDocument.load(arrayBuffer);
-                return {
-                    preview: '',
-                    pageCount: pdf.getPageCount(),
-                };
-            } catch (fallbackError) {
-                console.error('Fallback error:', fallbackError);
-                return {
-                    preview: '',
-                    pageCount: 0,
-                };
+            // Fallback for PDFs: just get page count without preview
+            if (!file.type.startsWith('image/')) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await PDFDocument.load(arrayBuffer);
+                    return {
+                        preview: '',
+                        pageCount: pdf.getPageCount(),
+                        type: 'pdf'
+                    };
+                } catch (fallbackError) {
+                    console.error('Fallback error:', fallbackError);
+                    return {
+                        preview: '',
+                        pageCount: 0,
+                        type: 'pdf'
+                    };
+                }
             }
+
+            return {
+                preview: '',
+                pageCount: 1,
+                type: 'image'
+            };
         }
     }, []);
 
@@ -130,26 +157,30 @@ export default function PdfAssemblerPage() {
         async (uploadedFiles: FileList | null) => {
             if (!uploadedFiles) return;
 
-            const pdfFiles = Array.from(uploadedFiles).filter((file) => file.type === 'application/pdf');
+            // Accept both PDF and image files
+            const validFiles = Array.from(uploadedFiles).filter((file) =>
+                file.type === 'application/pdf' || file.type.startsWith('image/')
+            );
 
             // Show loading state
-            const loadingFiles: UploadedFile[] = pdfFiles.map((file) => ({
+            const loadingFiles: UploadedFile[] = validFiles.map((file) => ({
                 id: crypto.randomUUID(),
                 file,
                 name: file.name,
                 rotation: 0, // Initialize rotation to 0
+                type: file.type === 'application/pdf' ? 'pdf' : 'image',
             }));
 
             setFiles((prev) => [...prev, ...loadingFiles]);
 
             // Generate previews asynchronously
-            for (let i = 0; i < pdfFiles.length; i++) {
-                const file = pdfFiles[i];
+            for (let i = 0; i < validFiles.length; i++) {
+                const file = validFiles[i];
                 const fileId = loadingFiles[i].id;
 
                 try {
-                    const { preview, pageCount } = await generatePreview(file);
-                    setFiles((prev) => prev.map((f) => (f.id === fileId ? { ...f, preview, pageCount } : f)));
+                    const { preview, pageCount, type } = await generatePreview(file);
+                    setFiles((prev) => prev.map((f) => (f.id === fileId ? { ...f, preview, pageCount, type } : f)));
                 } catch (error) {
                     console.error('Error processing file:', error);
                 }
@@ -366,18 +397,94 @@ export default function PdfAssemblerPage() {
         try {
             const mergedPdf = await PDFDocument.create();
 
-            for (const { file, rotation = 0 } of files) {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await PDFDocument.load(arrayBuffer);
-                const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+            for (const { file, rotation = 0, type } of files) {
+                if (type === 'pdf') {
+                    // Handle PDF files
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await PDFDocument.load(arrayBuffer);
+                    const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
 
-                pages.forEach((page) => {
+                    pages.forEach((page) => {
+                        // Apply rotation if needed
+                        if (rotation > 0) {
+                            page.setRotation({ angle: rotation, type: RotationTypes.Degrees });
+                        }
+                        mergedPdf.addPage(page);
+                    });
+                } else if (type === 'image') {
+                    // Handle image files
+                    const arrayBuffer = await file.arrayBuffer();
+
+                    let image;
+                    if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+                        image = await mergedPdf.embedJpg(arrayBuffer);
+                    } else if (file.type === 'image/png') {
+                        image = await mergedPdf.embedPng(arrayBuffer);
+                    } else {
+                        // For other image types, convert to PNG first
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const img = document.createElement('img') as HTMLImageElement;
+
+                        await new Promise((resolve, reject) => {
+                            img.onload = resolve;
+                            img.onerror = reject;
+                            img.src = URL.createObjectURL(file);
+                        });
+
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx?.drawImage(img, 0, 0);
+
+                        const pngArrayBuffer = await new Promise<ArrayBuffer>((resolve) => {
+                            canvas.toBlob((blob) => {
+                                blob?.arrayBuffer().then(resolve);
+                            }, 'image/png');
+                        });
+
+                        image = await mergedPdf.embedPng(pngArrayBuffer);
+                        URL.revokeObjectURL(img.src);
+                    }
+
+                    // Create a page with the image
+                    const { width, height } = image.scale(1);
+                    const page = mergedPdf.addPage([width, height]);
+
                     // Apply rotation if needed
                     if (rotation > 0) {
-                        page.setRotation({ angle: rotation, type: RotationTypes.Degrees });
+                        const centerX = width / 2;
+                        const centerY = height / 2;
+
+                        // Calculate new dimensions after rotation
+                        let newWidth = width;
+                        let newHeight = height;
+
+                        if (rotation === 90 || rotation === 270) {
+                            newWidth = height;
+                            newHeight = width;
+                        }
+
+                        // Set new page size
+                        page.setSize(newWidth, newHeight);
+
+                        // Draw the image with rotation
+                        page.drawImage(image, {
+                            x: (newWidth - width) / 2,
+                            y: (newHeight - height) / 2,
+                            width: width,
+                            height: height,
+                            rotate: { angle: rotation, type: RotationTypes.Degrees },
+                        });
+                    } else {
+                        // Draw the image without rotation
+                        page.drawImage(image, {
+                            x: 0,
+                            y: 0,
+                            width: width,
+                            height: height,
+                        });
                     }
-                    mergedPdf.addPage(page);
-                });
+                }
             }
 
             const pdfBytes = await mergedPdf.save();
@@ -401,7 +508,7 @@ export default function PdfAssemblerPage() {
             });
         } catch (error) {
             console.error('Error assembling PDFs:', error);
-            alert("Erreur lors de l'assemblage des PDF");
+            alert("Erreur lors de l'assemblage des documents");
         } finally {
             setIsAssembling(false);
         }
@@ -501,14 +608,20 @@ export default function PdfAssemblerPage() {
         }
     }, [files.length, isVisible]);
 
-    // New function to render all pages of a PDF
-    const renderAllPages = useCallback(async (file: File): Promise<string[]> => {
+    // New function to render all pages of a PDF or display image
+    const renderAllPages = useCallback(async (file: UploadedFile): Promise<string[]> => {
         try {
+            if (file.type === 'image') {
+                // For images, just return the preview
+                return file.preview ? [file.preview] : [];
+            }
+
+            // For PDFs, render all pages
             while (!window.pdfjsLib) {
                 await new Promise((resolve) => setTimeout(resolve, 100));
             }
 
-            const arrayBuffer = await file.arrayBuffer();
+            const arrayBuffer = await file.file.arrayBuffer();
             const loadingTask = window.pdfjsLib.getDocument(arrayBuffer);
             const pdfDoc = await loadingTask.promise;
             const pageImages: string[] = [];
@@ -552,8 +665,8 @@ export default function PdfAssemblerPage() {
                 pageImages: [],
             });
 
-            // Render all pages
-            const pageImages = await renderAllPages(file.file);
+            // Render all pages or display image
+            const pageImages = await renderAllPages(file);
             setPreviewModal((prev) => ({
                 ...prev,
                 pageImages,
@@ -775,11 +888,10 @@ export default function PdfAssemblerPage() {
                 {/* Upload Zone */}
                 <div ref={uploadRef} className="mb-8">
                     <div
-                        className={`relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl border-2 border-dashed transition-all duration-300 p-8 text-center shadow-2xl ${
-                            dragOver
-                                ? 'border-blue-400 bg-blue-500/10 shadow-blue-500/25'
-                                : 'border-white/30 hover:border-white/50'
-                        }`}
+                        className={`relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl border-2 border-dashed transition-all duration-300 p-8 text-center shadow-2xl ${dragOver
+                            ? 'border-blue-400 bg-blue-500/10 shadow-blue-500/25'
+                            : 'border-white/30 hover:border-white/50'
+                            }`}
                         onDrop={handleDrop}
                         onDragOver={handleDragOver}
                         onDragEnter={handleDragEnter}
@@ -800,8 +912,8 @@ export default function PdfAssemblerPage() {
                                 />
                             </svg>
                         </div>
-                        <h3 className="text-xl font-semibold text-white mb-2">Glissez-déposez vos fichiers PDF ici</h3>
-                        <p className="text-gray-300 mb-4">ou</p>
+                        <h3 className="text-xl font-semibold text-white mb-2">Glissez-déposez vos fichiers ici</h3>
+                        <p className="text-gray-300 mb-4">PDFs et images (JPEG, PNG, WebP, etc.)</p>
                         <label className="group relative inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-2xl cursor-pointer transition-all duration-300 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105">
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
                             <span className="relative z-10 flex items-center gap-2">
@@ -818,12 +930,12 @@ export default function PdfAssemblerPage() {
                             <input
                                 type="file"
                                 multiple
-                                accept=".pdf,application/pdf"
+                                accept=".pdf,application/pdf,image/*"
                                 className="hidden"
                                 onChange={(e) => handleFileUpload(e.target.files)}
                             />
                         </label>
-                        <p className="text-sm text-gray-400 mt-3">Sélectionnez plusieurs fichiers PDF à la fois</p>
+                        <p className="text-sm text-gray-400 mt-3">Formats supportés : PDF, JPEG, PNG, WebP, GIF, BMP</p>
                     </div>
                 </div>
 
@@ -846,6 +958,18 @@ export default function PdfAssemblerPage() {
                                     />
                                 </svg>
                                 Documents à assembler ({files.length})
+                                <div className="ml-2 flex gap-1">
+                                    {files.filter(f => f.type === 'pdf').length > 0 && (
+                                        <span className="bg-red-500/20 text-red-300 px-2 py-1 rounded-lg text-xs font-medium">
+                                            {files.filter(f => f.type === 'pdf').length} PDF
+                                        </span>
+                                    )}
+                                    {files.filter(f => f.type === 'image').length > 0 && (
+                                        <span className="bg-green-500/20 text-green-300 px-2 py-1 rounded-lg text-xs font-medium">
+                                            {files.filter(f => f.type === 'image').length} Image{files.filter(f => f.type === 'image').length > 1 ? 's' : ''}
+                                        </span>
+                                    )}
+                                </div>
                             </h3>
                             <div className="text-sm text-gray-400 mb-6 flex items-center gap-2">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -856,7 +980,7 @@ export default function PdfAssemblerPage() {
                                         d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
                                     />
                                 </svg>
-                                Glissez-déposez les cartes pour réorganiser • Aperçu automatique généré
+                                Glissez-déposez les cartes pour réorganiser • Les images seront converties en PDF
                             </div>
 
                             {/* Card Grid Layout */}
@@ -871,72 +995,83 @@ export default function PdfAssemblerPage() {
                                         onDragOver={(e) => handleFileDragOver(e, file.id)}
                                         onDragLeave={(e) => handleFileDragLeave(e)}
                                         onDrop={(e) => handleFileDrop(e, file.id)}
-                                        className={`file-item group relative cursor-move transition-all duration-300 transform hover:scale-[1.02] ${
-                                            draggedFileId === file.id
-                                                ? 'scale-95 opacity-60 rotate-2'
-                                                : dragOverFileId === file.id
-                                                  ? 'scale-105 rotate-1'
-                                                  : ''
-                                        }`}
+                                        className={`file-item group relative cursor-move transition-all duration-300 transform hover:scale-[1.02] ${draggedFileId === file.id
+                                            ? 'scale-95 opacity-60 rotate-2'
+                                            : dragOverFileId === file.id
+                                                ? 'scale-105 rotate-1'
+                                                : ''
+                                            }`}
                                     >
                                         {/* Card Container */}
                                         <div
-                                            className={`relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl ${
-                                                draggedFileId === file.id
-                                                    ? 'border-blue-400/70 bg-blue-500/10 shadow-blue-500/25'
-                                                    : dragOverFileId === file.id
-                                                      ? 'border-green-400/70 bg-green-500/10 shadow-green-500/25'
-                                                      : 'border-white/20 hover:border-white/40 hover:bg-white/20'
-                                            }`}
+                                            className={`relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl ${draggedFileId === file.id
+                                                ? 'border-blue-400/70 bg-blue-500/10 shadow-blue-500/25'
+                                                : dragOverFileId === file.id
+                                                    ? 'border-green-400/70 bg-green-500/10 shadow-green-500/25'
+                                                    : 'border-white/20 hover:border-white/40 hover:bg-white/20'
+                                                }`}
                                         >
                                             {/* Card Header with Order Number */}
                                             <div className="relative p-4 pb-2">
                                                 <div className="flex items-center justify-between mb-3">
-                                                    <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-500/40 to-purple-500/40 rounded-xl border border-blue-400/50 text-sm font-bold text-blue-200 shadow-lg">
-                                                        #{index + 1}
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-500/40 to-purple-500/40 rounded-xl border border-blue-400/50 text-sm font-bold text-blue-200 shadow-lg">
+                                                            #{index + 1}
+                                                        </div>
+                                                        {/* File Type Badge */}
+                                                        <div className={`px-2 py-1 rounded-lg text-xs font-medium ${file.type === 'pdf'
+                                                            ? 'bg-red-500/20 text-red-300 border border-red-400/30'
+                                                            : 'bg-green-500/20 text-green-300 border border-green-400/30'
+                                                            }`}>
+                                                            {file.type === 'pdf' ? 'PDF' : 'IMG'}
+                                                        </div>
                                                     </div>
 
                                                     {/* Actions */}
                                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                                         {/* Rotation Controls */}
-                                                        <button
-                                                            onClick={() => rotateFile(file.id, 'left')}
-                                                            className="p-1.5 text-gray-400 hover:text-blue-300 rounded-lg hover:bg-blue-500/20 transition-all duration-200"
-                                                            title="Rotation 90° gauche"
-                                                        >
-                                                            <svg
-                                                                className="w-4 h-4"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                viewBox="0 0 24 24"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={2}
-                                                                    d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
-                                                                />
-                                                            </svg>
-                                                        </button>
-                                                        <button
-                                                            onClick={() => rotateFile(file.id, 'right')}
-                                                            className="p-1.5 text-gray-400 hover:text-blue-300 rounded-lg hover:bg-blue-500/20 transition-all duration-200"
-                                                            title="Rotation 90° droite"
-                                                        >
-                                                            <svg
-                                                                className="w-4 h-4"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                viewBox="0 0 24 24"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={2}
-                                                                    d="M21 10H11a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6"
-                                                                />
-                                                            </svg>
-                                                        </button>
+                                                        {file.type === 'pdf' && (
+                                                            <>
+                                                                <button
+                                                                    onClick={() => rotateFile(file.id, 'left')}
+                                                                    className="p-1.5 text-gray-400 hover:text-blue-300 rounded-lg hover:bg-blue-500/20 transition-all duration-200"
+                                                                    title="Rotation 90° gauche"
+                                                                >
+                                                                    <svg
+                                                                        className="w-4 h-4"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        viewBox="0 0 24 24"
+                                                                    >
+                                                                        <path
+                                                                            strokeLinecap="round"
+                                                                            strokeLinejoin="round"
+                                                                            strokeWidth={2}
+                                                                            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                                                                        />
+                                                                    </svg>
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => rotateFile(file.id, 'right')}
+                                                                    className="p-1.5 text-gray-400 hover:text-blue-300 rounded-lg hover:bg-blue-500/20 transition-all duration-200"
+                                                                    title="Rotation 90° droite"
+                                                                >
+                                                                    <svg
+                                                                        className="w-4 h-4"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        viewBox="0 0 24 24"
+                                                                    >
+                                                                        <path
+                                                                            strokeLinecap="round"
+                                                                            strokeLinejoin="round"
+                                                                            strokeWidth={2}
+                                                                            d="M21 10H11a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6"
+                                                                        />
+                                                                    </svg>
+                                                                </button>
+                                                            </>
+                                                        )}
                                                         <div className="w-px h-4 bg-white/20 mx-1"></div>
                                                         <div
                                                             className="p-1.5 text-gray-400 hover:text-gray-300 rounded-lg hover:bg-white/10 transition-all duration-200"
@@ -978,10 +1113,11 @@ export default function PdfAssemblerPage() {
                                                     </div>
                                                 </div>
 
-                                                {/* PDF Preview */}
+                                                {/* Preview */}
                                                 <div className="relative mb-4">
                                                     <div
-                                                        className="w-full aspect-[3/4] bg-white rounded-xl border-2 border-gray-200 shadow-lg overflow-hidden mx-auto max-w-[120px] cursor-pointer hover:border-blue-400 transition-all duration-200 group"
+                                                        className={`w-full aspect-[3/4] rounded-xl border-2 shadow-lg overflow-hidden mx-auto max-w-[120px] cursor-pointer hover:border-blue-400 transition-all duration-200 group ${file.type === 'pdf' ? 'bg-white border-gray-200' : 'bg-gray-100 border-gray-300'
+                                                            }`}
                                                         onClick={() => openPreviewModal(file)}
                                                         title="Cliquer pour prévisualiser le document"
                                                     >
@@ -992,7 +1128,8 @@ export default function PdfAssemblerPage() {
                                                                     alt={`Aperçu de ${file.name}`}
                                                                     width={120}
                                                                     height={160}
-                                                                    className={`preview-image w-full h-full object-contain bg-white transition-all duration-300 group-hover:scale-105`}
+                                                                    className={`preview-image w-full h-full object-contain transition-all duration-300 group-hover:scale-105 ${file.type === 'pdf' ? 'bg-white' : 'bg-gray-50'
+                                                                        }`}
                                                                     style={{
                                                                         transform: `rotate(${file.rotation || 0}deg)`,
                                                                         transformOrigin: 'center center',
@@ -1050,7 +1187,7 @@ export default function PdfAssemblerPage() {
                                                     </div>
 
                                                     {/* Page Count Badge */}
-                                                    {file.pageCount && (
+                                                    {file.pageCount && file.type === 'pdf' && (
                                                         <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs px-2.5 py-1 rounded-full shadow-lg border-2 border-white/20 font-semibold">
                                                             {file.pageCount}p
                                                         </div>
@@ -1212,6 +1349,9 @@ export default function PdfAssemblerPage() {
                                                 {files.some((f) => (f.rotation ?? 0) > 0) && (
                                                     <span className="text-orange-300"> • Rotations appliquées</span>
                                                 )}
+                                                {files.some((f) => f.type === 'image') && (
+                                                    <span className="text-green-300"> • Images incluses</span>
+                                                )}
                                             </p>
                                         </div>
                                     </div>
@@ -1233,6 +1373,19 @@ export default function PdfAssemblerPage() {
                                             </div>
                                             <div className="text-xs text-gray-400 uppercase tracking-wide">MB</div>
                                         </div>
+                                        {files.filter(f => f.type === 'image').length > 0 && (
+                                            <>
+                                                <div className="w-px h-10 bg-white/20"></div>
+                                                <div>
+                                                    <div className="text-2xl font-bold text-green-300">
+                                                        {files.filter(f => f.type === 'image').length}
+                                                    </div>
+                                                    <div className="text-xs text-gray-400 uppercase tracking-wide">
+                                                        Images
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
                                         {files.some((f) => (f.rotation ?? 0) > 0) && (
                                             <>
                                                 <div className="w-px h-10 bg-white/20"></div>
@@ -1285,7 +1438,7 @@ export default function PdfAssemblerPage() {
                         <div className="success-animation">
                             <button
                                 onClick={assemblePDFs}
-                                disabled={isAssembling || files.length < 2}
+                                disabled={isAssembling}
                                 className="assemble-button group relative bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-8 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-green-500/25 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
@@ -1330,7 +1483,7 @@ export default function PdfAssemblerPage() {
                     </div>
                 )}
 
-                {files.length === 1 && (
+                {files.length === 0 && (
                     <div className="text-center mt-6">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 border border-amber-400/30 rounded-xl text-amber-300">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1341,7 +1494,7 @@ export default function PdfAssemblerPage() {
                                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.728-.833-2.598 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"
                                 />
                             </svg>
-                            Ajoutez au moins un autre fichier PDF pour pouvoir les assembler.
+                            Ajoutez au moins un autre fichier (PDF ou image) pour pouvoir les assembler.
                         </div>
                     </div>
                 )}
