@@ -321,5 +321,5 @@ Ce site peut utiliser des cookies à des fins techniques et analytiques. Vous po
 
 ## Droit applicable
 
-Les présentes mentions légales sont soumises au droit français. En cas de litige, les tribunaux français seront seuls compétents.
+LES PRÉSENTES MENTIONS LÉGALES SONT SOUMISES AU DROIT FRANÇAIS. EN CAS DE LITIGE, LES TRIBUNAUX FRANÇAIS SERONT SEULS COMPÉTENTS.
 `;
