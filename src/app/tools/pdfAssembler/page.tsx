@@ -452,9 +452,6 @@ export default function PdfAssemblerPage() {
 
                     // Apply rotation if needed
                     if (rotation > 0) {
-                        const centerX = width / 2;
-                        const centerY = height / 2;
-
                         // Calculate new dimensions after rotation
                         let newWidth = width;
                         let newHeight = height;
