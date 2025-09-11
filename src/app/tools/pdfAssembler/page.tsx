@@ -65,101 +65,104 @@ export default function PdfAssemblerPage() {
     }, []);
 
     // Enhanced preview generation function
-    const generatePreview = useCallback(async (file: File): Promise<{ preview: string; pageCount: number; type: 'pdf' | 'image' }> => {
-        try {
-            // Check if it's an image file
-            if (file.type.startsWith('image/')) {
-                return new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        resolve({
-                            preview: e.target?.result as string,
-                            pageCount: 1, // Images are always 1 page
-                            type: 'image'
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                });
-            }
-
-            // Wait for PDF.js to load for PDF files
-            while (!window.pdfjsLib) {
-                await new Promise((resolve) => setTimeout(resolve, 100));
-            }
-
-            // Create separate ArrayBuffers to avoid detachment issues
-            const arrayBuffer1 = await file.arrayBuffer();
-            const arrayBuffer2 = await file.arrayBuffer();
-
-            // Load PDF with PDF.js for rendering
-            const loadingTask = window.pdfjsLib.getDocument(arrayBuffer1);
-            const pdfDoc = await loadingTask.promise;
-
-            // Get first page
-            const page = await pdfDoc.getPage(1);
-            const viewport = page.getViewport({ scale: 0.5 }); // Scale down for thumbnail
-
-            // Create canvas
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            // Render PDF page to canvas
-            const renderContext = {
-                canvasContext: context,
-                viewport: viewport,
-            };
-
-            await page.render(renderContext).promise;
-
-            // Get page count using pdf-lib with separate ArrayBuffer
-            const pdfLibDoc = await PDFDocument.load(arrayBuffer2);
-            const pageCount = pdfLibDoc.getPageCount();
-
-            return {
-                preview: canvas.toDataURL('image/png'),
-                pageCount: pageCount,
-                type: 'pdf'
-            };
-        } catch (error) {
-            console.error('Error generating preview:', error);
-
-            // Fallback for PDFs: just get page count without preview
-            if (!file.type.startsWith('image/')) {
-                try {
-                    const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await PDFDocument.load(arrayBuffer);
-                    return {
-                        preview: '',
-                        pageCount: pdf.getPageCount(),
-                        type: 'pdf'
-                    };
-                } catch (fallbackError) {
-                    console.error('Fallback error:', fallbackError);
-                    return {
-                        preview: '',
-                        pageCount: 0,
-                        type: 'pdf'
-                    };
+    const generatePreview = useCallback(
+        async (file: File): Promise<{ preview: string; pageCount: number; type: 'pdf' | 'image' }> => {
+            try {
+                // Check if it's an image file
+                if (file.type.startsWith('image/')) {
+                    return new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            resolve({
+                                preview: e.target?.result as string,
+                                pageCount: 1, // Images are always 1 page
+                                type: 'image',
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    });
                 }
-            }
 
-            return {
-                preview: '',
-                pageCount: 1,
-                type: 'image'
-            };
-        }
-    }, []);
+                // Wait for PDF.js to load for PDF files
+                while (!window.pdfjsLib) {
+                    await new Promise((resolve) => setTimeout(resolve, 100));
+                }
+
+                // Create separate ArrayBuffers to avoid detachment issues
+                const arrayBuffer1 = await file.arrayBuffer();
+                const arrayBuffer2 = await file.arrayBuffer();
+
+                // Load PDF with PDF.js for rendering
+                const loadingTask = window.pdfjsLib.getDocument(arrayBuffer1);
+                const pdfDoc = await loadingTask.promise;
+
+                // Get first page
+                const page = await pdfDoc.getPage(1);
+                const viewport = page.getViewport({ scale: 0.5 }); // Scale down for thumbnail
+
+                // Create canvas
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render PDF page to canvas
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport,
+                };
+
+                await page.render(renderContext).promise;
+
+                // Get page count using pdf-lib with separate ArrayBuffer
+                const pdfLibDoc = await PDFDocument.load(arrayBuffer2);
+                const pageCount = pdfLibDoc.getPageCount();
+
+                return {
+                    preview: canvas.toDataURL('image/png'),
+                    pageCount: pageCount,
+                    type: 'pdf',
+                };
+            } catch (error) {
+                console.error('Error generating preview:', error);
+
+                // Fallback for PDFs: just get page count without preview
+                if (!file.type.startsWith('image/')) {
+                    try {
+                        const arrayBuffer = await file.arrayBuffer();
+                        const pdf = await PDFDocument.load(arrayBuffer);
+                        return {
+                            preview: '',
+                            pageCount: pdf.getPageCount(),
+                            type: 'pdf',
+                        };
+                    } catch (fallbackError) {
+                        console.error('Fallback error:', fallbackError);
+                        return {
+                            preview: '',
+                            pageCount: 0,
+                            type: 'pdf',
+                        };
+                    }
+                }
+
+                return {
+                    preview: '',
+                    pageCount: 1,
+                    type: 'image',
+                };
+            }
+        },
+        []
+    );
 
     const handleFileUpload = useCallback(
         async (uploadedFiles: FileList | null) => {
             if (!uploadedFiles) return;
 
             // Accept both PDF and image files
-            const validFiles = Array.from(uploadedFiles).filter((file) =>
-                file.type === 'application/pdf' || file.type.startsWith('image/')
+            const validFiles = Array.from(uploadedFiles).filter(
+                (file) => file.type === 'application/pdf' || file.type.startsWith('image/')
             );
 
             // Show loading state
@@ -885,10 +888,11 @@ export default function PdfAssemblerPage() {
                 {/* Upload Zone */}
                 <div ref={uploadRef} className="mb-8">
                     <div
-                        className={`relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl border-2 border-dashed transition-all duration-300 p-8 text-center shadow-2xl ${dragOver
-                            ? 'border-blue-400 bg-blue-500/10 shadow-blue-500/25'
-                            : 'border-white/30 hover:border-white/50'
-                            }`}
+                        className={`relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl border-2 border-dashed transition-all duration-300 p-8 text-center shadow-2xl ${
+                            dragOver
+                                ? 'border-blue-400 bg-blue-500/10 shadow-blue-500/25'
+                                : 'border-white/30 hover:border-white/50'
+                        }`}
                         onDrop={handleDrop}
                         onDragOver={handleDragOver}
                         onDragEnter={handleDragEnter}
@@ -956,14 +960,15 @@ export default function PdfAssemblerPage() {
                                 </svg>
                                 Documents à assembler ({files.length})
                                 <div className="ml-2 flex gap-1">
-                                    {files.filter(f => f.type === 'pdf').length > 0 && (
+                                    {files.filter((f) => f.type === 'pdf').length > 0 && (
                                         <span className="bg-red-500/20 text-red-300 px-2 py-1 rounded-lg text-xs font-medium">
-                                            {files.filter(f => f.type === 'pdf').length} PDF
+                                            {files.filter((f) => f.type === 'pdf').length} PDF
                                         </span>
                                     )}
-                                    {files.filter(f => f.type === 'image').length > 0 && (
+                                    {files.filter((f) => f.type === 'image').length > 0 && (
                                         <span className="bg-green-500/20 text-green-300 px-2 py-1 rounded-lg text-xs font-medium">
-                                            {files.filter(f => f.type === 'image').length} Image{files.filter(f => f.type === 'image').length > 1 ? 's' : ''}
+                                            {files.filter((f) => f.type === 'image').length} Image
+                                            {files.filter((f) => f.type === 'image').length > 1 ? 's' : ''}
                                         </span>
                                     )}
                                 </div>
@@ -992,21 +997,23 @@ export default function PdfAssemblerPage() {
                                         onDragOver={(e) => handleFileDragOver(e, file.id)}
                                         onDragLeave={(e) => handleFileDragLeave(e)}
                                         onDrop={(e) => handleFileDrop(e, file.id)}
-                                        className={`file-item group relative cursor-move transition-all duration-300 transform hover:scale-[1.02] ${draggedFileId === file.id
-                                            ? 'scale-95 opacity-60 rotate-2'
-                                            : dragOverFileId === file.id
-                                                ? 'scale-105 rotate-1'
-                                                : ''
-                                            }`}
+                                        className={`file-item group relative cursor-move transition-all duration-300 transform hover:scale-[1.02] ${
+                                            draggedFileId === file.id
+                                                ? 'scale-95 opacity-60 rotate-2'
+                                                : dragOverFileId === file.id
+                                                  ? 'scale-105 rotate-1'
+                                                  : ''
+                                        }`}
                                     >
                                         {/* Card Container */}
                                         <div
-                                            className={`relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl ${draggedFileId === file.id
-                                                ? 'border-blue-400/70 bg-blue-500/10 shadow-blue-500/25'
-                                                : dragOverFileId === file.id
-                                                    ? 'border-green-400/70 bg-green-500/10 shadow-green-500/25'
-                                                    : 'border-white/20 hover:border-white/40 hover:bg-white/20'
-                                                }`}
+                                            className={`relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-300 overflow-hidden shadow-xl hover:shadow-2xl ${
+                                                draggedFileId === file.id
+                                                    ? 'border-blue-400/70 bg-blue-500/10 shadow-blue-500/25'
+                                                    : dragOverFileId === file.id
+                                                      ? 'border-green-400/70 bg-green-500/10 shadow-green-500/25'
+                                                      : 'border-white/20 hover:border-white/40 hover:bg-white/20'
+                                            }`}
                                         >
                                             {/* Card Header with Order Number */}
                                             <div className="relative p-4 pb-2">
@@ -1016,10 +1023,13 @@ export default function PdfAssemblerPage() {
                                                             #{index + 1}
                                                         </div>
                                                         {/* File Type Badge */}
-                                                        <div className={`px-2 py-1 rounded-lg text-xs font-medium ${file.type === 'pdf'
-                                                            ? 'bg-red-500/20 text-red-300 border border-red-400/30'
-                                                            : 'bg-green-500/20 text-green-300 border border-green-400/30'
-                                                            }`}>
+                                                        <div
+                                                            className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                                                                file.type === 'pdf'
+                                                                    ? 'bg-red-500/20 text-red-300 border border-red-400/30'
+                                                                    : 'bg-green-500/20 text-green-300 border border-green-400/30'
+                                                            }`}
+                                                        >
                                                             {file.type === 'pdf' ? 'PDF' : 'IMG'}
                                                         </div>
                                                     </div>
@@ -1113,8 +1123,11 @@ export default function PdfAssemblerPage() {
                                                 {/* Preview */}
                                                 <div className="relative mb-4">
                                                     <div
-                                                        className={`w-full aspect-[3/4] rounded-xl border-2 shadow-lg overflow-hidden mx-auto max-w-[120px] cursor-pointer hover:border-blue-400 transition-all duration-200 group ${file.type === 'pdf' ? 'bg-white border-gray-200' : 'bg-gray-100 border-gray-300'
-                                                            }`}
+                                                        className={`w-full aspect-[3/4] rounded-xl border-2 shadow-lg overflow-hidden mx-auto max-w-[120px] cursor-pointer hover:border-blue-400 transition-all duration-200 group ${
+                                                            file.type === 'pdf'
+                                                                ? 'bg-white border-gray-200'
+                                                                : 'bg-gray-100 border-gray-300'
+                                                        }`}
                                                         onClick={() => openPreviewModal(file)}
                                                         title="Cliquer pour prévisualiser le document"
                                                     >
@@ -1125,8 +1138,9 @@ export default function PdfAssemblerPage() {
                                                                     alt={`Aperçu de ${file.name}`}
                                                                     width={120}
                                                                     height={160}
-                                                                    className={`preview-image w-full h-full object-contain transition-all duration-300 group-hover:scale-105 ${file.type === 'pdf' ? 'bg-white' : 'bg-gray-50'
-                                                                        }`}
+                                                                    className={`preview-image w-full h-full object-contain transition-all duration-300 group-hover:scale-105 ${
+                                                                        file.type === 'pdf' ? 'bg-white' : 'bg-gray-50'
+                                                                    }`}
                                                                     style={{
                                                                         transform: `rotate(${file.rotation || 0}deg)`,
                                                                         transformOrigin: 'center center',
@@ -1370,12 +1384,12 @@ export default function PdfAssemblerPage() {
                                             </div>
                                             <div className="text-xs text-gray-400 uppercase tracking-wide">MB</div>
                                         </div>
-                                        {files.filter(f => f.type === 'image').length > 0 && (
+                                        {files.filter((f) => f.type === 'image').length > 0 && (
                                             <>
                                                 <div className="w-px h-10 bg-white/20"></div>
                                                 <div>
                                                     <div className="text-2xl font-bold text-green-300">
-                                                        {files.filter(f => f.type === 'image').length}
+                                                        {files.filter((f) => f.type === 'image').length}
                                                     </div>
                                                     <div className="text-xs text-gray-400 uppercase tracking-wide">
                                                         Images

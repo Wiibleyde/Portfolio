@@ -9,35 +9,38 @@
     "format": "prettier --write \"**/*.{tsx,ts}\""
   },
   "dependencies": {
-    "@next/third-parties": "^15.4.3",
-    "framer-motion": "^12.23.7",
+    "@next/third-parties": "^15.5.3",
+    "@types/ws": "^8.18.1",
+    "framer-motion": "^12.23.12",
     "gsap": "^3.13.0",
-    "markdown-to-jsx": "^7.7.12",
-    "next": "15.4.3",
-    "nodemailer": "^7.0.5",
+    "markdown-to-jsx": "^7.7.13",
+    "next": "15.5.3",
+    "nodemailer": "^7.0.6",
     "ogl": "^1.0.11",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^5.3.93",
+    "pdfjs-dist": "^5.4.149",
     "postprocessing": "^6.37.7",
     "qrcode-with-logos": "^1.1.1",
-    "react": "^19.0.0",
+    "react": "^19.1.1",
     "react-bootstrap-icons": "^1.11.6",
-    "react-dom": "^19.0.0",
+    "react-dom": "^19.1.1",
     "react-google-recaptcha-v3": "^1.11.0",
-    "three": "^0.179.1"
+    "three": "^0.180.0",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4.1.11",
-    "@types/node": "^24.1.0",
-    "@types/nodemailer": "^6.4.17",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19",
-    "@types/three": "^0.179.0",
-    "eslint": "^9.31.0",
-    "eslint-config-next": "15.4.3",
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^24.3.1",
+    "@types/nodemailer": "^7.0.1",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@types/three": "^0.180.0",
+    "eslint": "^9.35.0",
+    "eslint-config-next": "15.5.3",
     "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.11",
-    "typescript": "^5"
-  }
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

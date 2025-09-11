@@ -1,17 +1,11 @@
-import Hyperspeed from "@/components/UI/Hyperspeed";
-import Logo from "@public/img/samc/f1-logo.png";
-import Image from "next/image";
+import Hyperspeed from '@/components/UI/Hyperspeed';
+import Logo from '@public/img/samc/f1-logo.png';
+import Image from 'next/image';
 
 export default async function SamcPage() {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-            <Image
-                src={Logo.src}
-                alt="F1 Logo"
-                width={512}
-                height={512}
-                className="absolute mb-8 w-96 h-auto"
-            />
+            <Image src={Logo.src} alt="F1 Logo" width={512} height={512} className="absolute mb-8 w-96 h-auto" />
             <Hyperspeed
                 effectOptions={{
                     distortion: 'turbulentDistortion',
@@ -41,12 +35,12 @@ export default async function SamcPage() {
                         roadColor: 0x080808,
                         islandColor: 0x0a0a0a,
                         background: 0x000000,
-                        shoulderLines: 0xFFFFFF,
-                        brokenLines: 0xFFFFFF,
-                        leftCars: [0xD856BF, 0x6750A2, 0xC247AC],
-                        rightCars: [0x03B3C3, 0x0E5EA5, 0x324555],
-                        sticks: 0x03B3C3,
-                    }
+                        shoulderLines: 0xffffff,
+                        brokenLines: 0xffffff,
+                        leftCars: [0xd856bf, 0x6750a2, 0xc247ac],
+                        rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
+                        sticks: 0x03b3c3,
+                    },
                 }}
             />
         </div>
