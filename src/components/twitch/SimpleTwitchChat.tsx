@@ -1,5 +1,7 @@
 'use client';
 
+import './SimpleTwitchChatScrollbar.css';
+
 import React, { useRef, useEffect } from 'react';
 import { useTwitchChatClient, ChatMessage } from '@/hooks/useTwitchChatClient';
 
@@ -14,17 +16,11 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
     channel,
     className = '',
     width = '600px',
-    height = '400px'
+    height = '400px',
 }) => {
-    const {
-        messages,
-        isConnected,
-        isConnecting,
-        error,
-        connect,
-        disconnect,
-        clearMessages
-    } = useTwitchChatClient({ channel });
+    const { messages, isConnected, isConnecting, error, connect, disconnect, clearMessages } = useTwitchChatClient({
+        channel,
+    });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -37,13 +33,12 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
         return new Date(timestamp).toLocaleTimeString('fr-FR', {
             hour: '2-digit',
             minute: '2-digit',
-            second: '2-digit'
+            second: '2-digit',
         });
     };
-    
+
     const processBadges = (badges: string[] | undefined) => {
         if (!badges) return null;
-        console.log('Processing badges:', badges);
         switch (badges[0]) {
             case 'broadcaster':
                 return <span className="text-red-500 font-bold mr-1">[B]</span>;
@@ -60,87 +55,90 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
 
     const renderMessage = (message: ChatMessage) => {
         // Fonction pour remplacer les emotes dans le texte par des images
-        console.log('Rendering message with emotes:', message.emotes);
         const renderWithEmotes = (text: string, emotes?: { id: string; positions: [number, number][] }[]) => {
             if (!emotes || emotes.length === 0) return text;
-            
+
             // Créer un tableau de segments avec les emotes
-            const segments: Array<{ type: 'text' | 'emote', content: string, emoteId?: string }> = [];
+            const segments: Array<{ type: 'text' | 'emote'; content: string; emoteId?: string }> = [];
             let lastIndex = 0;
-            
+
             // Collecter toutes les positions d'emotes et les trier
-            const allPositions: Array<{ start: number, end: number, emoteId: string }> = [];
-            emotes.forEach(emote => {
+            const allPositions: Array<{ start: number; end: number; emoteId: string }> = [];
+            emotes.forEach((emote) => {
                 emote.positions.forEach(([start, end]) => {
                     allPositions.push({ start, end, emoteId: emote.id });
                 });
             });
-            
+
             // Trier par position de début
             allPositions.sort((a, b) => a.start - b.start);
-            
+
             // Construire les segments
             allPositions.forEach(({ start, end, emoteId }) => {
                 // Ajouter le texte avant l'emote
                 if (start > lastIndex) {
                     segments.push({
                         type: 'text',
-                        content: text.slice(lastIndex, start)
+                        content: text.slice(lastIndex, start),
                     });
                 }
-                
+
                 // Ajouter l'emote
                 segments.push({
                     type: 'emote',
                     content: text.slice(start, end + 1),
-                    emoteId
+                    emoteId,
                 });
-                
+
                 lastIndex = end + 1;
             });
-            
+
             // Ajouter le texte restant
             if (lastIndex < text.length) {
                 segments.push({
                     type: 'text',
-                    content: text.slice(lastIndex)
+                    content: text.slice(lastIndex),
                 });
             }
-            
-            console.log('Message segments:', segments);
-            
+
             // Rendre les segments
             return (
-                <>
+                <span className="text-lg">
                     {segments.map((segment, index) => {
                         if (segment.type === 'emote' && segment.emoteId) {
+                            const animatedUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/animated/light/3.0`;
+                            const staticUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/static/light/3.0`;
                             return (
                                 <img
                                     key={index}
-                                    src={`https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/static/light/3.0`}
+                                    src={animatedUrl}
                                     alt={segment.content}
                                     title={segment.content}
-                                    className="inline w-7 h-7 align-middle"
+                                    className="inline w-6 h-6 align-middle"
+                                    onError={(e) => {
+                                        const target = e.currentTarget;
+                                        if (target.src !== staticUrl) {
+                                            target.src = staticUrl;
+                                        }
+                                    }}
                                 />
                             );
                         }
                         return <span key={index}>{segment.content}</span>;
                     })}
-                </>
+                </span>
             );
         };
 
         return (
             <div key={message.id} className="mb-1 group px-1 py-0.5 rounded-lg">
                 <div className="flex flex-row gap-1">
-                    <div className="flex items-start text-sm shrink-0 pt-0.5">
+                    <div className="flex items-start text-base shrink-0 pt-0.5">
                         {/* Prompt style terminal */}
                         <span className="text-green-400 font-mono">
                             {(message.displayName || message.username).toLowerCase()}@wiibleyde-stream
                         </span>
-                        <span className='ml-1'>
-                            {processBadges(message.badges)}
-                        </span>
+                        <span className="ml-1">{processBadges(message.badges)}</span>
                         <span className="text-blue-400 font-mono">:</span>
                         <span className="text-blue-400 font-mono">~</span>
                         <span className="text-white font-mono">$</span>
@@ -158,7 +156,7 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
     };
 
     return (
-        <div 
+        <div
             className={`${className} bg-black/70 border border-gray-700 rounded-md shadow-lg`}
             style={{ width, height }}
         >
@@ -170,20 +168,15 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
                         <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                         <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                     </div>
-                    <span className="text-gray-300 text-sm font-mono ml-4">
-                        wiibleyde@stream: twitch-chat
-                    </span>
+                    <span className="text-gray-300 text-sm font-mono ml-4">wiibleyde@stream: twitch-chat</span>
                 </div>
             </div>
 
             {/* Messages */}
-            <div 
-                className="overflow-y-auto p-2 flex-1"
-                style={{ height: 'calc(100% - 50px)' }}
-            >
+            <div className="overflow-y-auto p-2 flex-1 hide-scrollbar" style={{ height: 'calc(100% - 50px)' }}>
                 {/* Liste des messages */}
                 <div className="font-mono">
-                    {messages.map(renderMessage)}
+                    {[...messages].reverse().map(renderMessage)}
                     <div ref={messagesEndRef} />
                 </div>
             </div>

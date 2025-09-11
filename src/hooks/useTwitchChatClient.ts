@@ -31,20 +31,17 @@ interface UseTwitchChatClientReturn {
 
 export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwitchChatClientReturn {
     const { channel, maxMessages = 50, autoConnect = true } = options;
-    
+
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isConnected, setIsConnected] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    
-    const wsRef = useRef<WebSocket | null>(null);
 
+    const wsRef = useRef<WebSocket | null>(null);
 
     const parseIrcMessage = useCallback((rawMessage: string): ChatMessage | null => {
         // Vérifier que c'est bien un message PRIVMSG
         if (!rawMessage.includes('PRIVMSG')) return null;
-
-        console.log('Raw IRC message:', rawMessage); // Debug
 
         // Nettoyer le message des caractères de fin de ligne
         const cleanMessage = rawMessage.trim();
@@ -57,8 +54,7 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
 
         if (tagsMatch) {
             const tagString = tagsMatch[1].trim(); // Enlever les espaces
-            console.log('Raw tag string:', tagString); // Debug
-            tagString.split(';').forEach(tag => {
+            tagString.split(';').forEach((tag) => {
                 const equalIndex = tag.indexOf('=');
                 if (equalIndex !== -1) {
                     const key = tag.substring(0, equalIndex);
@@ -102,30 +98,38 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
         // Parser les badges
         const badges: string[] = [];
         if (tags.badges && tags.badges !== '') {
-            badges.push(...tags.badges.split(',').map(badge => badge.split('/')[0]).filter(Boolean));
+            badges.push(
+                ...tags.badges
+                    .split(',')
+                    .map((badge) => badge.split('/')[0])
+                    .filter(Boolean)
+            );
         }
 
         // Parser les emotes
         let emotes: { id: string; positions: [number, number][] }[] = [];
         if (tags.emotes && tags.emotes !== '') {
             // Format: emote_id:start-end[,start-end]/emote_id2:start-end
-            console.log('Tag emotes:', tags.emotes, 'Message:', message);
-            console.log('Full tags object:', tags); // Debug supplémentaire
-            emotes = tags.emotes.split('/').map(emote => {
-                // Certains emotes n'ont pas de positions, on ignore
-                if (!emote.includes(':')) return null;
-                const [emoteId, positionsStr] = emote.split(':');
-                if (!emoteId || !positionsStr) return null;
-                // positionsStr peut contenir plusieurs positions séparées par des virgules
-                const positions = positionsStr.split(',').map(pos => {
-                    const [start, end] = pos.trim().split('-').map(Number);
-                    if (isNaN(start) || isNaN(end)) return null;
-                    return [start, end] as [number, number];
-                }).filter(p => p !== null) as [number, number][];
-                // Accepte les ids alphanumériques (emotesv2_...)
-                return { id: emoteId.trim(), positions };
-            }).filter(e => e !== null && e.positions.length > 0) as { id: string; positions: [number, number][] }[];
-            console.log('Parsed emotes:', emotes);
+            emotes = tags.emotes
+                .split('/')
+                .map((emote) => {
+                    // Certains emotes n'ont pas de positions, on ignore
+                    if (!emote.includes(':')) return null;
+                    const [emoteId, positionsStr] = emote.split(':');
+                    if (!emoteId || !positionsStr) return null;
+                    // positionsStr peut contenir plusieurs positions séparées par des virgules
+                    const positions = positionsStr
+                        .split(',')
+                        .map((pos) => {
+                            const [start, end] = pos.trim().split('-').map(Number);
+                            if (isNaN(start) || isNaN(end)) return null;
+                            return [start, end] as [number, number];
+                        })
+                        .filter((p) => p !== null) as [number, number][];
+                    // Accepte les ids alphanumériques (emotesv2_...)
+                    return { id: emoteId.trim(), positions };
+                })
+                .filter((e) => e !== null && e.positions.length > 0) as { id: string; positions: [number, number][] }[];
         }
 
         //console.log('Parsed message:', { username, displayName, message, color, badges, emotes }); // Debug
@@ -138,13 +142,13 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
             timestamp: new Date().toISOString(),
             badges,
             color: color || '#8A2BE2',
-            emotes
+            emotes,
         };
     }, []);
 
     const connect = useCallback(() => {
         if (wsRef.current?.readyState === WebSocket.OPEN) return;
-        
+
         setIsConnecting(true);
         setError(null);
 
@@ -163,7 +167,7 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
 
             ws.onmessage = (event) => {
                 const rawMessage = event.data;
-                
+
                 // Répondre aux pings pour maintenir la connexion
                 if (rawMessage.startsWith('PING')) {
                     ws.send('PONG :tmi.twitch.tv');
@@ -183,7 +187,7 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
                 if (rawMessage.includes('PRIVMSG')) {
                     const parsedMessage = parseIrcMessage(rawMessage);
                     if (parsedMessage) {
-                        setMessages(prev => {
+                        setMessages((prev) => {
                             const newMessages = [parsedMessage, ...prev];
                             return newMessages.slice(0, maxMessages);
                         });
@@ -206,7 +210,6 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
                 setIsConnecting(false);
                 setIsConnected(false);
             };
-
         } catch (err) {
             console.error('Failed to connect:', err);
             setError('Impossible de se connecter au chat');
@@ -244,6 +247,6 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
         error,
         connect,
         disconnect,
-        clearMessages
+        clearMessages,
     };
 }
