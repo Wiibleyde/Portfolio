@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 interface IReponse {
     viewers: number;
@@ -106,7 +106,7 @@ function setCacheData(username: string, data: IReponse): void {
     });
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(): Promise<NextResponse> {
     const username = 'wiibleyde'; // Nom d'utilisateur Twitch
 
     try {

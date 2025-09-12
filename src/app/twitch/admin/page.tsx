@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 interface TokenHealth {
@@ -183,12 +184,12 @@ export default function TwitchAdminPage() {
                                     >
                                         🗑️ Supprimer Token
                                     </button>
-                                    <a
+                                    <Link
                                         href="/api/v1/twitch/auth"
                                         className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg inline-block"
                                     >
                                         🔐 Nouvelle Authentification
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
 

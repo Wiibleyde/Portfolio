@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Montserrat, Outfit } from 'next/font/google';
+import { Outfit } from 'next/font/google';
 import { ClientLayout } from '@/app/clientLayout';
 
 export const metadata: Metadata = {

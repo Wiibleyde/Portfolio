@@ -4,6 +4,7 @@ import './SimpleTwitchChatScrollbar.css';
 
 import React, { useRef, useEffect } from 'react';
 import { useTwitchChatClient, ChatMessage } from '@/hooks/useTwitchChatClient';
+import Image from 'next/image';
 
 interface SimpleTwitchChatProps {
     channel: string;
@@ -18,7 +19,7 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
     width = '600px',
     height = '400px',
 }) => {
-    const { messages, isConnected, isConnecting, error, connect, disconnect, clearMessages } = useTwitchChatClient({
+    const { messages } = useTwitchChatClient({
         channel,
     });
 
@@ -28,14 +29,6 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
-
-    const formatTimestamp = (timestamp: string) => {
-        return new Date(timestamp).toLocaleTimeString('fr-FR', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-        });
-    };
 
     const processBadges = (badges: string[] | undefined) => {
         if (!badges) return null;
@@ -109,12 +102,14 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
                             const animatedUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/animated/light/3.0`;
                             const staticUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/static/light/3.0`;
                             return (
-                                <img
+                                <Image
                                     key={index}
                                     src={animatedUrl}
                                     alt={segment.content}
                                     title={segment.content}
                                     className="inline w-6 h-6 align-middle"
+                                    width={24}
+                                    height={24}
                                     onError={(e) => {
                                         const target = e.currentTarget;
                                         if (target.src !== staticUrl) {
@@ -146,9 +141,9 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
                     </div>
                     {/* Message avec guillemets pour simuler une commande echo, avec emotes */}
                     <div className="break-words text-gray-300 font-mono flex-1 min-w-0">
-                        <span className="text-yellow-300">"</span>
+                        <span className="text-yellow-300">&quot;</span>
                         <span className="break-all">{renderWithEmotes(message.message, message.emotes)}</span>
-                        <span className="text-yellow-300">"</span>
+                        <span className="text-yellow-300">&quot;</span>
                     </div>
                 </div>
             </div>

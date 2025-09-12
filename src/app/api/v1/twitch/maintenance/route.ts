@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import TwitchTokenManager from '@/lib/twitchTokenManager';
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(): Promise<NextResponse> {
     const tokenManager = TwitchTokenManager.getInstance();
     
     try {

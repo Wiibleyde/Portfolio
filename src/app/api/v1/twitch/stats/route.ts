@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import TwitchTokenManager from '@/lib/twitchTokenManager';
 
 interface IStatsResponse {
@@ -137,7 +137,7 @@ function setCacheData(username: string, data: IStatsResponse): void {
     });
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(): Promise<NextResponse> {
     const username = 'wiibleyde'; // Nom d'utilisateur Twitch
 
     try {

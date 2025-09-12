@@ -45,7 +45,7 @@ export default function BarPage() {
 
     // Extraction des données ou valeurs par défaut
     const viewerCount = viewerData?.viewers || 0;
-    const isLive = viewerData?.isLive || false;
+    // const isLive = viewerData?.isLive || false;
     const followerCount = statsData?.followers || 0;
     const subscriberCount = statsData?.subscribers || 0;
     const lastSubscriber = statsData?.lastSubscriber?.username;

@@ -39,7 +39,7 @@ class TwitchTokenManager {
         try {
             const data = await fs.readFile(this.tokenPath, 'utf-8');
             return JSON.parse(data);
-        } catch (error) {
+        } catch {
             // Fichier n'existe pas ou erreur de lecture
             return null;
         }
@@ -248,7 +248,7 @@ class TwitchTokenManager {
         this.currentToken = null;
         try {
             await fs.unlink(this.tokenPath);
-        } catch (error) {
+        } catch {
             // Fichier n'existe peut-être pas
         }
     }

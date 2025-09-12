@@ -19,7 +19,7 @@ interface BalatroProps {
 }
 
 function hexToVec4(hex: string): [number, number, number, number] {
-    let hexStr = hex.replace('#', '');
+    const hexStr = hex.replace('#', '');
     let r = 0,
         g = 0,
         b = 0,
@@ -143,7 +143,7 @@ export default function Balatro({
         const gl = renderer.gl;
         gl.clearColor(0, 0, 0, 1);
 
-        let program: Program;
+        let program: Program | null = null;
 
         function resize() {
             renderer.setSize(container.offsetWidth, container.offsetHeight);
@@ -184,7 +184,9 @@ export default function Balatro({
 
         function update(time: number) {
             animationFrameId = requestAnimationFrame(update);
-            program.uniforms.iTime.value = time * 0.001;
+            if (program) {
+                program.uniforms.iTime.value = time * 0.001;
+            }
             renderer.render({ scene: mesh });
         }
         animationFrameId = requestAnimationFrame(update);
@@ -195,7 +197,9 @@ export default function Balatro({
             const rect = container.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width;
             const y = 1.0 - (e.clientY - rect.top) / rect.height;
-            program.uniforms.uMouse.value = [x, y];
+            if (program) {
+                program.uniforms.uMouse.value = [x, y];
+            }
         }
         container.addEventListener('mousemove', handleMouseMove);
 

@@ -240,7 +240,7 @@ async function initializeChatConnection(): Promise<boolean> {
     return true;
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(): Promise<NextResponse> {
     try {
         // Initialiser la connexion si nécessaire
         if (!isConnected && (!websocketClient || websocketClient.readyState !== WebSocket.OPEN)) {

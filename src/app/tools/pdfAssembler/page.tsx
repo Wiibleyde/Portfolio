@@ -488,6 +488,7 @@ export default function PdfAssemblerPage() {
             }
 
             const pdfBytes = await mergedPdf.save();
+            //@ts-expect-error Blob constructor exists
             const blob = new Blob([pdfBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
 
