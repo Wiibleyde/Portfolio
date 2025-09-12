@@ -110,6 +110,7 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
                                     className="inline w-6 h-6 align-middle"
                                     width={24}
                                     height={24}
+                                    unoptimized
                                     onError={(e) => {
                                         const target = e.currentTarget;
                                         if (target.src !== staticUrl) {
