@@ -17,5 +17,5 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return <div className={'antialiased bg-black min-h-screen ' + montserrat.className}>{children}</div>;
+    return <div className={'antialiased min-h-screen ' + montserrat.className}>{children}</div>;
 }

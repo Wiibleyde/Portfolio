@@ -1,5 +1,6 @@
 'use client';
-import Iridescence from '@/components/UI/Iridescence';
+import { Clock } from '@/components/twitch/Clock';
+import Balatro from '@/components/UI/LetterGlitch';
 import ScrollVelocity from '@/components/UI/ScrollVelocity';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
@@ -42,52 +43,20 @@ function Content({
 
     return (
         <div className="flex items-center justify-center h-screen w-screen">
-            <Iridescence color={[0.5, 0.5, 0.8]} mouseReact={false} amplitude={0.1} speed={1.0} />
+            <Balatro
+                isRotate={false}
+                mouseInteraction={false}
+                pixelFilter={900}
+            />
             <div className="absolute top-1/3">
-                <p className="text-8xl font-bold text-white">Wiibleyde</p>
+                <p className="text-8xl font-bold text-white text-shadow-black text-shadow-lg">Wiibleyde</p>
             </div>
-            {/* <div className="absolute top-0 right-0 p-2 flex flex-row items-center">
-                <DateComponent />
-                <p className="text-2xl font-black text-white mx-4">-</p>
-                <Clock />
-            </div> */}
+            <div className="absolute top-1/2 flex items-center justify-center w-full">
+                <Clock/>
+            </div>
             <div className="absolute bottom-36">
-                <ScrollVelocity texts={scrollVelocityTexts} velocity={130} className="text-white" />
+                <ScrollVelocity texts={scrollVelocityTexts} velocity={130} className="font-bold text-white text-shadow-black text-shadow-lg" />
             </div>
         </div>
     );
 }
-
-// export function Clock() {
-//     const [time, setTime] = useState(new Date());
-
-//     useEffect(() => {
-//         const interval = setInterval(() => {
-//             setTime(new Date());
-//         }, 1000);
-//         return () => clearInterval(interval);
-//     }, []);
-
-//     return (
-//         <div className="text-2xl font-black text-white">
-//             {time.toLocaleTimeString()}
-//         </div>
-//     );
-// }
-
-// export function DateComponent() {
-//     const [date, setDate] = useState(new Date());
-
-//     useEffect(() => {
-//         const interval = setInterval(() => {
-//             setDate(new Date());
-//         }, 1000);
-//         return () => clearInterval(interval);
-//     }, []);
-
-//     return (
-//         <div className="text-2xl font-black text-white">
-//             {date.toLocaleDateString()}
-//         </div>
-//     );
-// }
