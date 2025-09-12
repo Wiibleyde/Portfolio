@@ -110,6 +110,7 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
                                     className="inline w-6 h-6 align-middle"
                                     width={24}
                                     height={24}
+                                    unoptimized
                                     onError={(e) => {
                                         const target = e.currentTarget;
                                         if (target.src !== staticUrl) {
@@ -152,7 +153,7 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
 
     return (
         <div
-            className={`${className} bg-black/80 border border-gray-700 rounded-xl shadow-lg`}
+            className={`${className} bg-black/60 border border-gray-700 rounded-xl shadow-lg`}
             style={{ width, height }}
         >
             {/* Terminal header */}
