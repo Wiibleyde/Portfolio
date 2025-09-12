@@ -25,6 +25,7 @@
     "react-bootstrap-icons": "^1.11.6",
     "react-dom": "^19.1.1",
     "react-google-recaptcha-v3": "^1.11.0",
+    "swr": "^2.3.6",
     "three": "^0.180.0",
     "ws": "^8.18.3"
   },
