@@ -5,6 +5,7 @@ import './SimpleTwitchChatScrollbar.css';
 import React, { useRef, useEffect } from 'react';
 import { useTwitchChatClient, ChatMessage } from '@/hooks/useTwitchChatClient';
 import Image from 'next/image';
+import TerminalHeaderPanel from './TerminalHeaderPanel';
 
 interface SimpleTwitchChatProps {
     channel: string;
@@ -46,137 +47,129 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
         }
     };
 
-    const renderMessage = (message: ChatMessage) => {
-        // Fonction pour remplacer les emotes dans le texte par des images
-        const renderWithEmotes = (text: string, emotes?: { id: string; positions: [number, number][] }[]) => {
-            if (!emotes || emotes.length === 0) return text;
-
-            // Créer un tableau de segments avec les emotes
-            const segments: Array<{ type: 'text' | 'emote'; content: string; emoteId?: string }> = [];
-            let lastIndex = 0;
-
-            // Collecter toutes les positions d'emotes et les trier
-            const allPositions: Array<{ start: number; end: number; emoteId: string }> = [];
-            emotes.forEach((emote) => {
-                emote.positions.forEach(([start, end]) => {
-                    allPositions.push({ start, end, emoteId: emote.id });
-                });
+    // Fonction pour remplacer les emotes dans le texte par des images
+    const renderWithEmotes = (text: string, emotes?: { id: string; positions: [number, number][] }[]) => {
+        if (!emotes || emotes.length === 0) return text;
+        const segments: Array<{ type: 'text' | 'emote'; content: string; emoteId?: string }> = [];
+        let lastIndex = 0;
+        const allPositions: Array<{ start: number; end: number; emoteId: string }> = [];
+        emotes.forEach((emote) => {
+            emote.positions.forEach(([start, end]) => {
+                allPositions.push({ start, end, emoteId: emote.id });
             });
-
-            // Trier par position de début
-            allPositions.sort((a, b) => a.start - b.start);
-
-            // Construire les segments
-            allPositions.forEach(({ start, end, emoteId }) => {
-                // Ajouter le texte avant l'emote
-                if (start > lastIndex) {
-                    segments.push({
-                        type: 'text',
-                        content: text.slice(lastIndex, start),
-                    });
-                }
-
-                // Ajouter l'emote
-                segments.push({
-                    type: 'emote',
-                    content: text.slice(start, end + 1),
-                    emoteId,
-                });
-
-                lastIndex = end + 1;
-            });
-
-            // Ajouter le texte restant
-            if (lastIndex < text.length) {
+        });
+        allPositions.sort((a, b) => a.start - b.start);
+        allPositions.forEach(({ start, end, emoteId }) => {
+            if (start > lastIndex) {
                 segments.push({
                     type: 'text',
-                    content: text.slice(lastIndex),
+                    content: text.slice(lastIndex, start),
                 });
             }
-
-            // Rendre les segments
-            return (
-                <span className="text-lg">
-                    {segments.map((segment, index) => {
-                        if (segment.type === 'emote' && segment.emoteId) {
-                            const animatedUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/animated/light/3.0`;
-                            const staticUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/static/light/3.0`;
-                            return (
-                                <Image
-                                    key={index}
-                                    src={animatedUrl}
-                                    alt={segment.content}
-                                    title={segment.content}
-                                    className="inline w-6 h-6 align-middle"
-                                    width={24}
-                                    height={24}
-                                    unoptimized
-                                    onError={(e) => {
-                                        const target = e.currentTarget;
-                                        if (target.src !== staticUrl) {
-                                            target.src = staticUrl;
-                                        }
-                                    }}
-                                />
-                            );
-                        }
-                        return <span key={index}>{segment.content}</span>;
-                    })}
-                </span>
-            );
-        };
-
+            segments.push({
+                type: 'emote',
+                content: text.slice(start, end + 1),
+                emoteId,
+            });
+            lastIndex = end + 1;
+        });
+        if (lastIndex < text.length) {
+            segments.push({
+                type: 'text',
+                content: text.slice(lastIndex),
+            });
+        }
         return (
-            <div key={message.id} className="mb-1 group px-1 py-0.5 rounded-lg">
-                <div className="flex flex-row gap-1">
-                    <div className="flex items-start text-base shrink-0 pt-0.5">
-                        {/* Prompt style terminal */}
-                        <span className="text-green-400 font-mono">
-                            {(message.displayName || message.username).toLowerCase()}@wiibleyde-stream
-                        </span>
-                        <span className="ml-1">{processBadges(message.badges)}</span>
-                        <span className="text-blue-400 font-mono">:</span>
-                        <span className="text-blue-400 font-mono">~</span>
-                        <span className="text-white font-mono">$</span>
-                        <span className="text-white font-mono ml-1">echo</span>
-                    </div>
-                    {/* Message avec guillemets pour simuler une commande echo, avec emotes */}
-                    <div className="break-words text-gray-300 font-mono flex-1 min-w-0">
-                        <span className="text-yellow-300">&quot;</span>
-                        <span className="break-all">{renderWithEmotes(message.message, message.emotes)}</span>
-                        <span className="text-yellow-300">&quot;</span>
-                    </div>
-                </div>
+            <span className="text-lg">
+                {segments.map((segment, index) => {
+                    if (segment.type === 'emote' && segment.emoteId) {
+                        const animatedUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/animated/light/3.0`;
+                        const staticUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${segment.emoteId}/static/light/3.0`;
+                        return (
+                            <Image
+                                key={index}
+                                src={animatedUrl}
+                                alt={segment.content}
+                                title={segment.content}
+                                className="inline w-7 h-7 align-middle"
+                                width={32}
+                                height={32}
+                                unoptimized
+                                onError={(e) => {
+                                    const target = e.currentTarget;
+                                    if (target.src !== staticUrl) {
+                                        target.src = staticUrl;
+                                    }
+                                }}
+                            />
+                        );
+                    }
+                    return <span key={index}>{segment.content}</span>;
+                })}
+            </span>
+        );
+    };
+
+    // Affichage façon log journalctl
+    const renderLogMessage = (message: ChatMessage) => {
+        // Format date façon log
+        const date = new Date(message.timestamp || Date.now());
+        const formattedDate = date.toISOString().replace('T', ' ').replace('Z', '');
+        // Niveau de log selon badge
+        let level = 'INFO';
+        if (message.badges?.includes('broadcaster')) level = 'STREAMER';
+        else if (message.badges?.includes('moderator')) level = 'MOD';
+        else if (message.badges?.includes('vip')) level = 'VIP';
+        else if (message.badges?.includes('subscriber')) level = 'SUB';
+        else if (message.badges?.includes('artist-badge')) level = 'ARTIST';
+        else level = 'VIEWER';
+        // Couleur du niveau
+        const levelColor = {
+            'STREAMER': 'text-red-500',
+            'MOD': 'text-green-400',
+            'VIP': 'text-yellow-500',
+            'SUB': 'text-blue-400',
+            'VIEWER': 'text-gray-400',
+            'ARTIST': 'text-purple-400',
+        }[level];
+        return (
+            <div key={message.id} className="mb-1 px-2 py-1 rounded bg-black/30 flex flex-row gap-2 items-center">
+                <span className="text-gray-400 font-mono text-base">{formattedDate}</span>
+                <span className={`font-mono text-base font-bold ${levelColor}`}>{level}</span>
+                <span className="text-green-400 font-mono text-base">{(message.displayName || message.username).toLowerCase()}</span>
+                <span className="text-gray-400 font-mono text-base">:</span>
+                <span className="text-gray-200 font-mono text-base break-all">{renderWithEmotes(message.message, message.emotes)}</span>
             </div>
         );
     };
 
     return (
-        <div
-            className={`${className} bg-black/60 border border-gray-700 rounded-xl shadow-lg`}
+        <TerminalHeaderPanel
+            title="wiibleyde@stream: twitch-chat"
+            className={className}
             style={{ width, height }}
         >
-            {/* Terminal header */}
-            <div className="bg-gray-800 px-4 py-2 border-b border-gray-700 rounded-t-md">
-                <div className="flex items-center gap-2">
-                    <div className="flex gap-1.5">
-                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <div className="flex flex-col h-full">
+                {/* Ligne d'exécution de la commande journalctl */}
+                <div
+                    className="bg-black/60 px-2 py-1 font-mono text-base text-gray-300 border-b border-gray-700 flex items-center gap-2 flex-shrink-0"
+                    style={{ height: '40px', overflow: 'hidden' }}
+                >
+                    <span className="text-green-400">wiibleyde@stream</span>
+                    <span className="text-white">$</span>
+                    <span className="text-blue-400">journalctl -f</span>
+                </div>
+                <div
+                    className="overflow-y-auto p-2 flex-1 hide-scrollbar"
+                    style={{ minHeight: 0 }}
+                >
+                    <div className="font-mono">
+                        {[...messages].reverse().map(renderLogMessage)}
+                        <div ref={messagesEndRef} />
                     </div>
-                    <span className="text-gray-300 text-sm font-mono ml-4">wiibleyde@stream: twitch-chat</span>
                 </div>
             </div>
-
-            {/* Messages */}
-            <div className="overflow-y-auto p-2 flex-1 hide-scrollbar" style={{ height: 'calc(100% - 50px)' }}>
-                {/* Liste des messages */}
-                <div className="font-mono">
-                    {[...messages].reverse().map(renderMessage)}
-                    <div ref={messagesEndRef} />
-                </div>
-            </div>
-        </div>
+        </TerminalHeaderPanel>
     );
 };
 
