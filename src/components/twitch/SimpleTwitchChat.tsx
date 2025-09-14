@@ -133,7 +133,7 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
             'ARTIST': 'text-purple-400',
         }[level];
         return (
-            <div key={message.id} className="mb-1 px-2 py-1 rounded bg-black/30 flex flex-row gap-2 items-center">
+            <div key={message.id} className="mb-1 px-2 py-1 rounded flex flex-row gap-2 items-center">
                 <span className="text-gray-400 font-mono text-base">{formattedDate}</span>
                 <span className={`font-mono text-base font-bold ${levelColor}`}>{level}</span>
                 <span className="text-green-400 font-mono text-base">{(message.displayName || message.username).toLowerCase()}</span>
