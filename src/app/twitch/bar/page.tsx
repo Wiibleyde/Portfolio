@@ -67,32 +67,32 @@ export default function BarPage() {
     }
 
     return (
-        <div className="w-full h-8 bg-gray-800/80 backdrop-blur-md text-white text-base font-medium">
+        <div className="w-full h-10 bg-gray-800/80 backdrop-blur-md text-white text-base font-medium">
             <div className="flex items-center justify-between h-full px-2">
                 
                 {/* Menu gauche (style Apple menu) */}
                 <div className="flex items-center space-x-8">
                     {/* Logo Apple / Stream */}
                     <div className="flex items-center space-x-3 hover:bg-white/10 px-2 py-1 rounded cursor-pointer">
-                        <span className="text-white text-lg">🍎</span>
-                        <span className="text-white/90 text-sm">Wiibleyde</span>
+                        <span className="text-white text-lg">🍐</span>
+                        <span className="text-white/90 text-base">Wiibleyde</span>
                     </div>
 
                     {/* Menu items */}
                     <div className="flex items-center space-x-6">
-                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-sm">
+                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-base">
                             Fichier
                         </span>
-                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-sm">
+                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-base">
                             Édition
                         </span>
-                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-sm">
+                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-base">
                             Affichage
                         </span>
-                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-sm">
+                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-base">
                             Fenêtre
                         </span>
-                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-sm">
+                        <span className="hover:bg-white/10 px-3 py-1 rounded cursor-pointer text-white/90 text-base">
                             Aide
                         </span>
                     </div>
