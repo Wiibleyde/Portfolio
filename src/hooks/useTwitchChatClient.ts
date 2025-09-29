@@ -11,6 +11,12 @@ export interface ChatMessage {
     badges?: string[];
     color?: string;
     emotes?: { id: string; positions: [number, number][] }[];
+    isSubscription?: boolean;
+    subscriptionInfo?: {
+        isResub: boolean;
+        months?: number;
+        tier?: string;
+    };
 }
 
 interface UseTwitchChatClientOptions {
@@ -27,6 +33,7 @@ interface UseTwitchChatClientReturn {
     connect: () => void;
     disconnect: () => void;
     clearMessages: () => void;
+    lastSubscriber: { username: string; timestamp: string } | null;
 }
 
 export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwitchChatClientReturn {
@@ -36,6 +43,7 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
     const [isConnected, setIsConnected] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [lastSubscriber, setLastSubscriber] = useState<{ username: string; timestamp: string } | null>(null);
 
     const wsRef = useRef<WebSocket | null>(null);
 
@@ -132,6 +140,49 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
                 .filter((e) => e !== null && e.positions.length > 0) as { id: string; positions: [number, number][] }[];
         }
 
+        // Détecter les subscriptions - les vraies subs arrivent souvent via des messages système
+        // ou des messages avec des patterns spécifiques
+        const subKeywords = [
+            'just subscribed',
+            'subscribed with prime',
+            'subscribed at tier',
+            'resubscribed',
+            'gifted a tier',
+            'is gifting',
+            'has gifted'
+        ];
+        
+        const isSubscription = subKeywords.some(keyword => 
+            message.toLowerCase().includes(keyword)
+        ) || (
+            // Ou si c'est un message d'un subscriber avec des mots-clés liés aux subs
+            badges.includes('subscriber') && (
+                message.toLowerCase().includes('months') ||
+                message.toLowerCase().includes('tier') ||
+                message.toLowerCase().includes('thank') && message.toLowerCase().includes('sub')
+            )
+        );
+
+        let subscriptionInfo = undefined;
+        if (isSubscription) {
+            const isResub = message.toLowerCase().includes('resubscribed') || 
+                           message.toLowerCase().includes('months');
+            
+            // Essayer d'extraire le nombre de mois si c'est un resub
+            const monthsMatch = message.match(/(\d+)\s*month/i);
+            const months = monthsMatch ? parseInt(monthsMatch[1]) : undefined;
+            
+            // Détecter le tier depuis le message
+            const tierMatch = message.match(/tier\s*(\d+)/i);
+            const tier = tierMatch ? tierMatch[1] : '1';
+            
+            subscriptionInfo = {
+                isResub,
+                months,
+                tier,
+            };
+        }
+
         //console.log('Parsed message:', { username, displayName, message, color, badges, emotes }); // Debug
 
         return {
@@ -143,6 +194,8 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
             badges,
             color: color || '#8A2BE2',
             emotes,
+            isSubscription,
+            subscriptionInfo,
         };
     }, []);
 
@@ -191,6 +244,27 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
                             const newMessages = [parsedMessage, ...prev];
                             return newMessages.slice(0, maxMessages);
                         });
+
+                        // Si c'est une subscription, mettre à jour le lastSubscriber
+                        if (parsedMessage.isSubscription) {
+                            const newSubscriber = {
+                                username: parsedMessage.displayName,
+                                timestamp: parsedMessage.timestamp,
+                            };
+                            setLastSubscriber(newSubscriber);
+                            
+                            // Stocker localement
+                            localStorage.setItem('lastTwitchSubscriber', JSON.stringify(newSubscriber));
+                            
+                            // Envoyer au serveur pour synchronisation
+                            fetch('/api/v1/twitch/lastSubscriber', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(newSubscriber),
+                            }).catch(error => console.warn('Failed to sync subscriber to server:', error));
+                        }
                     } else {
                         console.log('Failed to parse message');
                     }
@@ -230,6 +304,19 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
         setMessages([]);
     }, []);
 
+    // Charger le dernier subscriber depuis localStorage au démarrage
+    useEffect(() => {
+        const stored = localStorage.getItem('lastTwitchSubscriber');
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                setLastSubscriber(parsed);
+            } catch (error) {
+                console.warn('Failed to parse stored subscriber:', error);
+            }
+        }
+    }, []);
+
     useEffect(() => {
         if (autoConnect) {
             connect();
@@ -248,5 +335,6 @@ export function useTwitchChatClient(options: UseTwitchChatClientOptions): UseTwi
         connect,
         disconnect,
         clearMessages,
+        lastSubscriber,
     };
 }

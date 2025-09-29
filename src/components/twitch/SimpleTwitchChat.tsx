@@ -114,7 +114,8 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
     const renderLogMessage = (message: ChatMessage) => {
         // Format date façon log
         const date = new Date(message.timestamp || Date.now());
-        const formattedDate = date.toISOString().replace('T', ' ').replace('Z', '');
+        // Format date with format [HH:MM:SS]
+        const formattedDate = `[${date.toLocaleTimeString('fr-FR', { hour12: false })}]`;
         // Niveau de log selon badge
         let level = 'INFO';
         if (message.badges?.includes('broadcaster')) level = 'STREAMER';
@@ -157,7 +158,7 @@ const SimpleTwitchChat: React.FC<SimpleTwitchChatProps> = ({
                 >
                     <span className="text-green-400">wiibleyde@stream</span>
                     <span className="text-white">$</span>
-                    <span className="text-blue-400">journalctl -f</span>
+                    <span className="text-blue-400">sudo log stream</span>
                 </div>
                 <div
                     className="overflow-y-auto p-2 flex-1 hide-scrollbar"

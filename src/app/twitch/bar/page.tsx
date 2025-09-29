@@ -1,6 +1,8 @@
 "use client";
 import { Twitch } from 'react-bootstrap-icons';
 import useSWR from 'swr';
+import { useTwitchChatClient } from '@/hooks/useTwitchChatClient';
+import { useEffect } from 'react';
 
 interface ViewerData {
     viewers: number;
@@ -23,6 +25,13 @@ const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 // Page for /twitch/bar used in my OBS scenes
 export default function BarPage() {
+    // Utilisation du hook de chat Twitch pour détecter les subscriptions en temps réel
+    const { lastSubscriber: chatLastSubscriber } = useTwitchChatClient({
+        channel: 'wiibleyde',
+        autoConnect: true,
+        maxMessages: 10, // On n'a pas besoin de beaucoup de messages pour cette page
+    });
+
     // Utilisation de useSWR pour récupérer les données des viewers
     const { data: viewerData, error: viewerError, isLoading: viewerLoading } = useSWR<ViewerData>(
         '/api/v1/twitch/viewers',
@@ -48,7 +57,9 @@ export default function BarPage() {
     // const isLive = viewerData?.isLive || false;
     const followerCount = statsData?.followers || 0;
     const subscriberCount = statsData?.subscribers || 0;
-    const lastSubscriber = statsData?.lastSubscriber?.username;
+    
+    // Prioriser le lastSubscriber du chat en temps réel, sinon celui de l'API
+    const lastSubscriber = chatLastSubscriber?.username || statsData?.lastSubscriber?.username;
 
     // État de chargement global
     const loading = viewerLoading || statsLoading;

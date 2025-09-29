@@ -238,16 +238,6 @@ export async function GET(): Promise<NextResponse> {
                 if (subscribersResponse.ok) {
                     const subscribersData: TwitchSubscribersResponse = await subscribersResponse.json();
                     subscribersCount = subscribersData.total;
-
-                    // Trouver le dernier subscriber (le plus récent)
-                    if (subscribersData.data.length > 0) {
-                        // Les données sont triées par date, le premier est le plus récent
-                        const recent = subscribersData.data[0];
-                        lastSubscriber = {
-                            username: recent.user_name,
-                            subscribeDate: new Date().toISOString(), // L'API ne fournit pas la date d'abonnement
-                        };
-                    }
                 } else {
                     const errorText = await subscribersResponse.text();
                     console.error('Failed to fetch subscribers:', errorText);
@@ -257,6 +247,22 @@ export async function GET(): Promise<NextResponse> {
             }
         } else {
             console.log('No valid token available for subscribers data');
+        }
+
+        // Récupérer le dernier subscriber depuis notre système de tracking en temps réel
+        try {
+            const lastSubResponse = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/v1/twitch/lastSubscriber`);
+            if (lastSubResponse.ok) {
+                const lastSubData = await lastSubResponse.json();
+                if (lastSubData.lastSubscriber) {
+                    lastSubscriber = {
+                        username: lastSubData.lastSubscriber.username,
+                        subscribeDate: lastSubData.lastSubscriber.timestamp,
+                    };
+                }
+            }
+        } catch (error) {
+            console.warn('Failed to fetch last subscriber from tracking system:', error);
         }
 
         const responseData: IStatsResponse = {
