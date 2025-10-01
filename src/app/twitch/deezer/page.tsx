@@ -1,8 +1,8 @@
 'use client';
 import { ScrollingText } from '@/components/UI/ScrollingText';
-import Image from 'next/image';
-import { useState, useCallback } from 'react';
 import useSWR from 'swr';
+import TerminalHeaderPanel from '@/components/twitch/TerminalHeaderPanel';
+import Image from 'next/image';
 
 interface NowPlayingMusic {
     title: string;
@@ -13,101 +13,59 @@ interface NowPlayingMusic {
 interface ApiResponse {
     currentlyPlaying: NowPlayingMusic;
 }
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function DeezerPage() {
-    const [nowPlayingMusic, setNowPlayingMusic] = useState<NowPlayingMusic | null>(null);
-    const [dominantColor, setDominantColor] = useState<string>('rgba(255, 255, 255, 0.3)');
-
-    const extractDominantColor = useCallback((img: HTMLImageElement) => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        if (!ctx) return;
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-
-        let r = 0,
-            g = 0,
-            b = 0;
-        let pixelCount = 0;
-
-        // Sample every 10th pixel for performance
-        for (let i = 0; i < data.length; i += 40) {
-            r += data[i];
-            g += data[i + 1];
-            b += data[i + 2];
-            pixelCount++;
-        }
-
-        r = Math.floor(r / pixelCount);
-        g = Math.floor(g / pixelCount);
-        b = Math.floor(b / pixelCount);
-
-        setDominantColor(`rgba(${r}, ${g}, ${b}, 0.6)`);
-    }, []);
-
-    // Extract host from URL parameters
-    const host = 'https://eve-api.bonnell.fr';
-    const apiUrl = `${host}/api/v1/music`;
-
-    const { data, error } = useSWR<ApiResponse>(apiUrl, fetcher, {
+    const { data, error } = useSWR<ApiResponse>('https://eve-api.bonnell.fr/api/v1/music', fetcher, {
         refreshInterval: 1000,
-        onSuccess: (data) => {
-            const musicData = data.currentlyPlaying;
-            setNowPlayingMusic({
-                title: musicData.title,
-                artist: musicData.artist,
-                trackImageUrl: musicData.trackImageUrl,
-            });
-        },
     });
 
     return (
-        <>
-            <div className="w-screen h-screen flex items-start justify-start p-0 bg-transparent box-border">
-                {!data && !error && <div className="text-white text-[2.5vw]">Loading...</div>}
-                {nowPlayingMusic && (
-                    <div className="flex items-center bg-black backdrop-blur-sm rounded-[20px] p-[4%] w-full h-full box-border overflow-hidden">
-                        <Image
-                            src={nowPlayingMusic.trackImageUrl}
-                            alt="Album Art"
-                            className="w-[23%] aspect-square rounded-[15px] mr-[4%] flex-shrink-0 object-cover block"
-                            style={{
-                                boxShadow: `
-                  0 0 40px 10px ${dominantColor.replace('0.6', '1')},
-                  0 0 80px 30px ${dominantColor.replace('0.6', '0.8')},
-                  0 0 120px 50px ${dominantColor.replace('0.6', '0.4')},
-                  0 0 160px 70px ${dominantColor.replace('0.6', '0.2')}
-                `,
-                            }}
-                            width={500}
-                            height={500}
-                            onLoad={(e) => {
-                                const img = e.target as HTMLImageElement;
-                                img.crossOrigin = 'anonymous';
-                                extractDominantColor(img);
-                            }}
-                            crossOrigin="anonymous"
-                        />
-                        <div className="flex flex-col justify-center overflow-hidden">
-                            <ScrollingText
-                                text={nowPlayingMusic.title}
-                                className="text-white text-[20vh] font-semibold m-0 whitespace-nowrap"
-                            />
-                            <ScrollingText
-                                text={nowPlayingMusic.artist}
-                                className="text-gray-300 text-[16vh] italic m-0 whitespace-nowrap"
-                            />
+        <TerminalHeaderPanel
+            title="wiibleyde@stream: deezer-now-playing"
+            className="min-h-screen bg-black text-green-500 font-mono"
+        >
+            <div className="flex flex-col h-full">
+                {/* Command execution line */}
+                <div
+                    className="bg-black/60 px-2 py-1 font-mono text-base text-gray-300 border-b border-gray-700 flex items-center gap-2 flex-shrink-0"
+                    style={{ height: '40px', overflow: 'hidden' }}
+                >
+                    <span className="text-green-400">wiibleyde@stream</span>
+                    <span className="text-white">$</span>
+                    <span className="text-blue-400">sudo log music</span>
+                </div>
+                <div className="p-4 flex-1 overflow-y-auto hide-scrollbar">
+                    {error && <div className="text-red-500">Failed to load music data.</div>}
+                    {!data && !error && <div className="text-[2.5vw]">Loading...</div>}
+                    {data && (
+                        <div className="flex flex-col items-start">
+                            <div className="flex items-center gap-4">
+                                <Image
+                                    src={data.currentlyPlaying.trackImageUrl}
+                                    alt="Album Art"
+                                    className="w-32 h-32 rounded"
+                                    width={128}
+                                    height={128}
+                                    unoptimized
+                                />
+                                <div>
+                                    <div className="text-[3vw] font-bold">Now Playing:</div>
+                                    <ScrollingText
+                                        text={data.currentlyPlaying.title}
+                                        className="text-[2.5vw] font-semibold mt-2"
+                                    />
+                                    <ScrollingText
+                                        text={`by ${data.currentlyPlaying.artist}`}
+                                        className="text-[2vw] italic mt-1"
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-        </>
+        </TerminalHeaderPanel>
     );
 }
