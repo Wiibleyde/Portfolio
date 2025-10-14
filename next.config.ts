@@ -26,6 +26,11 @@ const nextConfig: NextConfig = {
                 hostname: 'nathan.bonnell.fr',
                 pathname: '/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'media.discordapp.net',
+                pathname: '/**',
+            },
         ],
     },
 };

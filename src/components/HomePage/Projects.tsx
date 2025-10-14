@@ -11,6 +11,7 @@ import FurutsuGame from '@public/img/projects/furutsugame.png';
 import Me from '@public/img/pp.webp';
 import F1 from '@public/img/projects/f1.png';
 import SABSLogo from '@public/img/projects/sabs-logo.png';
+import LightManager from '@public/img/projects/light-manager.png';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Filter, ChevronLeft, ChevronRight } from 'react-bootstrap-icons';
@@ -31,8 +32,16 @@ export function Projects() {
 
     const projects: Project[] = [
         {
+            title: 'Régie lumière FiveM',
+            description:
+                'Régie lumière pour des concerts. Aide : [JusteKal](https://mapping.justekal.be), [Waytostars](https://github.com/waytostars) et [FailyV](https://x.com/FailyV_GTARP)).',
+            type: ProjectType.Personal,
+            image: LightManager.src,
+            tags: ['FiveM', 'TypeScript', 'GTARP', 'Régie', 'Lumière', 'Concert', 'FailyV'],
+        },
+        {
             title: 'Site SABS',
-            description: 'Site vitrine du projet SABS.',
+            description: 'Site vitrine du projet SABS. Découvrez [le site en ligne](https://sabs.vercel.app).',
             type: ProjectType.Personal,
             url: 'https://sabs.vercel.app',
             repoUrl: 'https://github.com/Wiibleyde/sabs',
@@ -41,7 +50,8 @@ export function Projects() {
         },
         {
             title: 'F1 App',
-            description: 'F1 App est une application web pour suivre les courses de Formule 1.',
+            description:
+                "F1 App est une application web pour suivre les courses de Formule 1 en utilisant l'[API Open-F1](https://openf1.org/).",
             type: ProjectType.School,
             repoUrl: 'https://github.com/Wiibleyde/f1-app',
             image: F1.src,
@@ -58,7 +68,8 @@ export function Projects() {
         },
         {
             title: 'Hope - GTARP (Fermé)',
-            description: 'Hope - GTARP est (était 😢) un serveur de jeu sur la plateforme FiveM.',
+            description:
+                'Hope - GTARP est (était 😢) un serveur de jeu sur la plateforme [FiveM](https://fivem.net/). Voir la [vidéo de présentation](https://youtu.be/Q8jP5BC0cXM).',
             type: ProjectType.Personal,
             url: 'https://youtu.be/Q8jP5BC0cXM',
             image: HopeLogo.src,
@@ -103,7 +114,8 @@ export function Projects() {
         },
         {
             title: 'Eve',
-            description: 'Eve est un bot Discord pour les serveurs Discord fait en Typescript.',
+            description:
+                "Eve est un bot [Discord](https://discord.com/) pour les serveurs Discord fait en Typescript. Consultez les [conditions d'utilisation](/eve/tos).",
             type: ProjectType.Personal,
             repoUrl: 'https://github.com/Wiibleyde/Eve',
             image: EveBanner.src,

@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { Github, BoxArrowUpRight } from 'react-bootstrap-icons';
 import Image from 'next/image';
 import { Project, ProjectType } from '@/types';
+import { RichDescription } from './RichDescription';
 
 interface ProjectCardProps {
     project: Project;
@@ -240,7 +241,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {/* Content */}
             <div className="p-6 flex flex-col h-48">
                 <h3 className="text-xl font-semibold text-white mb-3 line-clamp-1">{project.title}</h3>
-                <p className="text-sm text-gray-300 mb-4 line-clamp-2 flex-grow">{project.description}</p>
+                <p className="text-sm text-gray-300 mb-4 line-clamp-2 flex-grow">
+                    <RichDescription text={project.description} />
+                </p>
 
                 {/* Tags */}
                 <div
