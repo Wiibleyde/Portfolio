@@ -34,7 +34,7 @@ export function Projects() {
         {
             title: 'Régie lumière FiveM',
             description:
-                'Régie lumière pour des concerts (FiveM). Le mapping a été réalisé par [JusteKal](https://mapping.justekal.be).',
+                'Régie lumière pour des concerts. Aide : [JusteKal](https://mapping.justekal.be), [Waytostars](https://github.com/waytostars) et [FailyV](https://x.com/FailyV_GTARP)).',
             type: ProjectType.Personal,
             image: LightManager.src,
             tags: ['FiveM', 'TypeScript', 'GTARP', 'Régie', 'Lumière', 'Concert', 'FailyV'],
