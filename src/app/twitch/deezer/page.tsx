@@ -3,6 +3,7 @@ import { ScrollingText } from '@/components/UI/ScrollingText';
 import useSWR from 'swr';
 import TerminalHeaderPanel from '@/components/twitch/TerminalHeaderPanel';
 import Image from 'next/image';
+import { useEffect } from 'react';
 
 interface NowPlayingMusic {
     title: string;
@@ -20,6 +21,19 @@ export default function DeezerPage() {
     const { data, error } = useSWR<ApiResponse>('https://eve-api.bonnell.fr/api/v1/music', fetcher, {
         refreshInterval: 1000,
     });
+
+    useEffect(() => {
+        console.log(data);
+    }, [data]);
+
+    // Vérification de la présence de la musique
+    const music = data?.currentlyPlaying;
+    const hasMusic =
+        music &&
+        typeof music.title === 'string' &&
+        music.title.trim() !== '' &&
+        typeof music.artist === 'string' &&
+        music.artist.trim() !== '';
 
     return (
         <TerminalHeaderPanel
@@ -42,24 +56,31 @@ export default function DeezerPage() {
                     {data && (
                         <div className="flex flex-col items-start">
                             <div className="flex items-center gap-4">
-                                <Image
-                                    src={data.currentlyPlaying.trackImageUrl}
-                                    alt="Album Art"
-                                    className="w-32 h-32 rounded"
-                                    width={128}
-                                    height={128}
-                                    unoptimized
-                                />
+                                {hasMusic && music.trackImageUrl && (
+                                    <Image
+                                        src={music.trackImageUrl}
+                                        alt="Album Art"
+                                        className="w-32 h-32 rounded bg-gray-800"
+                                        width={128}
+                                        height={128}
+                                    />
+                                )}
                                 <div>
                                     <div className="text-[3vw] font-bold">Now Playing:</div>
-                                    <ScrollingText
-                                        text={data.currentlyPlaying.title}
-                                        className="text-[2.5vw] font-semibold mt-2"
-                                    />
-                                    <ScrollingText
-                                        text={`by ${data.currentlyPlaying.artist}`}
-                                        className="text-[2vw] italic mt-1"
-                                    />
+                                    {hasMusic ? (
+                                        <>
+                                            <ScrollingText
+                                                text={music.title}
+                                                className="text-[2.5vw] font-semibold mt-2"
+                                            />
+                                            <ScrollingText
+                                                text={`by ${music.artist}`}
+                                                className="text-[2vw] italic mt-1"
+                                            />
+                                        </>
+                                    ) : (
+                                        <div className="text-[2vw] text-gray-400 mt-2">Aucune musique en cours</div>
+                                    )}
                                 </div>
                             </div>
                         </div>
