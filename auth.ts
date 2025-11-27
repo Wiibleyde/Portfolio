@@ -7,9 +7,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     callbacks: {
         ...authConfig.callbacks,
         async signIn({ account }) {
-            // Check if the user is logging in with Discord
             if (account?.provider === "discord" && account?.providerAccountId) {
-                // Check if user exists in database
                 const existingUser = await prisma.user.findUnique({
                     where: { discordId: account.providerAccountId },
                 });
@@ -21,13 +19,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     return false; // Deny access - user not in database
                 }
             }
-            return true; // Allow access
+            return true;
         },
         async jwt({ token, account, profile }) {
             // Store Discord info in JWT token on first sign in
             if (account?.provider === "discord" && profile) {
                 token.discordId = account.providerAccountId;
-                // Discord profile data
                 const discordProfile = profile as {
                     global_name?: string;
                     username?: string;
@@ -36,7 +33,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 };
                 token.username =
                     discordProfile.global_name || discordProfile.username;
-                // Construct Discord avatar URL
                 if (discordProfile.avatar && discordProfile.id) {
                     token.picture = `https://cdn.discordapp.com/avatars/${discordProfile.id}/${discordProfile.avatar}.png`;
                 }
@@ -44,7 +40,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return token;
         },
         async session({ session, token }) {
-            // Add Discord info from token to session
             if (session.user) {
                 session.user.id = token.sub as string;
                 session.user.discordId = token.discordId as string;
