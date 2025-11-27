@@ -8,30 +8,30 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const discordId = process.argv[2];
+    const discordId = process.argv[2];
 
-  if (!discordId) {
-    console.error("Please provide a Discord ID as an argument");
-    console.log("Usage: bun prisma/seed.ts <DISCORD_ID>");
-    process.exit(1);
-  }
+    if (!discordId) {
+        console.error("Please provide a Discord ID as an argument");
+        console.log("Usage: bun prisma/seed.ts <DISCORD_ID>");
+        process.exit(1);
+    }
 
-  const user = await prisma.user.upsert({
-    where: { discordId },
-    update: {},
-    create: {
-      discordId,
-    },
-  });
+    const user = await prisma.user.upsert({
+        where: { discordId },
+        update: {},
+        create: {
+            discordId,
+        },
+    });
 
-  console.log("✅ User added/updated:", user);
+    console.log("✅ User added/updated:", user);
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });
