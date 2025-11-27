@@ -25,7 +25,7 @@ interface MatrixChar {
 
 export default function Home() {
     const [windows, setWindows] = useState<Record<WindowType, WindowState>>({
-        about: { isOpen: true, isMinimized: false, zIndex: 20 },
+        about: { isOpen: false, isMinimized: false, zIndex: 10 },
         projects: { isOpen: false, isMinimized: false, zIndex: 10 },
         contact: { isOpen: false, isMinimized: false, zIndex: 10 },
         terminal: { isOpen: false, isMinimized: false, zIndex: 10 },
