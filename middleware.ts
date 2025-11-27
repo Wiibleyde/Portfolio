@@ -1,7 +1,8 @@
-import NextAuth from "next-auth";
-import authConfig from "./auth.config";
+import { auth } from "./auth";
 
-export const { auth: middleware } = NextAuth(authConfig);
+export default auth((_req) => {
+    // Add your middleware logic here
+});
 
 export const config = {
     matcher: ["/admin/:path*"],
