@@ -258,7 +258,7 @@ export default function FaultyTerminal({
     tint = '#ffffff',
     mouseReact = true,
     mouseStrength = 0.2,
-    dpr = Math.min(window?.devicePixelRatio || 1, 2),
+    dpr = 1,
     pageLoadAnimation = true,
     brightness = 1,
     className,
@@ -279,6 +279,11 @@ export default function FaultyTerminal({
 
     const ditherValue = useMemo(() => (typeof dither === 'boolean' ? (dither ? 1 : 0) : dither), [dither]);
 
+    const resolvedDpr = useMemo(() => {
+        const deviceDpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1;
+        return Math.min(dpr ?? deviceDpr, 2);
+    }, [dpr]);
+
     const handleMouseMove = useCallback((e: MouseEvent) => {
         const ctn = containerRef.current;
         if (!ctn) return;
@@ -292,7 +297,7 @@ export default function FaultyTerminal({
         const ctn = containerRef.current;
         if (!ctn) return;
 
-        const renderer = new Renderer({ dpr });
+        const renderer = new Renderer({ dpr: resolvedDpr });
         rendererRef.current = renderer;
         const gl = renderer.gl;
         gl.clearColor(0, 0, 0, 1);
@@ -398,7 +403,7 @@ export default function FaultyTerminal({
             timeOffsetRef.current = Math.random() * 100;
         };
     }, [
-        dpr,
+        resolvedDpr,
         pause,
         timeScale,
         scale,
