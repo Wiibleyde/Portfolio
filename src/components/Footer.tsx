@@ -1,8 +1,8 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { Envelope, Github, Linkedin, Heart } from 'react-bootstrap-icons';
 import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { Envelope, Github, Heart, Linkedin } from 'react-bootstrap-icons';
 
 export function Footer() {
     const footerRef = useRef<HTMLElement>(null);
@@ -27,13 +27,13 @@ export function Footer() {
                                     duration: 0.8,
                                     stagger: 0.2,
                                     ease: 'power2.out',
-                                }
+                                },
                             );
                         }
                     }
                 });
             },
-            { threshold: 0.3 }
+            { threshold: 0.3 },
         );
 
         if (footerRef.current) {
@@ -63,14 +63,14 @@ export function Footer() {
                         backgroundImage: `radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 80% 20%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
             <div ref={contentRef} className="relative z-10 max-w-4xl mx-auto px-6 text-center">
                 {/* Main heading */}
                 <div className="mb-12">
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Restons en contact</h2>
-                    <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
+                    <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full" />
                 </div>
 
                 {/* Contact info */}

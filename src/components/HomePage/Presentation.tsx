@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { useEffect, useRef, useState } from 'react';
 
 export function Presentation() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ export function Presentation() {
                                     duration: 0.8,
                                     ease: 'power2.out',
                                 },
-                                '-=0.4'
+                                '-=0.4',
                             )
                             .to(
                                 birthRef.current,
@@ -86,7 +86,7 @@ export function Presentation() {
                                     duration: 0.6,
                                     ease: 'back.out(1.7)',
                                 },
-                                '-=0.3'
+                                '-=0.3',
                             )
                             .to(
                                 cvRef.current,
@@ -96,12 +96,12 @@ export function Presentation() {
                                     duration: 0.6,
                                     ease: 'elastic.out(1, 0.5)',
                                 },
-                                '-=0.2'
+                                '-=0.2',
                             );
                     }
                 });
             },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
         );
 
         if (containerRef.current) {
@@ -153,7 +153,7 @@ export function Presentation() {
                     duration: 0.2,
                     ease: 'power2.in',
                 },
-                '-=0.1'
+                '-=0.1',
             );
         } else {
             setShowPreview(false);
@@ -187,7 +187,7 @@ export function Presentation() {
                     duration: 0.4,
                     ease: 'back.out(1.2)',
                 },
-                '-=0.1'
+                '-=0.1',
             );
         }
     }, [showPreview]);
@@ -205,13 +205,13 @@ export function Presentation() {
                         backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
             <div ref={containerRef} className="relative z-10 px-10">
                 <div className="text-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Présentation</h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
+                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full" />
                 </div>
 
                 <div className="w-full max-w-7xl mx-auto grid gap-8 content-center">
@@ -243,8 +243,8 @@ export function Presentation() {
                     <blockquote ref={quoteRef} className="relative w-full mx-auto">
                         <div className="relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl overflow-hidden">
                             {/* Decorative background elements */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
-                            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-500/15 to-blue-500/15 rounded-full blur-2xl translate-y-12 -translate-x-12"></div>
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl -translate-y-16 translate-x-16" />
+                            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-500/15 to-blue-500/15 rounded-full blur-2xl translate-y-12 -translate-x-12" />
 
                             {/* Opening quote */}
                             <div className="absolute top-4 left-6 text-6xl text-blue-400/30 font-serif leading-none select-none">
@@ -259,11 +259,11 @@ export function Presentation() {
 
                                 {/* Author section */}
                                 <div className="flex items-center justify-center gap-3">
-                                    <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+                                    <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
                                     <cite className="text-blue-400 text-lg font-semibold not-italic tracking-wide">
                                         Steve Jobs
                                     </cite>
-                                    <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+                                    <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
                                 </div>
                             </div>
 
@@ -341,10 +341,10 @@ export function Presentation() {
                                         onClick={handlePreviewCV}
                                     >
                                         {/* Animated background overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
 
                                         {/* Glow effect */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/50 to-purple-400/50 rounded-xl blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-300 -z-10"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/50 to-purple-400/50 rounded-xl blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-300 -z-10" />
 
                                         <svg
                                             className="w-5 h-5 relative z-10 group-hover:scale-110 transition-transform duration-300"
@@ -370,8 +370,8 @@ export function Presentation() {
                                         </span>
 
                                         {/* Corner accents */}
-                                        <div className="absolute top-1 right-1 w-3 h-3 border-t-2 border-r-2 border-white/30 rounded-tr-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                        <div className="absolute bottom-1 left-1 w-3 h-3 border-b-2 border-l-2 border-white/30 rounded-bl-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        <div className="absolute top-1 right-1 w-3 h-3 border-t-2 border-r-2 border-white/30 rounded-tr-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                        <div className="absolute bottom-1 left-1 w-3 h-3 border-b-2 border-l-2 border-white/30 rounded-bl-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     </button>
 
                                     <button
@@ -380,10 +380,10 @@ export function Presentation() {
                                         onClick={handleDownloadCV}
                                     >
                                         {/* Animated background overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
 
                                         {/* Glow effect */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/50 to-teal-400/50 rounded-xl blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-300 -z-10"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/50 to-teal-400/50 rounded-xl blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-300 -z-10" />
 
                                         <svg
                                             className="w-5 h-5 relative z-10 group-hover:animate-bounce transition-transform duration-300"
@@ -403,13 +403,13 @@ export function Presentation() {
                                         </span>
 
                                         {/* Download indicator */}
-                                        <div className="absolute top-2 right-2 w-2 h-2 bg-white/50 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300"></div>
+                                        <div className="absolute top-2 right-2 w-2 h-2 bg-white/50 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300" />
                                     </button>
                                 </div>
 
                                 {/* Decorative elements */}
-                                <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full opacity-70 blur-sm"></div>
-                                <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-gradient-to-tr from-green-400 to-emerald-500 rounded-full opacity-50 blur-sm"></div>
+                                <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full opacity-70 blur-sm" />
+                                <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-gradient-to-tr from-green-400 to-emerald-500 rounded-full opacity-50 blur-sm" />
                             </div>
                         </section>
                     </div>
@@ -433,7 +433,7 @@ export function Presentation() {
                     >
                         <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
                             <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                                 Prévisualisation du CV
                             </h3>
                             <div className="flex gap-2">
@@ -485,7 +485,7 @@ export function Presentation() {
                                     className="w-full h-full border-0"
                                     title="Prévisualisation du CV"
                                 />
-                                <div className="absolute inset-0 pointer-events-none border-2 border-blue-200/50 rounded-lg"></div>
+                                <div className="absolute inset-0 pointer-events-none border-2 border-blue-200/50 rounded-lg" />
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import Markdown from 'markdown-to-jsx';
+import { useEffect, useRef, useState } from 'react';
 import './markdown.css';
 import Link from 'next/link';
 
@@ -34,7 +34,7 @@ export default function LegalMentions() {
                                 duration: 0.8,
                                 ease: 'power2.out',
                             },
-                            '-=0.4'
+                            '-=0.4',
                         );
 
                         // Animation des sections du contenu
@@ -50,13 +50,13 @@ export default function LegalMentions() {
                                     stagger: 0.1,
                                     delay: 1,
                                     ease: 'power2.out',
-                                }
+                                },
                             );
                         }
                     }
                 });
             },
-            { threshold: 0.2, rootMargin: '0px 0px -50px 0px' }
+            { threshold: 0.2, rootMargin: '0px 0px -50px 0px' },
         );
 
         if (containerRef.current) {
@@ -77,7 +77,7 @@ export default function LegalMentions() {
 
         // Set initial state for content sections
         const sections = document.querySelectorAll(
-            '.markdownApplicable h2, .markdownApplicable p, .markdownApplicable ul'
+            '.markdownApplicable h2, .markdownApplicable p, .markdownApplicable ul',
         );
         gsap.set(sections, { opacity: 0, y: 20 });
     }, []);
@@ -95,14 +95,14 @@ export default function LegalMentions() {
                         backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
             <div className="relative z-10 px-6 max-w-4xl mx-auto">
                 {/* Title Section */}
                 <div ref={titleRef} className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Mentions Légales</h1>
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3"></div>
+                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3" />
                     <p className="text-gray-300 text-lg">Informations légales et conditions d&apos;utilisation</p>
                 </div>
 
@@ -121,7 +121,7 @@ export default function LegalMentions() {
                                                 {...props}
                                                 className="group flex items-center gap-3 text-2xl font-bold text-white mb-4 mt-8 first:mt-0 border-b border-white/20 pb-2 hover:border-blue-400/50 transition-colors duration-300"
                                             >
-                                                <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full group-hover:scale-125 transition-transform duration-300"></div>
+                                                <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full group-hover:scale-125 transition-transform duration-300" />
                                                 {children}
                                             </h2>
                                         ),
@@ -178,7 +178,7 @@ export default function LegalMentions() {
                                                 }
                                             >
                                                 {children}
-                                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 group-hover:w-full transition-all duration-300"></span>
+                                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 group-hover:w-full transition-all duration-300" />
                                                 {href?.startsWith('http') && (
                                                     <svg
                                                         className="inline w-3 h-3 ml-1 opacity-60 group-hover:opacity-100 transition-opacity"
@@ -246,7 +246,7 @@ export default function LegalMentions() {
                                     className="group relative text-blue-400 hover:text-blue-300 transition-colors duration-200 font-medium"
                                 >
                                     nathan@bonnell.fr
-                                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 group-hover:w-full transition-all duration-300"></span>
+                                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 group-hover:w-full transition-all duration-300" />
                                 </a>
                             </p>
                         </div>

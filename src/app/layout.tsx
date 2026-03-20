@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Outfit } from 'next/font/google';
 import { ClientLayout } from '@/app/clientLayout';
+import { Outfit } from 'next/font/google';
 
 export const metadata: Metadata = {
     title: 'Portfolio - Nathan Bonnell',

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             from: username,
             to: myEmail,
             replyTo: data.from,
-            subject: 'Portfolio : ' + data.subject,
+            subject: `Portfolio : ${data.subject}`,
             text: data.message,
         });
     } catch (error) {

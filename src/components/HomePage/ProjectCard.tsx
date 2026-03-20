@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { type Project, ProjectType } from '@/types';
 import { gsap } from 'gsap';
-import { Github, BoxArrowUpRight } from 'react-bootstrap-icons';
 import Image from 'next/image';
-import { Project, ProjectType } from '@/types';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { BoxArrowUpRight, Github } from 'react-bootstrap-icons';
 import { RichDescription } from './RichDescription';
 
 interface ProjectCardProps {
@@ -138,7 +138,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 timeoutRef.current = setTimeout(performHide, 100);
             }
         },
-        [tooltipState, clearAllTimeouts, killCurrentAnimation]
+        [tooltipState, clearAllTimeouts, killCurrentAnimation],
     );
 
     const handleCardMouseLeave = useCallback(() => {
@@ -204,7 +204,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {/* Image */}
             <div className="relative h-48 overflow-hidden rounded-t-2xl">
                 <Image src={project.image} alt={project.title} fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
                 {/* Type badge */}
                 <div
@@ -288,7 +288,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 <div className="bg-gray-900/95 backdrop-blur-md rounded-xl p-4 shadow-2xl border border-white/20">
                     <div className="flex items-center gap-2 mb-3">
                         <div className="text-xs text-blue-300 font-semibold">Tags</div>
-                        <div className="flex-1 h-px bg-gradient-to-r from-blue-500/50 to-transparent"></div>
+                        <div className="flex-1 h-px bg-gradient-to-r from-blue-500/50 to-transparent" />
                         <div className="text-xs text-gray-400">{project.tags.length} tags</div>
                     </div>
 

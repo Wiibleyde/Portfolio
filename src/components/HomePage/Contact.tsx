@@ -1,8 +1,8 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { verifyCaptchaAction } from '@/captcha';
+import { gsap } from 'gsap';
+import { useEffect, useRef, useState } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 interface FormData {
     name: string;
@@ -143,12 +143,12 @@ export function Contact() {
                                 duration: 0.8,
                                 ease: 'power2.out',
                             },
-                            '-=0.4'
+                            '-=0.4',
                         );
                     }
                 });
             },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
         );
 
         if (containerRef.current) {
@@ -191,14 +191,14 @@ export function Contact() {
                         backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
             <div ref={containerRef} className="relative z-10 px-10 max-w-4xl mx-auto">
                 {/* Title Section */}
                 <div ref={titleRef} className="text-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Contactez-moi</h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3"></div>
+                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3" />
                     <p className="text-gray-300 text-lg">
                         Une idée, un projet, une question ? N&apos;hésitez pas à me contacter !
                     </p>
@@ -304,7 +304,7 @@ export function Contact() {
                                     aria-label="Envoyer le message"
                                     className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
 
                                     {isSubmitting ? (
                                         <>

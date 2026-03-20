@@ -38,14 +38,19 @@ export function ScrollingText({ text, className }: ScrollingTextProps) {
             <motion.div
                 ref={textRef}
                 animate={{
-                    x: [0, 0, -(textRef.current ? textRef.current.scrollWidth - containerRef.current!.offsetWidth : 0), -(textRef.current ? textRef.current.scrollWidth - containerRef.current!.offsetWidth : 0)]
+                    x: [
+                        0,
+                        0,
+                        -(textRef.current ? textRef.current.scrollWidth - containerRef.current!.offsetWidth : 0),
+                        -(textRef.current ? textRef.current.scrollWidth - containerRef.current!.offsetWidth : 0),
+                    ],
                 }}
                 transition={{
                     duration: 10,
-                    repeat: Infinity,
-                    ease: "linear",
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: 'linear',
                     times: [0, 0.2, 0.8, 1],
-                    repeatType: "loop"
+                    repeatType: 'loop',
                 }}
                 style={{ whiteSpace: 'nowrap' }}
             >
@@ -53,4 +58,4 @@ export function ScrollingText({ text, className }: ScrollingTextProps) {
             </motion.div>
         </div>
     );
-};
+}

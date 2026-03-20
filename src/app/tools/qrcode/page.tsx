@@ -1,8 +1,8 @@
 'use client';
-import QrCodeWithLogo from 'qrcode-with-logos';
-import { BaseOptions, CornerType, DotType } from 'qrcode-with-logos/types/src/core/types';
-import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import QrCodeWithLogo from 'qrcode-with-logos';
+import type { BaseOptions, CornerType, DotType } from 'qrcode-with-logos/types/src/core/types';
+import { useEffect, useRef, useState } from 'react';
 
 const dotTypes: DotType[] = [
     'dot',
@@ -120,7 +120,7 @@ export default function VCardPage() {
                             rotation: 0,
                             duration: 0.6,
                             ease: 'back.out(1.7)',
-                        }
+                        },
                     );
 
                     if (!hasGenerated) {
@@ -159,7 +159,7 @@ export default function VCardPage() {
                                     duration: 0.8,
                                     ease: 'power2.out',
                                 },
-                                '-=0.4'
+                                '-=0.4',
                             )
                             .to(
                                 canvasRef.current,
@@ -169,7 +169,7 @@ export default function VCardPage() {
                                     duration: 0.8,
                                     ease: 'power2.out',
                                 },
-                                '-=0.6'
+                                '-=0.6',
                             );
 
                         // Animation des champs du formulaire
@@ -185,13 +185,13 @@ export default function VCardPage() {
                                     stagger: 0.1,
                                     delay: 1,
                                     ease: 'power2.out',
-                                }
+                                },
                             );
                         }
                     }
                 });
             },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
         );
 
         if (containerRef.current) {
@@ -259,14 +259,14 @@ export default function VCardPage() {
                         backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
             <div className="relative z-10 px-6 max-w-7xl mx-auto">
                 {/* Title Section */}
                 <div ref={titleRef} className="text-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Générateur de QR Code</h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3"></div>
+                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3" />
                     <p className="text-gray-300 text-lg">Créez des QR codes personnalisés avec logo et couleurs</p>
                 </div>
 
@@ -417,7 +417,7 @@ export default function VCardPage() {
                                     disabled={!text.trim() || isGenerating}
                                     className="generate-button group relative w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
 
                                     {isGenerating ? (
                                         <>
@@ -527,7 +527,7 @@ export default function VCardPage() {
                                     onClick={handleDownloadQrCode}
                                     className="group relative bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:shadow-green-500/25 transform hover:scale-105"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                                     <svg
                                         className="w-5 h-5 relative z-10"
                                         fill="none"

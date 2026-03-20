@@ -1,8 +1,8 @@
 'use client';
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, FC, useMemo } from 'react';
-import * as THREE from 'three';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass, SMAAEffect, SMAAPreset } from 'postprocessing';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { type FC, useEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
 
 interface Distortion {
     uniforms: Record<string, { value: any }>;
@@ -156,7 +156,7 @@ const distortions: Distortions = {
                 nsin(progress * Math.PI * uFreq.y + time) * uAmp.y -
                     nsin(movementProgressFix * Math.PI * uFreq.y + time) * uAmp.y,
                 nsin(progress * Math.PI * uFreq.z + time) * uAmp.z -
-                    nsin(movementProgressFix * Math.PI * uFreq.z + time) * uAmp.z
+                    nsin(movementProgressFix * Math.PI * uFreq.z + time) * uAmp.z,
             );
             const lookAtAmp = new THREE.Vector3(2, 2, 2);
             const lookAtOffset = new THREE.Vector3(0, 0, -5);
@@ -187,7 +187,7 @@ const distortions: Distortions = {
                     Math.cos(movementProgressFix * Math.PI * uFreq.x + time) * uAmp.x,
                 Math.sin(progress * Math.PI * uFreq.y + time + Math.PI / 2) * uAmp.y -
                     Math.sin(movementProgressFix * Math.PI * uFreq.y + time + Math.PI / 2) * uAmp.y,
-                0
+                0,
             );
             const lookAtAmp = new THREE.Vector3(2, 0.4, 1);
             const lookAtOffset = new THREE.Vector3(0, 0, -3);
@@ -218,7 +218,7 @@ const distortions: Distortions = {
                     Math.sin(camProgress * Math.PI * uFreq.x + time) * uAmp.x,
                 Math.sin(progress * Math.PI * uFreq.y + time) * uAmp.y -
                     Math.sin(camProgress * Math.PI * uFreq.y + time) * uAmp.y,
-                0
+                0,
             );
             const lookAtAmp = new THREE.Vector3(1, 1, 0);
             const lookAtOffset = new THREE.Vector3(0, 0, -5);
@@ -260,16 +260,16 @@ const distortions: Distortions = {
 
             const getX = (p: number) =>
                 Math.cos(Math.PI * p * uFreq.x + time) * uAmp.x +
-                Math.pow(Math.cos(Math.PI * p * uFreq.y + time * (uFreq.y / uFreq.x)), 2) * uAmp.y;
+                Math.cos(Math.PI * p * uFreq.y + time * (uFreq.y / uFreq.x)) ** 2 * uAmp.y;
 
             const getY = (p: number) =>
                 -nsin(Math.PI * p * uFreq.z + time) * uAmp.z -
-                Math.pow(nsin(Math.PI * p * uFreq.w + time / (uFreq.z / uFreq.w)), 5) * uAmp.w;
+                nsin(Math.PI * p * uFreq.w + time / (uFreq.z / uFreq.w)) ** 5 * uAmp.w;
 
             const distortion = new THREE.Vector3(
                 getX(progress) - getX(progress + 0.007),
                 getY(progress) - getY(progress + 0.007),
-                0
+                0,
             );
             const lookAtAmp = new THREE.Vector3(-2, -5, 0);
             const lookAtOffset = new THREE.Vector3(0, 0, -10);
@@ -369,13 +369,12 @@ const distortions: Distortions = {
             const uPowY = deepUniforms.uPowY.value;
 
             const getX = (p: number) => Math.sin(p * Math.PI * uFreq.x + time) * uAmp.x;
-            const getY = (p: number) =>
-                Math.pow(p * uPowY.x, uPowY.y) + Math.sin(p * Math.PI * uFreq.y + time) * uAmp.y;
+            const getY = (p: number) => (p * uPowY.x) ** uPowY.y + Math.sin(p * Math.PI * uFreq.y + time) * uAmp.y;
 
             const distortion = new THREE.Vector3(
                 getX(progress) - getX(progress + 0.01),
                 getY(progress) - getY(progress + 0.01),
-                0
+                0,
             );
             const lookAtAmp = new THREE.Vector3(-2, -4, 0);
             const lookAtOffset = new THREE.Vector3(0, 0, -10);
@@ -445,7 +444,7 @@ class CarLights {
         options: HyperspeedOptions,
         colors: number[] | THREE.Color,
         speed: [number, number],
-        fade: THREE.Vector2
+        fade: THREE.Vector2,
     ) {
         this.webgl = webgl;
         this.options = options;
@@ -531,14 +530,14 @@ class CarLights {
                     uFade: { value: this.fade },
                 },
                 this.webgl.fogUniforms,
-                (typeof this.options.distortion === 'object' ? this.options.distortion.uniforms : {}) || {}
+                (typeof this.options.distortion === 'object' ? this.options.distortion.uniforms : {}) || {},
             ),
         });
 
         material.onBeforeCompile = (shader) => {
             shader.vertexShader = shader.vertexShader.replace(
                 '#include <getDistortion_vertex>',
-                typeof this.options.distortion === 'object' ? this.options.distortion.getDistortion : ''
+                typeof this.options.distortion === 'object' ? this.options.distortion.getDistortion : '',
             );
         };
 
@@ -557,7 +556,7 @@ class CarLights {
 
 const carLightsFragment = `
   #define USE_FOG;
-  ${THREE.ShaderChunk['fog_pars_fragment']}
+  ${THREE.ShaderChunk.fog_pars_fragment}
   varying vec3 vColor;
   varying vec2 vUv; 
   uniform vec2 uFade;
@@ -566,13 +565,13 @@ const carLightsFragment = `
     float alpha = smoothstep(uFade.x, uFade.y, vUv.x);
     gl_FragColor = vec4(color, alpha);
     if (gl_FragColor.a < 0.0001) discard;
-    ${THREE.ShaderChunk['fog_fragment']}
+    ${THREE.ShaderChunk.fog_fragment}
   }
 `;
 
 const carLightsVertex = `
   #define USE_FOG;
-  ${THREE.ShaderChunk['fog_pars_vertex']}
+  ${THREE.ShaderChunk.fog_pars_vertex}
   attribute vec3 aOffset;
   attribute vec3 aMetrics;
   attribute vec3 aColor;
@@ -600,7 +599,7 @@ const carLightsVertex = `
     gl_Position = projectionMatrix * mvPosition;
     vUv = uv;
     vColor = aColor;
-    ${THREE.ShaderChunk['fog_vertex']}
+    ${THREE.ShaderChunk.fog_vertex}
   }
 `;
 
@@ -661,14 +660,14 @@ class LightsSticks {
                     uTime: { value: 0 },
                 },
                 this.webgl.fogUniforms,
-                (typeof options.distortion === 'object' ? options.distortion.uniforms : {}) || {}
+                (typeof options.distortion === 'object' ? options.distortion.uniforms : {}) || {},
             ),
         });
 
         material.onBeforeCompile = (shader) => {
             shader.vertexShader = shader.vertexShader.replace(
                 '#include <getDistortion_vertex>',
-                typeof this.options.distortion === 'object' ? this.options.distortion.getDistortion : ''
+                typeof this.options.distortion === 'object' ? this.options.distortion.getDistortion : '',
             );
         };
 
@@ -687,7 +686,7 @@ class LightsSticks {
 
 const sideSticksVertex = `
   #define USE_FOG;
-  ${THREE.ShaderChunk['fog_pars_vertex']}
+  ${THREE.ShaderChunk.fog_pars_vertex}
   attribute float aOffset;
   attribute vec3 aColor;
   attribute vec2 aMetrics;
@@ -722,18 +721,18 @@ const sideSticksVertex = `
     vec4 mvPosition = modelViewMatrix * vec4(transformed, 1.);
     gl_Position = projectionMatrix * mvPosition;
     vColor = aColor;
-    ${THREE.ShaderChunk['fog_vertex']}
+    ${THREE.ShaderChunk.fog_vertex}
   }
 `;
 
 const sideSticksFragment = `
   #define USE_FOG;
-  ${THREE.ShaderChunk['fog_pars_fragment']}
+  ${THREE.ShaderChunk.fog_pars_fragment}
   varying vec3 vColor;
   void main(){
     vec3 color = vec3(vColor);
     gl_FragColor = vec4(color,1.);
-    ${THREE.ShaderChunk['fog_fragment']}
+    ${THREE.ShaderChunk.fog_fragment}
   }
 `;
 
@@ -758,7 +757,7 @@ class Road {
             isRoad ? options.roadWidth : options.islandWidth,
             options.length,
             20,
-            segments
+            segments,
         );
 
         let uniforms: Record<string, { value: any }> = {
@@ -797,14 +796,14 @@ class Road {
             uniforms: Object.assign(
                 uniforms,
                 this.webgl.fogUniforms,
-                (typeof options.distortion === 'object' ? options.distortion.uniforms : {}) || {}
+                (typeof options.distortion === 'object' ? options.distortion.uniforms : {}) || {},
             ),
         });
 
         material.onBeforeCompile = (shader) => {
             shader.vertexShader = shader.vertexShader.replace(
                 '#include <getDistortion_vertex>',
-                typeof this.options.distortion === 'object' ? this.options.distortion.getDistortion : ''
+                typeof this.options.distortion === 'object' ? this.options.distortion.getDistortion : '',
             );
         };
 
@@ -834,13 +833,13 @@ const roadBaseFragment = `
   uniform vec3 uColor;
   uniform float uTime;
   #include <roadMarkings_vars>
-  ${THREE.ShaderChunk['fog_pars_fragment']}
+  ${THREE.ShaderChunk.fog_pars_fragment}
   void main() {
     vec2 uv = vUv;
     vec3 color = vec3(uColor);
     #include <roadMarkings_fragment>
     gl_FragColor = vec4(color, 1.);
-    ${THREE.ShaderChunk['fog_fragment']}
+    ${THREE.ShaderChunk.fog_fragment}
   }
 `;
 
@@ -884,7 +883,7 @@ const roadFragment = roadBaseFragment
 const roadVertex = `
   #define USE_FOG;
   uniform float uTime;
-  ${THREE.ShaderChunk['fog_pars_vertex']}
+  ${THREE.ShaderChunk.fog_pars_vertex}
   uniform float uTravelLength;
   varying vec2 vUv; 
   #include <getDistortion_vertex>
@@ -898,13 +897,13 @@ const roadVertex = `
     vec4 mvPosition = modelViewMatrix * vec4(transformed, 1.);
     gl_Position = projectionMatrix * mvPosition;
     vUv = uv;
-    ${THREE.ShaderChunk['fog_vertex']}
+    ${THREE.ShaderChunk.fog_vertex}
   }
 `;
 
 function resizeRendererToDisplaySize(
     renderer: THREE.WebGLRenderer,
-    setSize: (width: number, height: number, updateStyle: boolean) => void
+    setSize: (width: number, height: number, updateStyle: boolean) => void,
 ) {
     const canvas = renderer.domElement;
     const width = canvas.clientWidth;
@@ -962,7 +961,7 @@ class App {
             options.fov,
             container.offsetWidth / container.offsetHeight,
             0.1,
-            10000
+            10000,
         );
         this.camera.position.z = -5;
         this.camera.position.y = 8;
@@ -990,14 +989,14 @@ class App {
             options,
             options.colors.leftCars,
             options.movingAwaySpeed,
-            new THREE.Vector2(0, 1 - options.carLightsFade)
+            new THREE.Vector2(0, 1 - options.carLightsFade),
         );
         this.rightCarLights = new CarLights(
             this,
             options,
             options.colors.rightCars,
             options.movingCloserSpeed,
-            new THREE.Vector2(1, 0 + options.carLightsFade)
+            new THREE.Vector2(1, 0 + options.carLightsFade),
         );
         this.leftSticks = new LightsSticks(this, options);
 
@@ -1033,14 +1032,14 @@ class App {
                 luminanceThreshold: 0.2,
                 luminanceSmoothing: 0,
                 resolutionScale: 1,
-            })
+            }),
         );
 
         const smaaPass = new EffectPass(
             this.camera,
             new SMAAEffect({
                 preset: SMAAPreset.MEDIUM,
-            })
+            }),
         );
         this.renderPass.renderToScreen = false;
         this.bloomPass.renderToScreen = false;
@@ -1134,8 +1133,8 @@ class App {
                 new THREE.Vector3(
                     this.camera.position.x + distortion.x,
                     this.camera.position.y + distortion.y,
-                    this.camera.position.z + distortion.z
-                )
+                    this.camera.position.z + distortion.z,
+                ),
             );
             updateCamera = true;
         }
@@ -1192,10 +1191,13 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {} }) => {
     const hyperspeed = useRef<HTMLDivElement>(null);
     const appRef = useRef<App | null>(null);
 
-    const mergedOptions: HyperspeedOptions = useMemo(() => ({
-        ...defaultOptions,
-        ...effectOptions,
-    }), [effectOptions]);
+    const mergedOptions: HyperspeedOptions = useMemo(
+        () => ({
+            ...defaultOptions,
+            ...effectOptions,
+        }),
+        [effectOptions],
+    );
 
     useEffect(() => {
         if (appRef.current) {
@@ -1227,7 +1229,7 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {} }) => {
         };
     }, [mergedOptions]);
 
-    return <div id="lights" className="w-full h-full" ref={hyperspeed}></div>;
+    return <div id="lights" className="w-full h-full" ref={hyperspeed} />;
 };
 
 export default Hyperspeed;

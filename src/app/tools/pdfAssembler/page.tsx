@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { PDFDocument, RotationTypes } from 'pdf-lib';
 import { gsap } from 'gsap';
 import Image from 'next/image';
+import { PDFDocument, RotationTypes } from 'pdf-lib';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // Add PDF.js import
 declare global {
@@ -153,7 +153,7 @@ export default function PdfAssemblerPage() {
                 };
             }
         },
-        []
+        [],
     );
 
     const handleFileUpload = useCallback(
@@ -162,7 +162,7 @@ export default function PdfAssemblerPage() {
 
             // Accept both PDF and image files
             const validFiles = Array.from(uploadedFiles).filter(
-                (file) => file.type === 'application/pdf' || file.type.startsWith('image/')
+                (file) => file.type === 'application/pdf' || file.type.startsWith('image/'),
             );
 
             // Show loading state
@@ -195,11 +195,11 @@ export default function PdfAssemblerPage() {
                 gsap.fromTo(
                     newFileElements,
                     { opacity: 0, y: 20, scale: 0.9 },
-                    { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.7)', stagger: 0.1 }
+                    { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.7)', stagger: 0.1 },
                 );
             }, 100);
         },
-        [generatePreview]
+        [generatePreview],
     );
 
     const handleDrop = useCallback(
@@ -220,7 +220,7 @@ export default function PdfAssemblerPage() {
 
             handleFileUpload(e.dataTransfer.files);
         },
-        [handleFileUpload]
+        [handleFileUpload],
     );
 
     const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -325,7 +325,7 @@ export default function PdfAssemblerPage() {
                 setDragOverFileId(fileId);
             }
         },
-        [draggedFileId]
+        [draggedFileId],
     );
 
     const handleFileDragLeave = useCallback((e: React.DragEvent) => {
@@ -353,7 +353,7 @@ export default function PdfAssemblerPage() {
             setDragOverFileId(null);
             setDraggedFileId(null);
         },
-        [files, moveFile]
+        [files, moveFile],
     );
 
     const rotateFile = useCallback((fileId: string, direction: 'left' | 'right') => {
@@ -377,7 +377,7 @@ export default function PdfAssemblerPage() {
                     return { ...file, rotation: newRotation };
                 }
                 return file;
-            })
+            }),
         );
     }, []);
 
@@ -538,7 +538,7 @@ export default function PdfAssemblerPage() {
                                 duration: 0.8,
                                 ease: 'power2.out',
                             },
-                            '-=0.4'
+                            '-=0.4',
                         );
 
                         if (files.length > 0) {
@@ -550,13 +550,13 @@ export default function PdfAssemblerPage() {
                                     duration: 0.8,
                                     ease: 'power2.out',
                                 },
-                                '-=0.6'
+                                '-=0.6',
                             );
                         }
                     }
                 });
             },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
         );
 
         if (containerRef.current) {
@@ -604,7 +604,7 @@ export default function PdfAssemblerPage() {
                     duration: 0.5,
                     stagger: 0.1,
                     ease: 'power2.out',
-                }
+                },
             );
         }
     }, [files.length, isVisible]);
@@ -674,7 +674,7 @@ export default function PdfAssemblerPage() {
                 totalPages: pageImages.length,
             }));
         },
-        [renderAllPages]
+        [renderAllPages],
     );
 
     // Function to close preview modal
@@ -698,7 +698,7 @@ export default function PdfAssemblerPage() {
                 closePreviewModal();
             }
         },
-        [closePreviewModal]
+        [closePreviewModal],
     );
 
     // Function to navigate pages in modal
@@ -706,7 +706,8 @@ export default function PdfAssemblerPage() {
         setPreviewModal((prev) => {
             if (direction === 'prev' && prev.currentPage > 1) {
                 return { ...prev, currentPage: prev.currentPage - 1 };
-            } else if (direction === 'next' && prev.currentPage < prev.totalPages) {
+            }
+            if (direction === 'next' && prev.currentPage < prev.totalPages) {
                 return { ...prev, currentPage: prev.currentPage + 1 };
             }
             return prev;
@@ -733,7 +734,7 @@ export default function PdfAssemblerPage() {
                         backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
             {/* Preview Modal */}
@@ -846,7 +847,7 @@ export default function PdfAssemblerPage() {
                                             max={previewModal.totalPages}
                                             value={previewModal.currentPage}
                                             onChange={(e) => {
-                                                const page = parseInt(e.target.value);
+                                                const page = Number.parseInt(e.target.value);
                                                 if (page >= 1 && page <= previewModal.totalPages) {
                                                     setPreviewModal((prev) => ({ ...prev, currentPage: page }));
                                                 }
@@ -882,7 +883,7 @@ export default function PdfAssemblerPage() {
                 {/* Title Section */}
                 <div ref={titleRef} className="text-center mb-8">
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Assembleur PDF</h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3"></div>
+                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3" />
                     <p className="text-gray-300 text-lg">Combinez plusieurs fichiers PDF en un seul document</p>
                 </div>
 
@@ -917,7 +918,7 @@ export default function PdfAssemblerPage() {
                         <h3 className="text-xl font-semibold text-white mb-2">Glissez-déposez vos fichiers ici</h3>
                         <p className="text-gray-300 mb-4">PDFs et images (JPEG, PNG, WebP, etc.)</p>
                         <label className="group relative inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-2xl cursor-pointer transition-all duration-300 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                             <span className="relative z-10 flex items-center gap-2">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
@@ -1080,7 +1081,7 @@ export default function PdfAssemblerPage() {
                                                                 </button>
                                                             </>
                                                         )}
-                                                        <div className="w-px h-4 bg-white/20 mx-1"></div>
+                                                        <div className="w-px h-4 bg-white/20 mx-1" />
                                                         <div
                                                             className="p-1.5 text-gray-400 hover:text-gray-300 rounded-lg hover:bg-white/10 transition-all duration-200"
                                                             title="Drag to reorder"
@@ -1374,7 +1375,7 @@ export default function PdfAssemblerPage() {
                                             </div>
                                             <div className="text-xs text-gray-400 uppercase tracking-wide">Pages</div>
                                         </div>
-                                        <div className="w-px h-10 bg-white/20"></div>
+                                        <div className="w-px h-10 bg-white/20" />
                                         <div>
                                             <div className="text-2xl font-bold text-purple-300">
                                                 {(
@@ -1387,7 +1388,7 @@ export default function PdfAssemblerPage() {
                                         </div>
                                         {files.filter((f) => f.type === 'image').length > 0 && (
                                             <>
-                                                <div className="w-px h-10 bg-white/20"></div>
+                                                <div className="w-px h-10 bg-white/20" />
                                                 <div>
                                                     <div className="text-2xl font-bold text-green-300">
                                                         {files.filter((f) => f.type === 'image').length}
@@ -1400,7 +1401,7 @@ export default function PdfAssemblerPage() {
                                         )}
                                         {files.some((f) => (f.rotation ?? 0) > 0) && (
                                             <>
-                                                <div className="w-px h-10 bg-white/20"></div>
+                                                <div className="w-px h-10 bg-white/20" />
                                                 <div>
                                                     <div className="text-2xl font-bold text-orange-300">
                                                         {files.filter((f) => (f.rotation ?? 0) > 0).length}
@@ -1453,7 +1454,7 @@ export default function PdfAssemblerPage() {
                                 disabled={isAssembling}
                                 className="assemble-button group relative bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-8 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-green-500/25 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
                             >
-                                <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
 
                                 {isAssembling ? (
                                     <>

@@ -1,5 +1,5 @@
+import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
-import { Metadata } from 'next';
 
 const montserrat = Montserrat({
     subsets: ['latin'],
@@ -16,5 +16,5 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return <div className={'antialiased bg-black min-h-screen ' + montserrat.className}>{children}</div>;
+    return <div className={`antialiased bg-black min-h-screen ${montserrat.className}`}>{children}</div>;
 }

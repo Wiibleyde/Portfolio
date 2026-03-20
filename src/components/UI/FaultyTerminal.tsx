@@ -1,6 +1,7 @@
-"use client";
-import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
-import React, { useEffect, useRef, useMemo, useCallback } from 'react';
+'use client';
+import { Color, Mesh, Program, Renderer, Triangle } from 'ogl';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 type Vec2 = [number, number];
 
@@ -238,7 +239,7 @@ function hexToRgb(hex: string): [number, number, number] {
             .split('')
             .map((c) => c + c)
             .join('');
-    const num = parseInt(h, 16);
+    const num = Number.parseInt(h, 16);
     return [((num >> 16) & 255) / 255, ((num >> 8) & 255) / 255, (num & 255) / 255];
 }
 
@@ -344,7 +345,7 @@ export default function FaultyTerminal({
             program.uniforms.iResolution.value = new Color(
                 gl.canvas.width,
                 gl.canvas.height,
-                gl.canvas.width / gl.canvas.height
+                gl.canvas.width / gl.canvas.height,
             );
         }
 

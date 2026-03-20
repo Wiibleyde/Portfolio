@@ -1,5 +1,5 @@
 'use client';
-import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
+import { Color, Mesh, Program, Renderer, Triangle } from 'ogl';
 import { useEffect, useRef } from 'react';
 
 const vertexShader = `
@@ -80,7 +80,7 @@ export default function Iridescence({
                 program.uniforms.uResolution.value = new Color(
                     gl.canvas.width,
                     gl.canvas.height,
-                    gl.canvas.width / gl.canvas.height
+                    gl.canvas.width / gl.canvas.height,
                 );
             }
         }

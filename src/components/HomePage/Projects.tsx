@@ -1,22 +1,22 @@
 'use client';
+import { type Project, ProjectType } from '@/types';
+import Me from '@public/img/pp.webp';
+import WeazelNewsLogo from '@public/img/projects/WeazelNews_Logo.png';
+import Bro from '@public/img/projects/bro.png';
+import EveBanner from '@public/img/projects/eve-banner.png';
+import F1 from '@public/img/projects/f1.png';
+import FurutsuGame from '@public/img/projects/furutsugame.png';
 import HopeLogo from '@public/img/projects/hope.png';
 import LexPortLogo from '@public/img/projects/lexport.png';
-import RPlaceLogo from '@public/img/projects/rplace-logo.png';
-import EveBanner from '@public/img/projects/eve-banner.png';
-import WeazelNewsLogo from '@public/img/projects/WeazelNews_Logo.png';
-import Motus from '@public/img/projects/motus.jpg';
-import Twitch from '@public/img/projects/twitch.webp';
-import Bro from '@public/img/projects/bro.png';
-import FurutsuGame from '@public/img/projects/furutsugame.png';
-import Me from '@public/img/pp.webp';
-import F1 from '@public/img/projects/f1.png';
-import SABSLogo from '@public/img/projects/sabs-logo.png';
 import LightManager from '@public/img/projects/light-manager.png';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import Motus from '@public/img/projects/motus.jpg';
+import RPlaceLogo from '@public/img/projects/rplace-logo.png';
+import SABSLogo from '@public/img/projects/sabs-logo.png';
+import Twitch from '@public/img/projects/twitch.webp';
 import { gsap } from 'gsap';
-import { Filter, ChevronLeft, ChevronRight } from 'react-bootstrap-icons';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight, Filter } from 'react-bootstrap-icons';
 import { ProjectCard } from './ProjectCard';
-import { Project, ProjectType } from '@/types';
 
 export function Projects() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -166,7 +166,7 @@ export function Projects() {
 
     // Use displayedFilter for actual filtering to ensure sync with animations
     const filteredProjects = projects.filter(
-        (project) => displayedFilter === 'all' || project.type === displayedFilter
+        (project) => displayedFilter === 'all' || project.type === displayedFilter,
     );
 
     // Calculate how many projects to show at once based on screen size
@@ -260,7 +260,7 @@ export function Projects() {
                                     duration: 0.6,
                                     ease: 'power2.out',
                                 },
-                                '-=0.4'
+                                '-=0.4',
                             )
                             .to(
                                 carouselRef.current,
@@ -270,12 +270,12 @@ export function Projects() {
                                     duration: 0.8,
                                     ease: 'back.out(1.7)',
                                 },
-                                '-=0.3'
+                                '-=0.3',
                             );
                     }
                 });
             },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
         );
 
         if (containerRef.current) {
@@ -324,7 +324,7 @@ export function Projects() {
                 duration: 0.4,
                 ease: 'power2.out',
             },
-            '+=0.05'
+            '+=0.05',
         );
     };
 
@@ -371,14 +371,14 @@ export function Projects() {
                                      linear-gradient(180deg, #374151 1px, transparent 1px)`,
                         backgroundSize: '20px 20px',
                     }}
-                ></div>
+                />
             </div>
 
             <div className="relative z-10 p-6 md:p-8 flex flex-col h-full">
                 {/* Header */}
                 <div ref={titleRef} className="text-center mb-6">
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Mes Projets</h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
+                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full" />
                 </div>
 
                 {/* Filters */}

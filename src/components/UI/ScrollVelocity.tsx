@@ -1,14 +1,15 @@
 'use client';
-import React, { useRef, useLayoutEffect, useState, RefObject } from 'react';
 import {
     motion,
+    useAnimationFrame,
+    useMotionValue,
     useScroll,
     useSpring,
     useTransform,
-    useMotionValue,
     useVelocity,
-    useAnimationFrame,
 } from 'framer-motion';
+import type React from 'react';
+import { type RefObject, useLayoutEffect, useRef, useState } from 'react';
 
 interface VelocityMapping {
     input: [number, number];
@@ -102,7 +103,7 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
             smoothVelocity,
             velocityMapping?.input || [0, 1000],
             velocityMapping?.output || [0, 5],
-            { clamp: false }
+            { clamp: false },
         );
 
         const copyRef = useRef<HTMLSpanElement>(null);

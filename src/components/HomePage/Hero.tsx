@@ -42,7 +42,7 @@ export function Hero() {
                 y: 0,
                 duration: 1.2,
             },
-            '-=0.8'
+            '-=0.8',
         );
 
         // Animate the title with a slight delay
@@ -53,7 +53,7 @@ export function Hero() {
                 y: 0,
                 duration: 1.2,
             },
-            '-=0.9'
+            '-=0.9',
         );
 
         // Animate the button with a slight delay
@@ -64,7 +64,7 @@ export function Hero() {
                 y: 0,
                 duration: 1,
             },
-            '-=0.7'
+            '-=0.7',
         );
 
         // Animate the photo with a slight delay
@@ -76,7 +76,7 @@ export function Hero() {
                 duration: 1.5,
                 delay: 0.2,
             },
-            '-=0.7'
+            '-=0.7',
         );
 
         // Animate the scroll indicator
@@ -87,7 +87,7 @@ export function Hero() {
                 y: 0,
                 duration: 1,
             },
-            '-=0.5'
+            '-=0.5',
         );
 
         // Bouton hover animation
@@ -148,7 +148,7 @@ export function Hero() {
                             className="text-white py-4 px-8 rounded-full border-2 border-white hover:text-black transition-colors duration-400 ease-in-out font-medium tracking-wide relative overflow-hidden group"
                         >
                             <span className="relative z-10">Contactez-moi</span>
-                            <span className="absolute bottom-0 left-0 w-0 h-full bg-white group-hover:w-full transition-all duration-400 ease-in-out -z-1 opacity-80"></span>
+                            <span className="absolute bottom-0 left-0 w-0 h-full bg-white group-hover:w-full transition-all duration-400 ease-in-out -z-1 opacity-80" />
                         </button>
                     </div>
                 </div>
@@ -183,7 +183,7 @@ export function Hero() {
                 <div className="flex flex-col items-center animate-bounce">
                     <span className="text-sm font-medium mb-2 tracking-wide">Lire la suite...</span>
                     <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-                        <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+                        <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse" />
                     </div>
                 </div>
             </div>

@@ -6,12 +6,12 @@ import CatGif from '@public/img/lyp/cat.gif';
 import Image from 'next/image';
 
 enum OsType {
-    Windows,
-    Mac,
-    Linux,
-    Android,
-    IOS,
-    Unknown,
+    Windows = 0,
+    Mac = 1,
+    Linux = 2,
+    Android = 3,
+    IOS = 4,
+    Unknown = 5,
 }
 
 export default function Home() {

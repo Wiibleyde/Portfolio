@@ -1,7 +1,7 @@
 'use client';
-import { Book, Briefcase, Calendar, HeartFill, Icon, CodeSlash } from 'react-bootstrap-icons';
-import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { useEffect, useRef, useState } from 'react';
+import { Book, Briefcase, Calendar, CodeSlash, HeartFill, type Icon } from 'react-bootstrap-icons';
 
 interface Timeline {
     title: string;
@@ -105,13 +105,13 @@ export function Timeline() {
                                     duration: 0.6,
                                     stagger: 0.15,
                                     ease: 'power2.out',
-                                }
+                                },
                             );
                         }
                     }
                 });
             },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
         );
 
         if (timelineRef.current) {
@@ -144,7 +144,7 @@ export function Timeline() {
                         backgroundSize: '20px 20px',
                         backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
                     }}
-                ></div>
+                />
             </div>
             <div className="flex items-center justify-center min-h-screen p-4 relative z-10">
                 <div className="border border-blue-500/30 bg-gradient-to-b from-blue-500/30 to-purple-600/30 rounded-2xl shadow-lg p-8">

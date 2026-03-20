@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import Link from 'next/link';
-import { House, ArrowLeft, Search, Heart } from 'react-bootstrap-icons';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, Heart, House, Search } from 'react-bootstrap-icons';
 
 export default function NotFound() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,7 @@ export default function NotFound() {
                 {
                     opacity: 0,
                     y: 30,
-                }
+                },
             );
 
             // Main animation timeline
@@ -46,7 +46,7 @@ export default function NotFound() {
                         duration: 0.8,
                         ease: 'power2.out',
                     },
-                    '-=0.6'
+                    '-=0.6',
                 )
                 .to(
                     descriptionRef.current,
@@ -56,7 +56,7 @@ export default function NotFound() {
                         duration: 0.8,
                         ease: 'power2.out',
                     },
-                    '-=0.4'
+                    '-=0.4',
                 )
                 .to(
                     buttonsRef.current,
@@ -66,7 +66,7 @@ export default function NotFound() {
                         duration: 0.8,
                         ease: 'back.out(1.7)',
                     },
-                    '-=0.3'
+                    '-=0.3',
                 )
                 .to(
                     quoteRef.current,
@@ -76,7 +76,7 @@ export default function NotFound() {
                         duration: 0.8,
                         ease: 'power2.out',
                     },
-                    '-=0.2'
+                    '-=0.2',
                 );
 
             // Floating animation for buttons
@@ -136,7 +136,7 @@ export default function NotFound() {
                         backgroundImage: `radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), 
                                      radial-gradient(circle at 80% 20%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
             <div ref={containerRef} className="relative z-10 max-w-4xl mx-auto px-6 text-center">
@@ -165,7 +165,7 @@ export default function NotFound() {
                         href="/"
                         className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                         <House className="w-5 h-5 relative z-10" />
                         <span className="relative z-10">Retour à l&apos;accueil</span>
                     </Link>
@@ -174,7 +174,7 @@ export default function NotFound() {
                         onClick={() => router.back()}
                         className="group relative bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-semibold py-3 px-8 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-gray-500/25 transform hover:scale-105"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-gray-400 to-gray-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-gray-400 to-gray-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                         <ArrowLeft className="w-5 h-5 relative z-10" />
                         <span className="relative z-10">Page précédente</span>
                     </button>
@@ -184,8 +184,8 @@ export default function NotFound() {
                 <blockquote ref={quoteRef} className="relative w-full max-w-2xl mx-auto">
                     <div className="relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl overflow-hidden">
                         {/* Decorative background elements */}
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
-                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-500/15 to-blue-500/15 rounded-full blur-2xl translate-y-12 -translate-x-12"></div>
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl -translate-y-16 translate-x-16" />
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-500/15 to-blue-500/15 rounded-full blur-2xl translate-y-12 -translate-x-12" />
 
                         {/* Quote content */}
                         <div className="relative z-10">
@@ -195,11 +195,11 @@ export default function NotFound() {
 
                             {/* Author section */}
                             <div className="flex items-center justify-center gap-3">
-                                <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+                                <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
                                 <cite className="text-blue-400 text-base font-semibold not-italic tracking-wide">
                                     Philosophie du développement
                                 </cite>
-                                <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+                                <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
                             </div>
                         </div>
                     </div>
