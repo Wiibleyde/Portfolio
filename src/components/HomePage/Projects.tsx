@@ -1,7 +1,5 @@
 'use client';
-import { type Project, ProjectType } from '@/types';
 import Me from '@public/img/pp.webp';
-import WeazelNewsLogo from '@public/img/projects/WeazelNews_Logo.png';
 import Bro from '@public/img/projects/bro.png';
 import EveBanner from '@public/img/projects/eve-banner.png';
 import F1 from '@public/img/projects/f1.png';
@@ -13,9 +11,11 @@ import Motus from '@public/img/projects/motus.jpg';
 import RPlaceLogo from '@public/img/projects/rplace-logo.png';
 import SABSLogo from '@public/img/projects/sabs-logo.png';
 import Twitch from '@public/img/projects/twitch.webp';
+import WeazelNewsLogo from '@public/img/projects/WeazelNews_Logo.png';
 import { gsap } from 'gsap';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Filter } from 'react-bootstrap-icons';
+import { type Project, ProjectType } from '@/types';
 import { ProjectCard } from './ProjectCard';
 
 export function Projects() {

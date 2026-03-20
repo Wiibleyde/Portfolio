@@ -1,10 +1,10 @@
 'use client';
-import { useScroll } from '@/hooks/useScroll';
 import Background from '@public/img/background.jpg';
 import Me from '@public/img/pp.webp';
 import gsap from 'gsap';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
+import { useScroll } from '@/hooks/useScroll';
 
 export function Hero() {
     // References to elements we want to animate
@@ -171,9 +171,8 @@ export function Hero() {
                         <Image
                             src={Me}
                             alt="Nathan Bonnell"
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            className="rounded-lg"
+                            className="rounded-lg object-cover"
+                            style={{ width: '100%', height: 'auto' }}
                             priority
                         />
                     </div>

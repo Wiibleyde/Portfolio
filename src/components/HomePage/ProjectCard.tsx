@@ -1,9 +1,9 @@
 'use client';
-import { type Project, ProjectType } from '@/types';
 import { gsap } from 'gsap';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BoxArrowUpRight, Github } from 'react-bootstrap-icons';
+import { type Project, ProjectType } from '@/types';
 import { RichDescription } from './RichDescription';
 
 interface ProjectCardProps {
@@ -203,7 +203,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         >
             {/* Image */}
             <div className="relative h-48 overflow-hidden rounded-t-2xl">
-                <Image src={project.image} alt={project.title} fill className="object-cover" />
+                <Image src={project.image} alt={project.title} fill sizes="320px" className="object-cover" />
                 <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
 
                 {/* Type badge */}

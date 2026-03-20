@@ -329,7 +329,7 @@ export default function PdfAssemblerPage() {
         }, 0);
     }, []);
 
-    const handleFileDragEnd = useCallback((e: React.DragEvent, fileId: string) => {
+    const handleFileDragEnd = useCallback((_e: React.DragEvent, fileId: string) => {
         setDraggedFileId(null);
         setDragOverFileId(null);
 

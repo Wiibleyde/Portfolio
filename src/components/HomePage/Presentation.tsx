@@ -352,7 +352,7 @@ export function Presentation() {
                                         onClick={handlePreviewCV}
                                     >
                                         {/* Animated background overlay */}
-                                        <div className="absolute inset-0 translate-x-[-100%] bg-linear-to-r from-white/0 via-white/10 to-white/0 transition-transform duration-700 ease-in-out group-hover:translate-x-[100%]" />
+                                        <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-white/0 via-white/10 to-white/0 transition-transform duration-700 ease-in-out group-hover:translate-x-full" />
 
                                         {/* Glow effect */}
                                         <div className="-z-10 absolute inset-0 rounded-xl bg-linear-to-r from-blue-400/50 to-purple-400/50 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-70" />
@@ -393,7 +393,7 @@ export function Presentation() {
                                         onClick={handleDownloadCV}
                                     >
                                         {/* Animated background overlay */}
-                                        <div className="absolute inset-0 translate-x-[-100%] bg-linear-to-r from-white/0 via-white/10 to-white/0 transition-transform duration-700 ease-in-out group-hover:translate-x-[100%]" />
+                                        <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-white/0 via-white/10 to-white/0 transition-transform duration-700 ease-in-out group-hover:translate-x-full" />
 
                                         {/* Glow effect */}
                                         <div className="-z-10 absolute inset-0 rounded-xl bg-linear-to-r from-emerald-400/50 to-teal-400/50 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-70" />

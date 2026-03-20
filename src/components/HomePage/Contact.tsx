@@ -1,8 +1,8 @@
 'use client';
-import { verifyCaptchaAction } from '@/captcha';
 import { gsap } from 'gsap';
 import { useEffect, useRef, useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { verifyCaptchaAction } from '@/captcha';
 
 interface FormData {
     name: string;
