@@ -1,26 +1,20 @@
-import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import type { Metadata } from 'next';
+import { Montserrat } from 'next/font/google';
 
 const montserrat = Montserrat({
-	subsets: ["latin"],
-	display: "swap",
+    subsets: ['latin'],
+    display: 'swap',
 });
 
 export const metadata: Metadata = {
-	title: "LOCK YOUR COMPUTER",
-	description: "LOCK YOUR COMPUTER",
+    title: 'LOCK YOUR COMPUTER',
+    description: 'LOCK YOUR COMPUTER',
 };
 
 export default async function RootLayout({
-	children,
+    children,
 }: Readonly<{
-	children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-	return (
-		<div
-			className={`antialiased bg-black min-h-screen ${montserrat.className}`}
-		>
-			{children}
-		</div>
-	);
+    return <div className={`min-h-screen bg-black antialiased ${montserrat.className}`}>{children}</div>;
 }

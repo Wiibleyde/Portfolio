@@ -1,5 +1,5 @@
 {
-    "tab_size": 2,
+    "tab_size": 4,
     "languages": {
         "JavaScript": {
             "formatter": { "language_server": { "name": "biome" } },
