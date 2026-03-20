@@ -15,6 +15,7 @@ import WeazelNewsLogo from '@public/img/projects/WeazelNews_Logo.png';
 import { gsap } from 'gsap';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Filter } from 'react-bootstrap-icons';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { type Project, ProjectType } from '@/types';
 import { ProjectCard } from './ProjectCard';
 
@@ -24,7 +25,6 @@ export function Projects() {
     const filtersRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
     const [activeFilter, setActiveFilter] = useState<ProjectType | 'all'>('all');
     const [displayedFilter, setDisplayedFilter] = useState<ProjectType | 'all'>('all'); // Filter actually shown
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -225,65 +225,19 @@ export function Projects() {
         }
     }, [currentIndex, isAnimating]);
 
+    const isVisible = useScrollAnimation(containerRef, () => {
+        const tl = gsap.timeline({ delay: 0.2 });
+        tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' })
+            .to(filtersRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4')
+            .to(carouselRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'back.out(1.7)' }, '-=0.3');
+    });
+
     // Initial setup - set all elements to invisible
     useEffect(() => {
         if (titleRef.current && filtersRef.current && carouselRef.current) {
-            gsap.set([titleRef.current, filtersRef.current, carouselRef.current], {
-                opacity: 0,
-                y: 30,
-            });
+            gsap.set([titleRef.current, filtersRef.current, carouselRef.current], { opacity: 0, y: 30 });
         }
     }, []);
-
-    // Intersection Observer for initial animations
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !isVisible) {
-                        setIsVisible(true);
-
-                        // Create main timeline for initial appearance
-                        const tl = gsap.timeline({ delay: 0.2 });
-
-                        tl.to(titleRef.current, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.8,
-                            ease: 'power2.out',
-                        })
-                            .to(
-                                filtersRef.current,
-                                {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.6,
-                                    ease: 'power2.out',
-                                },
-                                '-=0.4',
-                            )
-                            .to(
-                                carouselRef.current,
-                                {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.8,
-                                    ease: 'back.out(1.7)',
-                                },
-                                '-=0.3',
-                            );
-                    }
-                });
-            },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
-        );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        return () => observer.disconnect();
-    }, [isVisible]);
 
     const handleFilterChange = (filter: ProjectType | 'all') => {
         if (isAnimating || filter === activeFilter) return;

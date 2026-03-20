@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { useEffect, useRef, useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { verifyCaptchaAction } from '@/captcha';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface FormData {
     name: string;
@@ -22,11 +23,24 @@ export function Contact() {
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const { executeRecaptcha } = useGoogleReCaptcha();
+
+    useScrollAnimation(containerRef, () => {
+        const tl = gsap.timeline({ delay: 0.2 });
+        tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }).to(
+            formRef.current,
+            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+            '-=0.4',
+        );
+    });
+
+    // Set initial state
+    useEffect(() => {
+        gsap.set([titleRef.current, formRef.current], { opacity: 0, y: 50 });
+    }, []);
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -122,54 +136,6 @@ export function Contact() {
             setErrors((prev) => ({ ...prev, [name]: undefined }));
         }
     };
-
-    // Animation on scroll
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !isVisible) {
-                        setIsVisible(true);
-
-                        const tl = gsap.timeline({ delay: 0.2 });
-
-                        tl.to(titleRef.current, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.8,
-                            ease: 'power2.out',
-                        }).to(
-                            formRef.current,
-                            {
-                                opacity: 1,
-                                y: 0,
-                                duration: 0.8,
-                                ease: 'power2.out',
-                            },
-                            '-=0.4',
-                        );
-                    }
-                });
-            },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
-        );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [isVisible]);
-
-    // Set initial state
-    useEffect(() => {
-        gsap.set([titleRef.current, formRef.current], {
-            opacity: 0,
-            y: 50,
-        });
-    }, []);
 
     // Reset success message after 5 seconds
     useEffect(() => {

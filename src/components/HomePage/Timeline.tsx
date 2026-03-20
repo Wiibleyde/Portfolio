@@ -1,7 +1,8 @@
 'use client';
 import { gsap } from 'gsap';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Book, Briefcase, Calendar, CodeSlash, HeartFill, type Icon } from 'react-bootstrap-icons';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface Timeline {
     title: string;
@@ -17,7 +18,6 @@ interface Timeline {
 
 export function Timeline() {
     const timelineRef = useRef<HTMLOListElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
     const data: Timeline[] = [
         {
             title: 'Développeur Full Stack (alternance)',
@@ -87,41 +87,16 @@ export function Timeline() {
         },
     ];
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !isVisible) {
-                        setIsVisible(true);
-
-                        const items = timelineRef.current?.querySelectorAll('.timeline-item');
-                        if (items) {
-                            gsap.fromTo(
-                                items,
-                                { opacity: 0, y: 50 },
-                                {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.6,
-                                    stagger: 0.15,
-                                    ease: 'power2.out',
-                                },
-                            );
-                        }
-                    }
-                });
-            },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
-        );
-
-        if (timelineRef.current) {
-            observer.observe(timelineRef.current);
+    useScrollAnimation(timelineRef, () => {
+        const items = timelineRef.current?.querySelectorAll('.timeline-item');
+        if (items) {
+            gsap.fromTo(
+                items,
+                { opacity: 0, y: 50 },
+                { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: 'power2.out' },
+            );
         }
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [isVisible]);
+    });
 
     // Set initial state
     useEffect(() => {

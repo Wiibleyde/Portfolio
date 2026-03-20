@@ -1,6 +1,7 @@
 'use client';
 import { gsap } from 'gsap';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 export function Presentation() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -10,7 +11,6 @@ export function Presentation() {
     const cvRef = useRef<HTMLElement>(null);
     const modalRef = useRef<HTMLDivElement>(null);
     const modalContentRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
     const [age, setAge] = useState(0);
     const [daysUntilBirthday, setDaysUntilBirthday] = useState(0);
     const [showPreview, setShowPreview] = useState(false);
@@ -52,73 +52,17 @@ export function Presentation() {
         return () => clearInterval(interval);
     }, [calculateAgeAndCountdown]);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !isVisible) {
-                        setIsVisible(true);
-
-                        // Main timeline
-                        const tl = gsap.timeline({ delay: 0.2 });
-
-                        tl.to(descriptionRef.current, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.8,
-                            ease: 'power2.out',
-                        })
-                            .to(
-                                quoteRef.current,
-                                {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.8,
-                                    ease: 'power2.out',
-                                },
-                                '-=0.4',
-                            )
-                            .to(
-                                birthRef.current,
-                                {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.6,
-                                    ease: 'back.out(1.7)',
-                                },
-                                '-=0.3',
-                            )
-                            .to(
-                                cvRef.current,
-                                {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.6,
-                                    ease: 'elastic.out(1, 0.5)',
-                                },
-                                '-=0.2',
-                            );
-                    }
-                });
-            },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
-        );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [isVisible]);
+    useScrollAnimation(containerRef, () => {
+        const tl = gsap.timeline({ delay: 0.2 });
+        tl.to(descriptionRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' })
+            .to(quoteRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.4')
+            .to(birthRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.7)' }, '-=0.3')
+            .to(cvRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' }, '-=0.2');
+    });
 
     // Set initial state
     useEffect(() => {
-        gsap.set([quoteRef.current, descriptionRef.current, birthRef.current, cvRef.current], {
-            opacity: 0,
-            y: 50,
-        });
+        gsap.set([quoteRef.current, descriptionRef.current, birthRef.current, cvRef.current], { opacity: 0, y: 50 });
     }, []);
 
     const handleDownloadCV = () => {

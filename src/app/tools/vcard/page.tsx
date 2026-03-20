@@ -3,30 +3,10 @@ import { gsap } from 'gsap';
 import QrCodeWithLogo from 'qrcode-with-logos';
 import type { BaseOptions, CornerType, DotType } from 'qrcode-with-logos/types/src/core/types';
 import { useEffect, useRef, useState } from 'react';
-
-const dotTypes: DotType[] = [
-    'dot',
-    'dot-small',
-    'tile',
-    'rounded',
-    'square',
-    'diamond',
-    'star',
-    'fluid',
-    'fluid-line',
-    'stripe',
-    'stripe-row',
-    'stripe-column',
-];
-const cornerTypes: CornerType[] = [
-    'square',
-    'rounded',
-    'circle',
-    'rounded-circle',
-    'circle-rounded',
-    'circle-star',
-    'circle-diamond',
-];
+import { QrCodeOptionsPanel } from '@/components/tools/QrCodeOptionsPanel';
+import { ToolPageLayout } from '@/components/tools/ToolPageLayout';
+import { useQrCodeOptions } from '@/hooks/useQrCodeOptions';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface VCardData {
     firstName: string;
@@ -42,16 +22,35 @@ interface VCardData {
     country: string;
 }
 
+const INPUT_CLASS =
+    'w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400';
+const LABEL_CLASS = 'mb-2 block font-medium text-gray-200 text-sm';
+
+function generateVCardString(data: VCardData): string {
+    let vcard = 'BEGIN:VCARD\nVERSION:3.0\n';
+    if (data.firstName || data.lastName) {
+        vcard += `FN:${data.firstName} ${data.lastName}\n`;
+        vcard += `N:${data.lastName};${data.firstName};;;\n`;
+    }
+    if (data.organization) vcard += `ORG:${data.organization}\n`;
+    if (data.title) vcard += `TITLE:${data.title}\n`;
+    if (data.phone) vcard += `TEL:${data.phone}\n`;
+    if (data.email) vcard += `EMAIL:${data.email}\n`;
+    if (data.website) vcard += `URL:${data.website}\n`;
+    if (data.address || data.city || data.postalCode || data.country) {
+        vcard += `ADR:;;${data.address};${data.city};;${data.postalCode};${data.country}\n`;
+    }
+    vcard += 'END:VCARD';
+    return vcard;
+}
+
 export default function VCardPage() {
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
     const formRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [hasGenerated, setHasGenerated] = useState(false);
-
-    // VCard data
     const [vCardData, setVCardData] = useState<VCardData>({
         firstName: '',
         lastName: '',
@@ -66,102 +65,56 @@ export default function VCardPage() {
         country: '',
     });
 
-    // QR Code customization options
-    const [logo, setLogo] = useState<string>('');
-    const [dotType, setDotType] = useState<string>('rounded');
-    const [cornerType, setCornerType] = useState<string>('rounded');
-    const [dotColor, setDotColor] = useState<string>('#1e40af');
-    const [cornerColor, setCornerColor] = useState<string>('#1e40af');
-    const [lightColor, setLightColor] = useState<string>('#FFFFFF');
+    const qrOptions = useQrCodeOptions({
+        dotType: 'rounded',
+        cornerType: 'rounded',
+        dotColor: '#1e40af',
+        cornerColor: '#1e40af',
+    });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setVCardData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setLogo(reader.result as string);
-            };
-            reader.readAsDataURL(file);
+    useScrollAnimation(containerRef, () => {
+        const tl = gsap.timeline({ delay: 0.2 });
+        tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' })
+            .to(formRef.current, { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' }, '-=0.4')
+            .to(canvasRef.current, { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6');
+
+        const formFields = formRef.current?.querySelectorAll('.form-field');
+        if (formFields) {
+            gsap.fromTo(
+                formFields,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, delay: 1, ease: 'power2.out' },
+            );
         }
-    };
+    });
 
-    const generateVCardString = (): string => {
-        let vcard = 'BEGIN:VCARD\nVERSION:3.0\n';
-
-        if (vCardData.firstName || vCardData.lastName) {
-            vcard += `FN:${vCardData.firstName} ${vCardData.lastName}\n`;
-            vcard += `N:${vCardData.lastName};${vCardData.firstName};;;\n`;
-        }
-
-        if (vCardData.organization) {
-            vcard += `ORG:${vCardData.organization}\n`;
-        }
-
-        if (vCardData.title) {
-            vcard += `TITLE:${vCardData.title}\n`;
-        }
-
-        if (vCardData.phone) {
-            vcard += `TEL:${vCardData.phone}\n`;
-        }
-
-        if (vCardData.email) {
-            vcard += `EMAIL:${vCardData.email}\n`;
-        }
-
-        if (vCardData.website) {
-            vcard += `URL:${vCardData.website}\n`;
-        }
-
-        if (vCardData.address || vCardData.city || vCardData.postalCode || vCardData.country) {
-            vcard += `ADR:;;${vCardData.address};${vCardData.city};;${vCardData.postalCode};${vCardData.country}\n`;
-        }
-
-        vcard += 'END:VCARD';
-        return vcard;
-    };
+    useEffect(() => {
+        gsap.set(titleRef.current, { opacity: 0, y: 50 });
+        gsap.set(formRef.current, { opacity: 0, x: -50 });
+        gsap.set(canvasRef.current, { opacity: 0, x: 50 });
+        gsap.set(document.querySelectorAll('.form-field'), { opacity: 0, y: 20 });
+    }, []);
 
     const handleGenerateVCard = async () => {
         if (!vCardData.firstName && !vCardData.lastName) return;
-
         setIsGenerating(true);
 
-        // Animation du bouton pendant la génération
         const button = document.querySelector('.generate-button');
-        if (button) {
-            gsap.to(button, {
-                scale: 0.95,
-                duration: 0.1,
-                yoyo: true,
-                repeat: 1,
-            });
-        }
+        if (button) gsap.to(button, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
 
         try {
-            const vCardString = generateVCardString();
-
             const qrCodeOptions: BaseOptions = {
-                content: vCardString,
+                content: generateVCardString(vCardData),
                 width: 900,
-                nodeQrCodeOptions: {
-                    color: {
-                        light: lightColor,
-                    },
-                },
-                dotsOptions: {
-                    type: dotType as DotType,
-                    color: dotColor,
-                },
-                cornersOptions: {
-                    type: cornerType as CornerType,
-                    color: cornerColor,
-                },
-                logo: logo ? { src: logo, logoRadius: 1 } : undefined,
+                nodeQrCodeOptions: { color: { light: qrOptions.lightColor } },
+                dotsOptions: { type: qrOptions.dotType as DotType, color: qrOptions.dotColor },
+                cornersOptions: { type: qrOptions.cornerType as CornerType, color: qrOptions.cornerColor },
+                logo: qrOptions.logo ? { src: qrOptions.logo, logoRadius: 1 } : undefined,
             };
 
             const qrCode = new QrCodeWithLogo(qrCodeOptions);
@@ -177,23 +130,12 @@ export default function VCardPage() {
             img.onload = () => {
                 if (context) {
                     context.drawImage(img, 0, 0, 500, 500);
-
-                    // Animation du canvas après génération
                     gsap.fromTo(
                         canvas,
                         { scale: 0.8, opacity: 0, rotation: 5 },
-                        {
-                            scale: 1,
-                            opacity: 1,
-                            rotation: 0,
-                            duration: 0.6,
-                            ease: 'back.out(1.7)',
-                        },
+                        { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.7)' },
                     );
-
-                    if (!hasGenerated) {
-                        setHasGenerated(true);
-                    }
+                    if (!hasGenerated) setHasGenerated(true);
                 }
                 setIsGenerating(false);
             };
@@ -203,110 +145,10 @@ export default function VCardPage() {
         }
     };
 
-    // Animation on scroll
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !isVisible) {
-                        setIsVisible(true);
-
-                        const tl = gsap.timeline({ delay: 0.2 });
-
-                        tl.to(titleRef.current, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.8,
-                            ease: 'power2.out',
-                        })
-                            .to(
-                                formRef.current,
-                                {
-                                    opacity: 1,
-                                    x: 0,
-                                    duration: 0.8,
-                                    ease: 'power2.out',
-                                },
-                                '-=0.4',
-                            )
-                            .to(
-                                canvasRef.current,
-                                {
-                                    opacity: 1,
-                                    x: 0,
-                                    duration: 0.8,
-                                    ease: 'power2.out',
-                                },
-                                '-=0.6',
-                            );
-
-                        // Animation des champs du formulaire
-                        const formFields = formRef.current?.querySelectorAll('.form-field');
-                        if (formFields) {
-                            gsap.fromTo(
-                                formFields,
-                                { opacity: 0, y: 20 },
-                                {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.5,
-                                    stagger: 0.1,
-                                    delay: 1,
-                                    ease: 'power2.out',
-                                },
-                            );
-                        }
-                    }
-                });
-            },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' },
-        );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [isVisible]);
-
-    // Set initial state
-    useEffect(() => {
-        gsap.set([titleRef.current], {
-            opacity: 0,
-            y: 50,
-        });
-
-        gsap.set([formRef.current], {
-            opacity: 0,
-            x: -50,
-        });
-
-        gsap.set([canvasRef.current], {
-            opacity: 0,
-            x: 50,
-        });
-
-        // Set initial state for form fields
-        const formFields = document.querySelectorAll('.form-field');
-        gsap.set(formFields, { opacity: 0, y: 20 });
-    }, []);
-
-    // Animation pour le téléchargement du QR code
     const handleDownloadVCard = () => {
         const canvas = document.getElementById('vcardCanvas') as HTMLCanvasElement;
         if (canvas && hasGenerated) {
-            // Animation du canvas
-            gsap.to(canvas, {
-                scale: 1.05,
-                duration: 0.1,
-                yoyo: true,
-                repeat: 1,
-                ease: 'power2.inOut',
-            });
-
-            // Télécharger l'image
+            gsap.to(canvas, { scale: 1.05, duration: 0.1, yoyo: true, repeat: 1, ease: 'power2.inOut' });
             const link = document.createElement('a');
             link.download = 'vcard-qrcode.png';
             link.href = canvas.toDataURL();
@@ -314,26 +156,12 @@ export default function VCardPage() {
         }
     };
 
-    const isFormValid = vCardData.firstName.trim() || vCardData.lastName.trim();
+    const isFormValid = !!(vCardData.firstName.trim() || vCardData.lastName.trim());
 
     return (
-        <div
-            ref={containerRef}
-            className="relative min-h-screen bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12"
-        >
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-10">
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%),
-                                     radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
-                    }}
-                />
-            </div>
-
-            <div className="relative z-10 mx-auto max-w-7xl px-6">
-                {/* Title Section */}
+        <ToolPageLayout>
+            <div ref={containerRef} className="mx-auto max-w-7xl px-6">
+                {/* Title */}
                 <div ref={titleRef} className="mb-8 text-center">
                     <h2 className="mb-3 font-bold text-3xl text-white md:text-4xl">Générateur de VCard</h2>
                     <div className="mx-auto mb-3 h-1 w-20 rounded-full bg-linear-to-r from-blue-500 to-purple-600" />
@@ -341,7 +169,7 @@ export default function VCardPage() {
                 </div>
 
                 <div className="grid items-start gap-8 lg:grid-cols-2">
-                    {/* Form Section */}
+                    {/* Form */}
                     <div
                         ref={formRef}
                         className="rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 p-6 shadow-2xl backdrop-blur-md md:p-8"
@@ -365,10 +193,9 @@ export default function VCardPage() {
                         </h3>
 
                         <form className="space-y-5">
-                            {/* Name Fields */}
                             <div className="form-field grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div>
-                                    <label htmlFor="firstName" className="mb-2 block font-medium text-gray-200 text-sm">
+                                    <label htmlFor="firstName" className={LABEL_CLASS}>
                                         Prénom *
                                     </label>
                                     <input
@@ -377,12 +204,12 @@ export default function VCardPage() {
                                         name="firstName"
                                         value={vCardData.firstName}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="John"
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="lastName" className="mb-2 block font-medium text-gray-200 text-sm">
+                                    <label htmlFor="lastName" className={LABEL_CLASS}>
                                         Nom *
                                     </label>
                                     <input
@@ -391,19 +218,15 @@ export default function VCardPage() {
                                         name="lastName"
                                         value={vCardData.lastName}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="Doe"
                                     />
                                 </div>
                             </div>
 
-                            {/* Professional Info */}
                             <div className="form-field grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div>
-                                    <label
-                                        htmlFor="organization"
-                                        className="mb-2 block font-medium text-gray-200 text-sm"
-                                    >
+                                    <label htmlFor="organization" className={LABEL_CLASS}>
                                         Entreprise
                                     </label>
                                     <input
@@ -412,12 +235,12 @@ export default function VCardPage() {
                                         name="organization"
                                         value={vCardData.organization}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="Mon Entreprise"
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="title" className="mb-2 block font-medium text-gray-200 text-sm">
+                                    <label htmlFor="title" className={LABEL_CLASS}>
                                         Titre/Poste
                                     </label>
                                     <input
@@ -426,16 +249,15 @@ export default function VCardPage() {
                                         name="title"
                                         value={vCardData.title}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="Développeur"
                                     />
                                 </div>
                             </div>
 
-                            {/* Contact Info */}
                             <div className="form-field grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div>
-                                    <label htmlFor="phone" className="mb-2 block font-medium text-gray-200 text-sm">
+                                    <label htmlFor="phone" className={LABEL_CLASS}>
                                         Téléphone
                                     </label>
                                     <input
@@ -444,12 +266,12 @@ export default function VCardPage() {
                                         name="phone"
                                         value={vCardData.phone}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="+33 6 12 34 56 78"
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="email" className="mb-2 block font-medium text-gray-200 text-sm">
+                                    <label htmlFor="email" className={LABEL_CLASS}>
                                         Email
                                     </label>
                                     <input
@@ -458,15 +280,14 @@ export default function VCardPage() {
                                         name="email"
                                         value={vCardData.email}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="john.doe@exemple.com"
                                     />
                                 </div>
                             </div>
 
-                            {/* Website */}
                             <div className="form-field">
-                                <label htmlFor="website" className="mb-2 block font-medium text-gray-200 text-sm">
+                                <label htmlFor="website" className={LABEL_CLASS}>
                                     Site web
                                 </label>
                                 <input
@@ -475,14 +296,13 @@ export default function VCardPage() {
                                     name="website"
                                     value={vCardData.website}
                                     onChange={handleInputChange}
-                                    className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                    className={INPUT_CLASS}
                                     placeholder="https://monsite.com"
                                 />
                             </div>
 
-                            {/* Address */}
                             <div className="form-field">
-                                <label htmlFor="address" className="mb-2 block font-medium text-gray-200 text-sm">
+                                <label htmlFor="address" className={LABEL_CLASS}>
                                     Adresse
                                 </label>
                                 <input
@@ -491,15 +311,14 @@ export default function VCardPage() {
                                     name="address"
                                     value={vCardData.address}
                                     onChange={handleInputChange}
-                                    className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                    className={INPUT_CLASS}
                                     placeholder="123 Rue de la Paix"
                                 />
                             </div>
 
-                            {/* City, Postal Code, Country */}
                             <div className="form-field grid grid-cols-1 gap-4 md:grid-cols-3">
                                 <div>
-                                    <label htmlFor="city" className="mb-2 block font-medium text-gray-200 text-sm">
+                                    <label htmlFor="city" className={LABEL_CLASS}>
                                         Ville
                                     </label>
                                     <input
@@ -508,15 +327,12 @@ export default function VCardPage() {
                                         name="city"
                                         value={vCardData.city}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="Paris"
                                     />
                                 </div>
                                 <div>
-                                    <label
-                                        htmlFor="postalCode"
-                                        className="mb-2 block font-medium text-gray-200 text-sm"
-                                    >
+                                    <label htmlFor="postalCode" className={LABEL_CLASS}>
                                         Code postal
                                     </label>
                                     <input
@@ -525,12 +341,12 @@ export default function VCardPage() {
                                         name="postalCode"
                                         value={vCardData.postalCode}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="75001"
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="country" className="mb-2 block font-medium text-gray-200 text-sm">
+                                    <label htmlFor="country" className={LABEL_CLASS}>
                                         Pays
                                     </label>
                                     <input
@@ -539,13 +355,13 @@ export default function VCardPage() {
                                         name="country"
                                         value={vCardData.country}
                                         onChange={handleInputChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                        className={INPUT_CLASS}
                                         placeholder="France"
                                     />
                                 </div>
                             </div>
 
-                            {/* QR Code Customization Section */}
+                            {/* QR Customization */}
                             <div className="form-field border-white/20 border-t pt-5">
                                 <h4 className="mb-4 flex items-center gap-2 font-semibold text-lg text-white">
                                     <svg
@@ -564,118 +380,9 @@ export default function VCardPage() {
                                     </svg>
                                     Personnalisation du QR Code
                                 </h4>
-
-                                {/* Logo Upload */}
-                                <div className="mb-4">
-                                    <label htmlFor="logo" className="mb-2 block font-medium text-gray-200 text-sm">
-                                        Logo (optionnel)
-                                    </label>
-                                    <input
-                                        type="file"
-                                        id="logo"
-                                        accept="image/*"
-                                        onChange={handleLogoChange}
-                                        className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:font-medium file:text-white file:transition-colors hover:file:bg-blue-700"
-                                    />
-                                </div>
-
-                                {/* Dot Type and Color */}
-                                <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    <div>
-                                        <label
-                                            htmlFor="dotType"
-                                            className="mb-2 block font-medium text-gray-200 text-sm"
-                                        >
-                                            Type de point
-                                        </label>
-                                        <select
-                                            id="dotType"
-                                            value={dotType}
-                                            onChange={(e) => setDotType(e.target.value)}
-                                            className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                                        >
-                                            {dotTypes.map((type) => (
-                                                <option key={type} value={type} className="bg-gray-800">
-                                                    {type}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label
-                                            htmlFor="dotColor"
-                                            className="mb-2 block font-medium text-gray-200 text-sm"
-                                        >
-                                            Couleur du point
-                                        </label>
-                                        <input
-                                            type="color"
-                                            id="dotColor"
-                                            value={dotColor}
-                                            onChange={(e) => setDotColor(e.target.value)}
-                                            className="h-12 w-full cursor-pointer rounded-xl border border-white/20 bg-white/10 px-2 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Corner Type and Color */}
-                                <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    <div>
-                                        <label
-                                            htmlFor="cornerType"
-                                            className="mb-2 block font-medium text-gray-200 text-sm"
-                                        >
-                                            Type de coin
-                                        </label>
-                                        <select
-                                            id="cornerType"
-                                            value={cornerType}
-                                            onChange={(e) => setCornerType(e.target.value)}
-                                            className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                                        >
-                                            {cornerTypes.map((type) => (
-                                                <option key={type} value={type} className="bg-gray-800">
-                                                    {type}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label
-                                            htmlFor="cornerColor"
-                                            className="mb-2 block font-medium text-gray-200 text-sm"
-                                        >
-                                            Couleur du coin
-                                        </label>
-                                        <input
-                                            type="color"
-                                            id="cornerColor"
-                                            value={cornerColor}
-                                            onChange={(e) => setCornerColor(e.target.value)}
-                                            className="h-12 w-full cursor-pointer rounded-xl border border-white/20 bg-white/10 px-2 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Background Color */}
-                                <div>
-                                    <label
-                                        htmlFor="lightColor"
-                                        className="mb-2 block font-medium text-gray-200 text-sm"
-                                    >
-                                        Couleur de fond
-                                    </label>
-                                    <input
-                                        type="color"
-                                        id="lightColor"
-                                        value={lightColor}
-                                        onChange={(e) => setLightColor(e.target.value)}
-                                        className="h-12 w-full cursor-pointer rounded-xl border border-white/20 bg-white/10 px-2 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                                    />
-                                </div>
+                                <QrCodeOptionsPanel options={qrOptions} />
                             </div>
 
-                            {/* Generate Button */}
                             <div className="pt-4">
                                 <button
                                     type="button"
@@ -684,7 +391,6 @@ export default function VCardPage() {
                                     className="generate-button group relative flex w-full transform items-center justify-center gap-3 rounded-2xl bg-linear-to-r from-blue-600 to-purple-600 px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-purple-700 hover:shadow-blue-500/25 disabled:scale-100 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700"
                                 >
                                     <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-blue-400 to-purple-400 opacity-0 blur transition-opacity duration-300 group-hover:opacity-30" />
-
                                     {isGenerating ? (
                                         <>
                                             <svg
@@ -727,7 +433,7 @@ export default function VCardPage() {
                         </form>
                     </div>
 
-                    {/* VCard Display Section */}
+                    {/* Preview */}
                     <div
                         ref={canvasRef}
                         className="rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 p-6 shadow-2xl backdrop-blur-md md:p-8"
@@ -755,7 +461,6 @@ export default function VCardPage() {
                             </svg>
                             Aperçu
                         </h3>
-
                         <div className="flex justify-center">
                             <div className="relative rounded-2xl border border-white/10 bg-white/5 p-6 shadow-inner">
                                 <canvas
@@ -789,8 +494,6 @@ export default function VCardPage() {
                                 )}
                             </div>
                         </div>
-
-                        {/* Download Button */}
                         {hasGenerated && (
                             <div className="mt-6 flex justify-center">
                                 <button
@@ -820,6 +523,6 @@ export default function VCardPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </ToolPageLayout>
     );
 }
