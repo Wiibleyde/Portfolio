@@ -20,26 +20,30 @@ export function Timeline() {
     const timelineRef = useRef<HTMLOListElement>(null);
     const data: Timeline[] = [
         {
-            title: 'Développeur Full Stack (alternance)',
-            duration: "Septembre 2025 - Aujourd'hui",
-            org: 'Orange Business',
-            icon: CodeSlash,
-            description: 'Développement pour Orange Business.',
-            skills: ['React', '.NET'],
-            class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-orange-400 text-orange-100',
-            circleColor: 'bg-orange-400',
-            ringColor: 'ring-orange-400/45',
+            title: 'Scolarité (Maternelle, Primaire, Collège, Lycée)',
+            duration: 'Septembre 2007 - Juin 2022',
+            org: 'Sainte Marie Grand Lebrun',
+            description: 'Scolarité de la maternelle à la terminale, baccalauréat général.',
+            icon: Book,
+            skills: [
+                'Numérique et Sciences Informatiques',
+                'Historie-Géographie Géopolitique et Sciences Politiques',
+                'Sciences Économiques et Sociales',
+            ],
+            class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-green-900 text-green-300',
+            circleColor: 'bg-green-900',
+            ringColor: 'ring-green-900/45',
         },
         {
-            title: 'Développeur Full Stack (alternance)',
-            duration: 'Septembre 2024 - Août 2025',
-            org: 'Lex-Port',
-            icon: Briefcase,
-            description: 'Développement de sites web pour le cabinet.',
-            skills: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'Mariadb', 'Node.js'],
-            class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-blue-900 text-blue-300',
-            circleColor: 'bg-blue-800',
-            ringColor: 'ring-blue-800/45',
+            title: "Maraude de l'Ordre de Malte",
+            duration: "Septembre 2019 - Aujourd'hui",
+            org: 'Ordre de Malte',
+            icon: HeartFill,
+            description: 'Aide aux sans-abris de Bordeaux.',
+            skills: ['Écoute', 'Aide', 'Partage'],
+            class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-red-700 text-red-300',
+            circleColor: 'bg-red-500',
+            ringColor: 'ring-red-500/45',
         },
         {
             title: 'Mastère Informatique',
@@ -60,30 +64,26 @@ export function Timeline() {
             ringColor: 'ring-teal-300/45',
         },
         {
-            title: "Maraude de l'Ordre de Malte",
-            duration: "Septembre 2019 - Aujourd'hui",
-            org: 'Ordre de Malte',
-            icon: HeartFill,
-            description: 'Aide aux sans-abris de Bordeaux.',
-            skills: ['Écoute', 'Aide', 'Partage'],
-            class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-red-700 text-red-300',
-            circleColor: 'bg-red-500',
-            ringColor: 'ring-red-500/45',
+            title: 'Développeur Full Stack (alternance)',
+            duration: 'Septembre 2024 - Août 2025',
+            org: 'Lex-Port',
+            icon: Briefcase,
+            description: 'Développement de sites web pour le cabinet.',
+            skills: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'Mariadb', 'Node.js'],
+            class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-blue-900 text-blue-300',
+            circleColor: 'bg-blue-800',
+            ringColor: 'ring-blue-800/45',
         },
         {
-            title: 'Scolarité (Maternelle, Primaire, Collège, Lycée)',
-            duration: 'Septembre 2007 - Juin 2022',
-            org: 'Sainte Marie Grand Lebrun',
-            description: 'Scolarité de la maternelle à la terminale, baccalauréat général.',
-            icon: Book,
-            skills: [
-                'Numérique et Sciences Informatiques',
-                'Historie-Géographie Géopolitique et Sciences Politiques',
-                'Sciences Économiques et Sociales',
-            ],
-            class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-green-900 text-green-300',
-            circleColor: 'bg-green-900',
-            ringColor: 'ring-green-900/45',
+            title: 'Développeur Full Stack (alternance)',
+            duration: "Septembre 2025 - Aujourd'hui",
+            org: 'Orange Business',
+            icon: CodeSlash,
+            description: 'Développement pour Orange Business.',
+            skills: ['React', '.NET'],
+            class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-orange-400 text-orange-100',
+            circleColor: 'bg-orange-400',
+            ringColor: 'ring-orange-400/45',
         },
     ];
 
@@ -121,25 +121,34 @@ export function Timeline() {
                     }}
                 />
             </div>
-            <div className="relative z-10 flex min-h-screen items-center justify-center p-4">
-                <div className="rounded-2xl border border-blue-500/30 bg-linear-to-b from-blue-500/30 to-purple-600/30 p-8 shadow-lg">
+            <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-8">
+                <div className="w-full rounded-2xl border border-blue-500/30 bg-linear-to-b from-blue-500/30 to-purple-600/30 p-8 shadow-lg">
                     <h2 className="mb-6 font-bold text-3xl text-white">Mon Parcours</h2>
-                    <ol ref={timelineRef} className="relative ml-6 border-gray-600 border-s-2">
-                        {data.map((item, index) => (
-                            <TimelineItem key={`${item.title}-${item.org}`} item={item} index={index} />
-                        ))}
-                    </ol>
+                    <div className="overflow-x-auto pt-6 pb-4">
+                        <ol
+                            ref={timelineRef}
+                            className="relative flex flex-col border-l-2 border-gray-600 ml-4 md:flex-row md:border-t-2 md:border-l-0 md:ml-0 md:max-w-full"
+                        >
+                            {data.map((item, index) => (
+                                <TimelineItem
+                                    key={`${item.title}-${item.org}`}
+                                    item={item}
+                                    isLast={index === data.length - 1}
+                                />
+                            ))}
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
 
-function TimelineItem({ item, index }: Readonly<{ item: Timeline; index: number }>) {
+function TimelineItem({ item, isLast }: Readonly<{ item: Timeline; isLast: boolean }>) {
     return (
-        <li className="timeline-item relative mb-8 ml-6">
+        <li className="timeline-item relative pl-8 mb-8 md:flex md:flex-col md:items-center md:min-w-30 md:flex-1 md:pl-4 md:pr-4 md:pt-10 md:mb-0">
             <span
-                className={`-left-10 absolute flex h-8 w-8 items-center justify-center rounded-full ring-4 ${item.ringColor} ${item.circleColor}`}
+                className={`absolute top-1 -left-4 md:-top-4 md:left-1/2 md:-translate-x-1/2 flex h-8 w-8 items-center justify-center rounded-full ring-4 ${item.ringColor} ${item.circleColor}`}
             >
                 {item.icon ? (
                     <item.icon className={'h-4 w-4 text-white'} />
@@ -147,19 +156,19 @@ function TimelineItem({ item, index }: Readonly<{ item: Timeline; index: number 
                     <Calendar className={'h-3 w-3 text-white'} />
                 )}
             </span>
-            <div className="ml-6">
-                <h3 className="mb-1 flex items-center font-semibold text-base text-white">
+            <div className="w-full md:text-center">
+                <h3 className="mb-1 font-semibold text-sm text-white leading-tight">
                     {item.title}
-                    {index === 0 && (
-                        <span className="ml-2 rounded bg-red-500 px-2.5 py-0.5 font-medium text-white text-xs">
-                            {'Expérience la plus récente'}
+                    {isLast && (
+                        <span className="mt-1 block rounded bg-red-500 px-2 py-0.5 font-medium text-white text-xs md:mx-auto w-fit">
+                            {'Récent'}
                         </span>
                     )}
                 </h3>
-                <time className="mb-2 block font-normal text-base text-gray-400 leading-none">{item.duration}</time>
-                <p className="mb-2 text-base text-white">{item.org}</p>
-                {item.description && <p className="mb-4 text-base text-white">{item.description}</p>}
-                <div className="flex flex-wrap gap-2">
+                <time className="mb-1 block font-normal text-xs text-gray-400 leading-none">{item.duration}</time>
+                <p className="mb-2 text-sm font-medium text-white">{item.org}</p>
+                {item.description && <p className="mb-3 text-xs text-gray-300">{item.description}</p>}
+                <div className="flex flex-wrap gap-1 md:justify-center">
                     {item.skills.map((skill) => (
                         <span key={skill} className={item.class}>
                             {skill}
