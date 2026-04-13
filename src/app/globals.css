@@ -18,7 +18,7 @@ body {
 }
 
 .grecaptcha-badge {
-    visibility: hidden !important;
+    visibility: hidden;
 }
 
 @keyframes fadeInScale {

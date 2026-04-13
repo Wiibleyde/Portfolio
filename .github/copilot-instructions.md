@@ -19,7 +19,7 @@ This is Nathan Bonnell's personal portfolio built with **Next.js 15 (App Router)
 - **GSAP** for animations and scroll effects
 - **Three.js + OGL** for WebGL effects
 - **Framer Motion** for advanced animations
-- **Yarn** as package manager (v1.22.22)
+- **Bun** as package manager (v1.22.22)
 
 ### Key Dependencies
 
@@ -169,11 +169,11 @@ Critical variables (example from code):
 ### Commands
 
 ```bash
-yarn dev          # Start dev server with Turbopack
-yarn build        # Production build
-yarn start        # Run production server
-yarn lint         # ESLint check
-yarn format       # Prettier format all TS/TSX files
+bun dev          # Start dev server with Turbopack
+bun build        # Production build
+bun start        # Run production server
+bun lint         # ESLint check
+bun format       # Prettier format all TS/TSX files
 ```
 
 ### Docker Build & Deployment

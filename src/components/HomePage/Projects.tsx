@@ -12,6 +12,7 @@ import RPlaceLogo from '@public/img/projects/rplace-logo.png';
 import SABSLogo from '@public/img/projects/sabs-logo.png';
 import Twitch from '@public/img/projects/twitch.webp';
 import WeazelNewsLogo from '@public/img/projects/WeazelNews_Logo.png';
+import WikiGuessrBanner from '@public/img/projects/wikiguessr-banner.png';
 import { gsap } from 'gsap';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Filter } from 'react-bootstrap-icons';
@@ -31,6 +32,16 @@ export function Projects() {
     const [isAnimating, setIsAnimating] = useState(false);
 
     const projects: Project[] = [
+        {
+            title: 'WikiGuessr',
+            description:
+                'WikiGuessr est un jeu inspiré de [Pédantix](https://pedantix.certitudes.org/) où les joueurs doivent deviner la page.',
+            type: ProjectType.School,
+            url: 'https://wikiguessr.bonnell.fr/',
+            repoUrl: 'https://github.com/Wiibleyde/BetterWikiGuessr',
+            tags: ['WikiGuessr', 'Pédantix', 'Next.js', 'TailwindCSS', 'Typescript', 'Docker', 'Github Actions'],
+            image: WikiGuessrBanner.src,
+        },
         {
             title: 'Régie lumière FiveM',
             description:
@@ -405,11 +416,8 @@ export function Projects() {
                                     willChange: 'transform',
                                 }}
                             >
-                                {filteredProjects.map((project, index) => (
-                                    <ProjectCard
-                                        key={`${displayedFilter}-${project.title}-${index}`}
-                                        project={project}
-                                    />
+                                {filteredProjects.map((project) => (
+                                    <ProjectCard key={`${displayedFilter}-${project.title}`} project={project} />
                                 ))}
                             </div>
                         </div>
@@ -418,15 +426,15 @@ export function Projects() {
                     {/* Pagination Dots */}
                     {totalPages > 1 && (
                         <div className="mt-6 flex justify-center gap-2">
-                            {Array.from({ length: totalPages }, (_, i) => (
+                            {Array.from({ length: totalPages }, (_, i) => i).map((pageIndex) => (
                                 <button
                                     type="button"
-                                    key={i}
-                                    onClick={() => goToPage(i)}
+                                    key={`page-${pageIndex}`}
+                                    onClick={() => goToPage(pageIndex)}
                                     disabled={isAnimating}
-                                    aria-label={`Aller à la page ${i + 1}`}
+                                    aria-label={`Aller à la page ${pageIndex + 1}`}
                                     className={`h-3 w-3 rounded-full transition-all duration-300 ${
-                                        Math.floor(currentIndex / projectsPerView) === i
+                                        Math.floor(currentIndex / projectsPerView) === pageIndex
                                             ? 'scale-125 bg-blue-500'
                                             : 'bg-white/30 hover:bg-white/50'
                                     } ${isAnimating ? 'cursor-not-allowed opacity-50' : ''}`}

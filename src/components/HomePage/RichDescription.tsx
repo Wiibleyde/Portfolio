@@ -56,8 +56,8 @@ export function RichDescription({ text, className = '' }: RichDescriptionProps) 
 
     return (
         <span className={className}>
-            {segments.map((segment, index) => (
-                <Fragment key={`${segment.type}-${segment.content.slice(0, 20)}-${index}`}>
+            {segments.map((segment) => (
+                <Fragment key={`${segment.type}-${segment.content.slice(0, 20)}`}>
                     {segment.type === 'text' ? (
                         segment.content
                     ) : (

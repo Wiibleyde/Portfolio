@@ -378,7 +378,9 @@ export function Presentation() {
             {showPreview && (
                 <div
                     ref={modalRef}
-                    role="presentation"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Prévisualisation du CV"
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
                     style={{ willChange: 'opacity' }}
                     onClick={(e) => {

@@ -33,6 +33,7 @@ export function FileCard({
     onDrop,
 }: FileCardProps) {
     return (
+        // biome-ignore lint/a11y/noStaticElementInteractions: Draggable file card; keyboard reordering is handled via buttons within the card
         <div
             data-file-id={file.id}
             draggable

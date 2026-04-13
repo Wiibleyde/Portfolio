@@ -30,14 +30,11 @@ export function PreviewModal({ modal, onClose, onNavigate, onPageChange }: Previ
             className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-black/80 p-4 backdrop-blur-sm"
             onClick={handleBackdropClick}
             onKeyDown={(e) => e.key === 'Escape' && onClose()}
-            role="presentation"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Prévisualisation du PDF"
         >
-            <div
-                className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 shadow-2xl backdrop-blur-md"
-                onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => e.stopPropagation()}
-                role="presentation"
-            >
+            <div className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 shadow-2xl backdrop-blur-md">
                 {/* Modal Header */}
                 <div className="flex shrink-0 items-center justify-between border-white/20 border-b p-6">
                     <div>

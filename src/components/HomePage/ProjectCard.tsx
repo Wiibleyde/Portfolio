@@ -19,9 +19,9 @@ enum TooltipState {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-    const cardRef = useRef<HTMLDivElement>(null);
+    const cardRef = useRef<HTMLElement>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
-    const tagsContainerRef = useRef<HTMLDivElement>(null);
+    const tagsContainerRef = useRef<HTMLElement>(null);
     const [tooltipState, setTooltipState] = useState<TooltipState>(TooltipState.HIDDEN);
     const [, setShouldAnimateTags] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -194,7 +194,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     };
 
     return (
-        <div
+        <article
             ref={cardRef}
             className="group relative h-96 w-80 shrink-0 transform-gpu overflow-visible rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-sm transition-all duration-300"
             onMouseEnter={handleCardMouseEnter}
@@ -246,8 +246,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 </p>
 
                 {/* Tags */}
-                <div
+                <section
                     ref={tagsContainerRef}
+                    aria-label="Tags du projet"
                     className="-m-2 relative cursor-help rounded-lg border border-transparent p-2 transition-all duration-200"
                     onMouseEnter={handleTagsMouseEnter}
                     onMouseLeave={handleTagsMouseLeave}
@@ -274,12 +275,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
                             </span>
                         )}
                     </div>
-                </div>
+                </section>
             </div>
 
             {/* Tooltip overlay */}
             <div
                 ref={tooltipRef}
+                role="tooltip"
                 className="-bottom-2 pointer-events-none absolute right-2 left-2 z-30 opacity-0"
                 style={{ transform: 'translateY(10px)' }}
                 onMouseEnter={handleTooltipMouseEnter}
@@ -304,6 +306,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
     );
 }

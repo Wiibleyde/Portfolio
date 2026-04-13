@@ -1,9 +1,16 @@
 'use client';
 import { gsap } from 'gsap';
 import { useEffect, useRef, useState } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { verifyCaptchaAction } from '@/captcha';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+
+declare global {
+    interface Window {
+        grecaptcha: {
+            ready: (cb: () => void) => void;
+            execute: (siteKey: string, options: { action: string }) => Promise<string>;
+        };
+    }
+}
 
 interface FormData {
     name: string;
@@ -25,8 +32,6 @@ export function Contact() {
     const formRef = useRef<HTMLFormElement>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
-
-    const { executeRecaptcha } = useGoogleReCaptcha();
 
     useScrollAnimation(containerRef, () => {
         const tl = gsap.timeline({ delay: 0.2 });
@@ -87,38 +92,35 @@ export function Contact() {
 
         setIsSubmitting(true);
 
-        if (!executeRecaptcha) {
-            return;
-        }
-        const token = await executeRecaptcha('onSubmit');
-        const verified = await verifyCaptchaAction(token);
-
-        if (!verified) {
-            setIsSubmitting(false);
-            setErrors((prev) => ({
-                ...prev,
-                captcha: 'Vérification CAPTCHA échouée. Veuillez réessayer.',
-            }));
-            console.error('CAPTCHA verification failed');
-            return;
-        }
-
         try {
-            // Send to /api/v1/contact/send
+            const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_KEY;
+            if (!siteKey || !window.grecaptcha) {
+                console.error('reCAPTCHA not loaded');
+                setIsSubmitting(false);
+                return;
+            }
+
+            const token = await new Promise<string>((resolve) => {
+                window.grecaptcha.ready(async () => {
+                    const t = await window.grecaptcha.execute(siteKey, { action: 'contact' });
+                    resolve(t);
+                });
+            });
+
             const response = await fetch('/api/v1/contact', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, captchaToken: token }),
             });
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || "Erreur lors de l'envoi du message");
             }
             setIsSubmitted(true);
-            setFormData({ name: '', email: '', subject: '', message: '' }); // Reset form
-            setErrors({}); // Clear errors
+            setFormData({ name: '', email: '', subject: '', message: '' });
+            setErrors({});
         } catch (error) {
             console.error('Error submitting form:', error);
         } finally {

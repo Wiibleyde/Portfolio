@@ -1,7 +1,7 @@
 'use client';
 import { gsap } from 'gsap';
-import { useEffect, useRef } from 'react';
-import { Book, Briefcase, Calendar, CodeSlash, HeartFill, type Icon } from 'react-bootstrap-icons';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ArrowRight, Book, Briefcase, Calendar, CodeSlash, HeartFill, type Icon } from 'react-bootstrap-icons';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface Timeline {
@@ -16,8 +16,35 @@ interface Timeline {
     ringColor?: string;
 }
 
+function extractStartDate(duration: string): string {
+    return duration.split(' - ')[0];
+}
+
 export function Timeline() {
     const timelineRef = useRef<HTMLOListElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [canScroll, setCanScroll] = useState(false);
+    const [isAtEnd, setIsAtEnd] = useState(false);
+
+    const checkScroll = useCallback(() => {
+        const el = scrollContainerRef.current;
+        if (!el) return;
+        const hasOverflow = el.scrollWidth > el.clientWidth;
+        setCanScroll(hasOverflow);
+        setIsAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 10);
+    }, []);
+
+    useEffect(() => {
+        const el = scrollContainerRef.current;
+        if (!el) return;
+        checkScroll();
+        el.addEventListener('scroll', checkScroll, { passive: true });
+        window.addEventListener('resize', checkScroll);
+        return () => {
+            el.removeEventListener('scroll', checkScroll);
+            window.removeEventListener('resize', checkScroll);
+        };
+    }, [checkScroll]);
     const data: Timeline[] = [
         {
             title: 'Scolarité (Maternelle, Primaire, Collège, Lycée)',
@@ -124,19 +151,29 @@ export function Timeline() {
             <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-8">
                 <div className="w-full rounded-2xl border border-blue-500/30 bg-linear-to-b from-blue-500/30 to-purple-600/30 p-8 shadow-lg">
                     <h2 className="mb-6 font-bold text-3xl text-white">Mon Parcours</h2>
-                    <div className="overflow-x-auto pt-6 pb-4">
-                        <ol
-                            ref={timelineRef}
-                            className="relative flex flex-col border-l-2 border-gray-600 ml-4 md:flex-row md:border-t-2 md:border-l-0 md:ml-0 md:max-w-full"
-                        >
-                            {data.map((item, index) => (
-                                <TimelineItem
-                                    key={`${item.title}-${item.org}`}
-                                    item={item}
-                                    isLast={index === data.length - 1}
-                                />
-                            ))}
-                        </ol>
+                    <div className="relative">
+                        <div ref={scrollContainerRef} className="overflow-x-auto pt-14 pb-6">
+                            <ol
+                                ref={timelineRef}
+                                className="relative flex flex-col border-l-2 border-gray-600 ml-4 md:flex-row md:border-t-2 md:border-l-0 md:ml-0 md:min-w-max"
+                            >
+                                {data.map((item, index) => (
+                                    <TimelineItem
+                                        key={`${item.title}-${item.org}`}
+                                        item={item}
+                                        isLast={index === data.length - 1}
+                                    />
+                                ))}
+                            </ol>
+                        </div>
+                        {canScroll && !isAtEnd && (
+                            <div className="hidden md:flex absolute -bottom-2 left-1/2 -translate-x-1/2 pointer-events-none">
+                                <span className="animate-pulse flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-white/70">
+                                    <span className="text-xs font-medium">Scroll</span>
+                                    <ArrowRight className="h-3.5 w-3.5" />
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -145,8 +182,12 @@ export function Timeline() {
 }
 
 function TimelineItem({ item, isLast }: Readonly<{ item: Timeline; isLast: boolean }>) {
+    const startDate = extractStartDate(item.duration);
     return (
-        <li className="timeline-item relative pl-8 mb-8 md:flex md:flex-col md:items-center md:min-w-30 md:flex-1 md:pl-4 md:pr-4 md:pt-10 md:mb-0">
+        <li className="timeline-item relative pl-8 mb-8 md:flex md:flex-col md:items-center md:min-w-72 md:w-72 md:pl-4 md:pr-4 md:pt-14 md:mb-0">
+            <span className="hidden md:block absolute -top-12 left-1/2 -translate-x-1/2 text-xs font-semibold text-gray-400 whitespace-nowrap">
+                {startDate}
+            </span>
             <span
                 className={`absolute top-1 -left-4 md:-top-4 md:left-1/2 md:-translate-x-1/2 flex h-8 w-8 items-center justify-center rounded-full ring-4 ${item.ringColor} ${item.circleColor}`}
             >

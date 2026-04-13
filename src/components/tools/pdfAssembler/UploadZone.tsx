@@ -11,7 +11,8 @@ interface UploadZoneProps {
 
 export function UploadZone({ dragOver, onDrop, onDragOver, onDragEnter, onDragLeave, onFileSelect }: UploadZoneProps) {
     return (
-        <div
+        <section
+            aria-label="Zone de dépôt de fichiers PDF"
             className={`relative rounded-3xl border-2 border-dashed bg-linear-to-br from-white/10 via-white/8 to-white/5 p-8 text-center shadow-2xl backdrop-blur-md transition-all duration-300 ${
                 dragOver ? 'border-blue-400 bg-blue-500/10 shadow-blue-500/25' : 'border-white/30 hover:border-white/50'
             }`}
@@ -55,6 +56,6 @@ export function UploadZone({ dragOver, onDrop, onDragOver, onDragEnter, onDragLe
                 />
             </label>
             <p className="mt-3 text-gray-400 text-sm">Formats supportés : PDF, JPEG, PNG, WebP, GIF, BMP</p>
-        </div>
+        </section>
     );
 }
