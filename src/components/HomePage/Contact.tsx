@@ -1,8 +1,16 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { verifyCaptchaAction } from '@/captcha';
+import { useEffect, useRef, useState } from 'react';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+
+declare global {
+    interface Window {
+        grecaptcha: {
+            ready: (cb: () => void) => void;
+            execute: (siteKey: string, options: { action: string }) => Promise<string>;
+        };
+    }
+}
 
 interface FormData {
     name: string;
@@ -22,11 +30,22 @@ export function Contact() {
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const { executeRecaptcha } = useGoogleReCaptcha();
+    useScrollAnimation(containerRef, () => {
+        const tl = gsap.timeline({ delay: 0.2 });
+        tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }).to(
+            formRef.current,
+            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+            '-=0.4',
+        );
+    });
+
+    // Set initial state
+    useEffect(() => {
+        gsap.set([titleRef.current, formRef.current], { opacity: 0, y: 50 });
+    }, []);
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -73,35 +92,35 @@ export function Contact() {
 
         setIsSubmitting(true);
 
-        if (!executeRecaptcha) {
-            return;
-        }
-        const token = await executeRecaptcha('onSubmit');
-        const verified = await verifyCaptchaAction(token);
-
-        if (!verified) {
-            setIsSubmitting(false);
-            setErrors((prev) => ({ ...prev, captcha: 'Vérification CAPTCHA échouée. Veuillez réessayer.' }));
-            console.error('CAPTCHA verification failed');
-            return;
-        }
-
         try {
-            // Send to /api/v1/contact/send
+            const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_KEY;
+            if (!siteKey || !window.grecaptcha) {
+                console.error('reCAPTCHA not loaded');
+                setIsSubmitting(false);
+                return;
+            }
+
+            const token = await new Promise<string>((resolve) => {
+                window.grecaptcha.ready(async () => {
+                    const t = await window.grecaptcha.execute(siteKey, { action: 'contact' });
+                    resolve(t);
+                });
+            });
+
             const response = await fetch('/api/v1/contact', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, captchaToken: token }),
             });
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || "Erreur lors de l'envoi du message");
             }
             setIsSubmitted(true);
-            setFormData({ name: '', email: '', subject: '', message: '' }); // Reset form
-            setErrors({}); // Clear errors
+            setFormData({ name: '', email: '', subject: '', message: '' });
+            setErrors({});
         } catch (error) {
             console.error('Error submitting form:', error);
         } finally {
@@ -120,54 +139,6 @@ export function Contact() {
         }
     };
 
-    // Animation on scroll
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !isVisible) {
-                        setIsVisible(true);
-
-                        const tl = gsap.timeline({ delay: 0.2 });
-
-                        tl.to(titleRef.current, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.8,
-                            ease: 'power2.out',
-                        }).to(
-                            formRef.current,
-                            {
-                                opacity: 1,
-                                y: 0,
-                                duration: 0.8,
-                                ease: 'power2.out',
-                            },
-                            '-=0.4'
-                        );
-                    }
-                });
-            },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
-        );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [isVisible]);
-
-    // Set initial state
-    useEffect(() => {
-        gsap.set([titleRef.current, formRef.current], {
-            opacity: 0,
-            y: 50,
-        });
-    }, []);
-
     // Reset success message after 5 seconds
     useEffect(() => {
         if (isSubmitted) {
@@ -180,7 +151,7 @@ export function Contact() {
 
     return (
         <div
-            className="snap-start min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12"
+            className="relative min-h-screen snap-start bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12"
             id="contact"
         >
             {/* Background pattern */}
@@ -188,29 +159,30 @@ export function Contact() {
                 <div
                     className="absolute inset-0"
                     style={{
-                        backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
+                        backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%),
                                      radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
-            <div ref={containerRef} className="relative z-10 px-10 max-w-4xl mx-auto">
+            <div ref={containerRef} className="relative z-10 mx-auto max-w-4xl px-10">
                 {/* Title Section */}
-                <div ref={titleRef} className="text-center mb-8">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Contactez-moi</h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3"></div>
+                <div ref={titleRef} className="mb-8 text-center">
+                    <h2 className="mb-3 font-bold text-3xl text-white md:text-4xl">Contactez-moi</h2>
+                    <div className="mx-auto mb-3 h-1 w-20 rounded-full bg-linear-to-r from-blue-500 to-purple-600" />
                     <p className="text-gray-300 text-lg">
                         Une idée, un projet, une question ? N&apos;hésitez pas à me contacter !
                     </p>
                 </div>
 
                 {/* Form Section */}
-                <div className="bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl">
+                <div className="rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 p-6 shadow-2xl backdrop-blur-md md:p-8">
                     {isSubmitted ? (
-                        <div className="text-center py-8">
-                            <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div className="py-8 text-center">
+                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20">
                                 <svg
-                                    className="w-8 h-8 text-green-400"
+                                    aria-hidden="true"
+                                    className="h-8 w-8 text-green-400"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -223,14 +195,14 @@ export function Contact() {
                                     />
                                 </svg>
                             </div>
-                            <h3 className="text-2xl font-bold text-white mb-2">Message envoyé !</h3>
+                            <h3 className="mb-2 font-bold text-2xl text-white">Message envoyé !</h3>
                             <p className="text-gray-300">Je vous répondrai dans les plus brefs délais.</p>
                         </div>
                     ) : (
                         <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
                             {/* Name Field */}
                             <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2">
+                                <label htmlFor="name" className="mb-2 block font-medium text-gray-200 text-sm">
                                     NOM & Prénom *
                                 </label>
                                 <input
@@ -239,15 +211,15 @@ export function Contact() {
                                     name="name"
                                     value={formData.name}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-3 bg-white/10 border ${errors.name ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors`}
+                                    className={`w-full border bg-white/10 px-4 py-3 ${errors.name ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
                                     placeholder="Votre nom complet"
                                 />
-                                {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
+                                {errors.name && <p className="mt-1 text-red-400 text-sm">{errors.name}</p>}
                             </div>
 
                             {/* Email Field */}
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+                                <label htmlFor="email" className="mb-2 block font-medium text-gray-200 text-sm">
                                     Email *
                                 </label>
                                 <input
@@ -256,15 +228,15 @@ export function Contact() {
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-3 bg-white/10 border ${errors.email ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors`}
+                                    className={`w-full border bg-white/10 px-4 py-3 ${errors.email ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
                                     placeholder="votre.email@exemple.com"
                                 />
-                                {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
+                                {errors.email && <p className="mt-1 text-red-400 text-sm">{errors.email}</p>}
                             </div>
 
                             {/* Subject Field */}
                             <div>
-                                <label htmlFor="subject" className="block text-sm font-medium text-gray-200 mb-2">
+                                <label htmlFor="subject" className="mb-2 block font-medium text-gray-200 text-sm">
                                     Objet *
                                 </label>
                                 <input
@@ -273,15 +245,15 @@ export function Contact() {
                                     name="subject"
                                     value={formData.subject}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-3 bg-white/10 border ${errors.subject ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors`}
+                                    className={`w-full border bg-white/10 px-4 py-3 ${errors.subject ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
                                     placeholder="Sujet de votre message"
                                 />
-                                {errors.subject && <p className="mt-1 text-sm text-red-400">{errors.subject}</p>}
+                                {errors.subject && <p className="mt-1 text-red-400 text-sm">{errors.subject}</p>}
                             </div>
 
                             {/* Message Field */}
                             <div>
-                                <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-2">
+                                <label htmlFor="message" className="mb-2 block font-medium text-gray-200 text-sm">
                                     Message *
                                 </label>
                                 <textarea
@@ -290,10 +262,10 @@ export function Contact() {
                                     rows={5}
                                     value={formData.message}
                                     onChange={handleChange}
-                                    className={`w-full px-4 py-3 bg-white/10 border ${errors.message ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors resize-none`}
+                                    className={`w-full border bg-white/10 px-4 py-3 ${errors.message ? 'border-red-400' : 'border-white/20'} resize-none rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
                                     placeholder="Décrivez votre projet ou votre demande..."
                                 />
-                                {errors.message && <p className="mt-1 text-sm text-red-400">{errors.message}</p>}
+                                {errors.message && <p className="mt-1 text-red-400 text-sm">{errors.message}</p>}
                             </div>
 
                             {/* Submit Button */}
@@ -302,14 +274,15 @@ export function Contact() {
                                     type="submit"
                                     disabled={isSubmitting}
                                     aria-label="Envoyer le message"
-                                    className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+                                    className="group relative flex transform items-center gap-3 rounded-2xl bg-linear-to-r from-blue-600 to-purple-600 px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-purple-700 hover:shadow-blue-500/25 disabled:scale-100 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                                    <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-blue-400 to-purple-400 opacity-0 blur transition-opacity duration-300 group-hover:opacity-30" />
 
                                     {isSubmitting ? (
                                         <>
                                             <svg
-                                                className="w-5 h-5 relative z-10 animate-spin"
+                                                aria-hidden="true"
+                                                className="relative z-10 h-5 w-5 animate-spin"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
@@ -326,7 +299,8 @@ export function Contact() {
                                     ) : (
                                         <>
                                             <svg
-                                                className="w-5 h-5 relative z-10"
+                                                aria-hidden="true"
+                                                className="relative z-10 h-5 w-5"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"

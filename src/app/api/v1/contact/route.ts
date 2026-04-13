@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { verifyCaptchaToken } from '@/captcha';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!request.body) {
@@ -7,10 +8,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const body = await request.json();
-    const { name, email, subject, message } = body;
+    const { name, email, subject, message, captchaToken } = body;
 
     if (!name || !email || !subject || !message) {
         return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
+    }
+
+    if (!captchaToken || !(await verifyCaptchaToken(captchaToken))) {
+        return NextResponse.json({ message: 'CAPTCHA verification failed' }, { status: 403 });
     }
 
     const username = process.env.NEXT_PUBLIC_BURNER_USERNAME;
@@ -41,7 +46,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             from: username,
             to: myEmail,
             replyTo: data.from,
-            subject: 'Portfolio : ' + data.subject,
+            subject: `Portfolio : ${data.subject}`,
             text: data.message,
         });
     } catch (error) {

@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { useEffect, useRef, useState } from 'react';
 
 export function Landing() {
     // Utiliser un état initial null pour différencier le premier chargement
@@ -27,7 +27,13 @@ export function Landing() {
         timeline.fromTo(
             logoRef.current,
             { scale: 0.5, filter: 'brightness(0.5)', opacity: 0 },
-            { scale: 1, filter: 'brightness(1.2)', opacity: 1, duration: 0.5, ease: 'back.out(1.7)' } // Réduit de 0.9 à 0.5s
+            {
+                scale: 1,
+                filter: 'brightness(1.2)',
+                opacity: 1,
+                duration: 0.5,
+                ease: 'back.out(1.7)',
+            }, // Réduit de 0.9 à 0.5s
         );
 
         timeline.to(
@@ -39,21 +45,27 @@ export function Landing() {
                 yoyo: true,
                 ease: 'power1.inOut',
             },
-            '-=0.1'
+            '-=0.1',
         );
 
         timeline.fromTo(
             welcomeTextRef.current,
             { opacity: 0, y: 20, scale: 0.95 },
             { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out' },
-            '-=0.4'
+            '-=0.4',
         );
 
         timeline.fromTo(
             taglineRef.current,
             { opacity: 0, y: 10, letterSpacing: '0.2em' },
-            { opacity: 0.9, y: 0, letterSpacing: '0.3em', duration: 0.6, ease: 'power2.out' },
-            '-=0.4'
+            {
+                opacity: 0.9,
+                y: 0,
+                letterSpacing: '0.3em',
+                duration: 0.6,
+                ease: 'power2.out',
+            },
+            '-=0.4',
         );
 
         timeline.fromTo(
@@ -78,7 +90,7 @@ export function Landing() {
                     }
                 },
             },
-            '-=0.6'
+            '-=0.6',
         );
 
         timeline.to(percentageRef.current, { opacity: 0, duration: 0.4, ease: 'power2.in' }, '-=0.2');
@@ -86,13 +98,20 @@ export function Landing() {
         // Séquence de sortie
         timeline.to(
             [welcomeTextRef.current, taglineRef.current],
-            { opacity: 0, y: -25, filter: 'blur(5px)', duration: 0.6, ease: 'power3.in', stagger: 0.1 },
-            '-=0.1'
+            {
+                opacity: 0,
+                y: -25,
+                filter: 'blur(5px)',
+                duration: 0.6,
+                ease: 'power3.in',
+                stagger: 0.1,
+            },
+            '-=0.1',
         );
         timeline.to(
             logoRef.current,
             { opacity: 0, scale: 1.2, rotation: 5, duration: 0.6, ease: 'power3.in' },
-            '-=0.4'
+            '-=0.4',
         );
 
         timeline.to(
@@ -106,7 +125,7 @@ export function Landing() {
                     setHasSeen(true);
                 },
             },
-            '-=0.3'
+            '-=0.3',
         );
     }, [hasSeen]);
 
@@ -117,36 +136,36 @@ export function Landing() {
     return (
         <div
             ref={containerRef}
-            className="fixed top-0 left-0 w-screen h-screen flex flex-col justify-center items-center bg-black text-white z-50"
+            className="fixed top-0 left-0 z-50 flex h-screen w-screen flex-col items-center justify-center bg-black text-white"
         >
-            <div ref={logoRef} className="mb-8 relative">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg">
-                    <span className="text-4xl font-bold">N</span>
+            <div ref={logoRef} className="relative mb-8">
+                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 via-purple-600 to-pink-500 shadow-lg">
+                    <span className="font-bold text-4xl">N</span>
                 </div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-blue-400/30 to-purple-500/30 blur-md -z-10"></div>
+                <div className="-translate-x-1/2 -translate-y-1/2 -z-10 absolute top-1/2 left-1/2 h-32 w-32 transform rounded-full bg-linear-to-br from-blue-400/30 to-purple-500/30 blur-md" />
             </div>
 
             <h1
                 ref={welcomeTextRef}
-                className="text-7xl font-black tracking-wide mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 px-4 pb-2"
+                className="mb-3 bg-linear-to-r from-white to-gray-300 bg-clip-text px-4 pb-2 font-black text-7xl text-transparent tracking-wide"
             >
                 Bonjour
             </h1>
 
-            <p ref={taglineRef} className="text-lg font-light tracking-[0.3em] text-gray-300 mb-16">
+            <p ref={taglineRef} className="mb-16 font-light text-gray-300 text-lg tracking-[0.3em]">
                 BIENVENUE SUR MON PORTFOLIO
             </p>
 
             <div className="flex flex-col items-center space-y-2">
-                <div className="w-72 h-1 bg-gray-800/60 rounded-full overflow-hidden backdrop-blur-sm">
+                <div className="h-1 w-72 overflow-hidden rounded-full bg-gray-800/60 backdrop-blur-sm">
                     <div
                         ref={progressBarRef}
-                        className="h-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 shadow-[0_0_8px_rgba(167,139,250,0.6)]"
+                        className="h-full bg-linear-to-r from-blue-400 via-purple-500 to-pink-500 shadow-[0_0_8px_rgba(167,139,250,0.6)]"
                         style={{ width: '0%' }}
-                    ></div>
+                    />
                 </div>
 
-                <div ref={percentageRef} className="text-sm font-light tracking-widest text-gray-400">
+                <div ref={percentageRef} className="font-light text-gray-400 text-sm tracking-widest">
                     {loadingPercentage}%
                 </div>
             </div>

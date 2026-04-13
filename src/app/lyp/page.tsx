@@ -6,12 +6,12 @@ import CatGif from '@public/img/lyp/cat.gif';
 import Image from 'next/image';
 
 enum OsType {
-    Windows,
-    Mac,
-    Linux,
-    Android,
-    IOS,
-    Unknown,
+    Windows = 0,
+    Mac = 1,
+    Linux = 2,
+    Android = 3,
+    IOS = 4,
+    Unknown = 5,
 }
 
 export default function Home() {
@@ -31,31 +31,31 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="overflow-hidden w-screen h-screen rainbow-background">
-            <div className="flex flex-col items-center justify-center h-full mlg-effects">
-                <h1 className="text-4xl font-bold text-white glitch" data-text="Lock Your Computer">
+        <div className="rainbow-background h-screen w-screen overflow-hidden">
+            <div className="mlg-effects flex h-full flex-col items-center justify-center">
+                <h1 className="glitch font-bold text-4xl text-white" data-text="Lock Your Computer">
                     Lock Your Computer
                 </h1>
-                <div className="mt-4 text-white text-8xl">
+                <div className="mt-4 text-8xl text-white">
                     {os === OsType.Windows && (
                         <p className="mb-2">
-                            Press <span className="font-bold rainbow-text">Win + L</span>
+                            Press <span className="rainbow-text font-bold">Win + L</span>
                         </p>
                     )}
                     {os === OsType.Mac && (
                         <p>
-                            Press <span className="font-bold rainbow-text">Cmd + Ctrl + Q</span>
+                            Press <span className="rainbow-text font-bold">Cmd + Ctrl + Q</span>
                         </p>
                     )}
                     {os === OsType.Linux && (
                         <p>
-                            Press <span className="font-bold rainbow-text">Meta + L / Ctrl + Alt + L</span>
+                            Press <span className="rainbow-text font-bold">Meta + L / Ctrl + Alt + L</span>
                         </p>
                     )}
                     {os === OsType.Unknown && (
                         <p className="text-2xl">
                             Unknown OS{' '}
-                            <span className="font-bold rainbow-text">but you can still lock your computer</span>
+                            <span className="rainbow-text font-bold">but you can still lock your computer</span>
                         </p>
                     )}
                 </div>

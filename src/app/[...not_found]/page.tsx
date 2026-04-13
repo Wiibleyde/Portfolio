@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import Link from 'next/link';
-import { House, ArrowLeft, Search, Heart } from 'react-bootstrap-icons';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, Heart, House, Search } from 'react-bootstrap-icons';
 
 export default function NotFound() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,7 @@ export default function NotFound() {
                 {
                     opacity: 0,
                     y: 30,
-                }
+                },
             );
 
             // Main animation timeline
@@ -46,7 +46,7 @@ export default function NotFound() {
                         duration: 0.8,
                         ease: 'power2.out',
                     },
-                    '-=0.6'
+                    '-=0.6',
                 )
                 .to(
                     descriptionRef.current,
@@ -56,7 +56,7 @@ export default function NotFound() {
                         duration: 0.8,
                         ease: 'power2.out',
                     },
-                    '-=0.4'
+                    '-=0.4',
                 )
                 .to(
                     buttonsRef.current,
@@ -66,7 +66,7 @@ export default function NotFound() {
                         duration: 0.8,
                         ease: 'back.out(1.7)',
                     },
-                    '-=0.3'
+                    '-=0.3',
                 )
                 .to(
                     quoteRef.current,
@@ -76,7 +76,7 @@ export default function NotFound() {
                         duration: 0.8,
                         ease: 'power2.out',
                     },
-                    '-=0.2'
+                    '-=0.2',
                 );
 
             // Floating animation for buttons
@@ -127,116 +127,120 @@ export default function NotFound() {
     };
 
     return (
-        <div className="min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 flex items-center justify-center">
+        <div className="relative flex min-h-screen items-center justify-center bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30">
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div
-                    className="w-full h-full"
+                    className="h-full w-full"
                     style={{
-                        backgroundImage: `radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), 
+                        backgroundImage: `radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%),
                                      radial-gradient(circle at 80% 20%, #8b5cf6 0%, transparent 50%)`,
                     }}
-                ></div>
+                />
             </div>
 
-            <div ref={containerRef} className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+            <div ref={containerRef} className="relative z-10 mx-auto max-w-4xl px-6 text-center">
                 {/* 404 Title */}
                 <h1
                     ref={titleRef}
-                    className="text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-4"
+                    className="mb-4 bg-linear-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text font-black text-8xl text-transparent md:text-9xl"
                 >
                     404
                 </h1>
 
                 {/* Subtitle */}
-                <h2 ref={subtitleRef} className="text-3xl md:text-4xl font-bold text-white mb-6">
+                <h2 ref={subtitleRef} className="mb-6 font-bold text-3xl text-white md:text-4xl">
                     Page non trouvée
                 </h2>
 
                 {/* Description */}
-                <p ref={descriptionRef} className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                <p ref={descriptionRef} className="mx-auto mb-8 max-w-2xl text-gray-300 text-xl leading-relaxed">
                     Oops ! Il semble que cette page n&apos;existe pas ou ait été déplacée. Mais ne vous inquiétez pas,
                     explorons d&apos;autres possibilités !
                 </p>
 
                 {/* Navigation buttons */}
-                <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                <div ref={buttonsRef} className="mb-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
                     <Link
                         href="/"
-                        className="group relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105"
+                        className="group relative flex transform items-center gap-3 rounded-2xl bg-linear-to-r from-blue-600 to-purple-600 px-8 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-purple-700 hover:shadow-blue-500/25"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-                        <House className="w-5 h-5 relative z-10" />
+                        <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-blue-400 to-purple-400 opacity-0 blur transition-opacity duration-300 group-hover:opacity-30" />
+                        <House className="relative z-10 h-5 w-5" />
                         <span className="relative z-10">Retour à l&apos;accueil</span>
                     </Link>
 
                     <button
+                        type="button"
                         onClick={() => router.back()}
-                        className="group relative bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-semibold py-3 px-8 rounded-2xl transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-gray-500/25 transform hover:scale-105"
+                        className="group relative flex transform items-center gap-3 rounded-2xl bg-linear-to-r from-gray-600 to-gray-700 px-8 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-gray-700 hover:to-gray-800 hover:shadow-gray-500/25"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-gray-400 to-gray-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-                        <ArrowLeft className="w-5 h-5 relative z-10" />
+                        <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-gray-400 to-gray-500 opacity-0 blur transition-opacity duration-300 group-hover:opacity-30" />
+                        <ArrowLeft className="relative z-10 h-5 w-5" />
                         <span className="relative z-10">Page précédente</span>
                     </button>
                 </div>
 
                 {/* Quote section */}
-                <blockquote ref={quoteRef} className="relative w-full max-w-2xl mx-auto">
-                    <div className="relative bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl overflow-hidden">
+                <blockquote ref={quoteRef} className="relative mx-auto w-full max-w-2xl">
+                    <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 p-6 shadow-2xl backdrop-blur-md md:p-8">
                         {/* Decorative background elements */}
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
-                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-500/15 to-blue-500/15 rounded-full blur-2xl translate-y-12 -translate-x-12"></div>
+                        <div className="-translate-y-16 absolute top-0 right-0 h-32 w-32 translate-x-16 rounded-full bg-linear-to-br from-blue-500/20 to-purple-500/20 blur-3xl" />
+                        <div className="-translate-x-12 absolute bottom-0 left-0 h-24 w-24 translate-y-12 rounded-full bg-linear-to-tr from-purple-500/15 to-blue-500/15 blur-2xl" />
 
                         {/* Quote content */}
                         <div className="relative z-10">
-                            <p className="text-lg text-gray-100 font-light leading-relaxed text-center mb-2 italic">
+                            <p className="mb-2 text-center font-light text-gray-100 text-lg italic leading-relaxed">
                                 « Chaque erreur est une opportunité d&apos;apprendre quelque chose de nouveau. »
                             </p>
 
                             {/* Author section */}
                             <div className="flex items-center justify-center gap-3">
-                                <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
-                                <cite className="text-blue-400 text-base font-semibold not-italic tracking-wide">
+                                <div className="h-0.5 w-10 bg-linear-to-r from-transparent via-blue-400 to-transparent" />
+                                <cite className="font-semibold text-base text-blue-400 not-italic tracking-wide">
                                     Philosophie du développement
                                 </cite>
-                                <div className="w-10 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+                                <div className="h-0.5 w-10 bg-linear-to-r from-transparent via-blue-400 to-transparent" />
                             </div>
                         </div>
                     </div>
                 </blockquote>
 
                 {/* Suggestions */}
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
                     <button
+                        type="button"
                         onClick={() => handleScrollToSection('timeline')}
-                        className="group bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/15 hover:border-blue-400/30 transition-all duration-300 hover:bg-white/15"
+                        className="group rounded-xl border border-white/15 bg-linear-to-r from-white/10 to-white/5 p-4 backdrop-blur-sm transition-all duration-300 hover:border-blue-400/30 hover:bg-white/15"
                     >
-                        <div className="text-blue-400 mb-2">
-                            <Search className="w-6 h-6 mx-auto" />
+                        <div className="mb-2 text-blue-400">
+                            <Search className="mx-auto h-6 w-6" />
                         </div>
-                        <h3 className="text-white font-semibold mb-1">Mon parcours</h3>
+                        <h3 className="mb-1 font-semibold text-white">Mon parcours</h3>
                         <p className="text-gray-400 text-sm">Découvrez mon parcours professionnel</p>
                     </button>
 
                     <button
+                        type="button"
                         onClick={() => handleScrollToSection('projects')}
-                        className="group bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/15 hover:border-purple-400/30 transition-all duration-300 hover:bg-white/15"
+                        className="group rounded-xl border border-white/15 bg-linear-to-r from-white/10 to-white/5 p-4 backdrop-blur-sm transition-all duration-300 hover:border-purple-400/30 hover:bg-white/15"
                     >
-                        <div className="text-purple-400 mb-2">
-                            <Heart className="w-6 h-6 mx-auto" />
+                        <div className="mb-2 text-purple-400">
+                            <Heart className="mx-auto h-6 w-6" />
                         </div>
-                        <h3 className="text-white font-semibold mb-1">Mes projets</h3>
+                        <h3 className="mb-1 font-semibold text-white">Mes projets</h3>
                         <p className="text-gray-400 text-sm">Explorez mes réalisations</p>
                     </button>
 
                     <button
+                        type="button"
                         onClick={() => handleScrollToSection('contact')}
-                        className="group bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/15 hover:border-green-400/30 transition-all duration-300 hover:bg-white/15"
+                        className="group rounded-xl border border-white/15 bg-linear-to-r from-white/10 to-white/5 p-4 backdrop-blur-sm transition-all duration-300 hover:border-green-400/30 hover:bg-white/15"
                     >
-                        <div className="text-green-400 mb-2">
-                            <House className="w-6 h-6 mx-auto" />
+                        <div className="mb-2 text-green-400">
+                            <House className="mx-auto h-6 w-6" />
                         </div>
-                        <h3 className="text-white font-semibold mb-1">Contact</h3>
+                        <h3 className="mb-1 font-semibold text-white">Contact</h3>
                         <p className="text-gray-400 text-sm">Restons en contact</p>
                     </button>
                 </div>

@@ -1,10 +1,10 @@
 'use client';
-import { useScroll } from '@/hooks/useScroll';
 import Background from '@public/img/background.jpg';
 import Me from '@public/img/pp.webp';
 import gsap from 'gsap';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
+import { useScroll } from '@/hooks/useScroll';
 
 export function Hero() {
     // References to elements we want to animate
@@ -42,7 +42,7 @@ export function Hero() {
                 y: 0,
                 duration: 1.2,
             },
-            '-=0.8'
+            '-=0.8',
         );
 
         // Animate the title with a slight delay
@@ -53,7 +53,7 @@ export function Hero() {
                 y: 0,
                 duration: 1.2,
             },
-            '-=0.9'
+            '-=0.9',
         );
 
         // Animate the button with a slight delay
@@ -64,7 +64,7 @@ export function Hero() {
                 y: 0,
                 duration: 1,
             },
-            '-=0.7'
+            '-=0.7',
         );
 
         // Animate the photo with a slight delay
@@ -76,7 +76,7 @@ export function Hero() {
                 duration: 1.5,
                 delay: 0.2,
             },
-            '-=0.7'
+            '-=0.7',
         );
 
         // Animate the scroll indicator
@@ -87,7 +87,7 @@ export function Hero() {
                 y: 0,
                 duration: 1,
             },
-            '-=0.5'
+            '-=0.5',
         );
 
         // Bouton hover animation
@@ -128,35 +128,40 @@ export function Hero() {
 
     return (
         <div
-            className="h-screen w-full snap-start relative"
-            style={{ backgroundImage: `url(${Background.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+            className="relative h-screen w-full snap-start"
+            style={{
+                backgroundImage: `url(${Background.src})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
         >
-            <div className="flex flex-col md:flex-row items-center justify-between min-h-screen w-full bg-gradient-to-r from-black/80 via-black/70 to-black/20 px-12 md:px-20 lg:px-24">
-                <div ref={containerRef} className="text-left text-white max-w-2xl w-full md:w-1/2">
-                    <h1 ref={nameRef} className="text-7xl md:text-8xl font-black mb-4 text-white">
+            <div className="flex min-h-screen w-full flex-col items-center justify-between bg-linear-to-r from-black/80 via-black/70 to-black/20 px-12 md:flex-row md:px-20 lg:px-24">
+                <div ref={containerRef} className="w-full max-w-2xl text-left text-white md:w-1/2">
+                    <h1 ref={nameRef} className="mb-4 font-black text-7xl text-white md:text-8xl">
                         Nathan Bonnell
                     </h1>
-                    <h2 ref={titleRef} className="text-2xl md:text-3xl font-bold text-gray-300 mb-8">
+                    <h2 ref={titleRef} className="mb-8 font-bold text-2xl text-gray-300 md:text-3xl">
                         Développeur Fullstack
                     </h2>
 
                     <div className="mt-10">
                         <button
+                            type="button"
                             ref={buttonRef}
                             onClick={scrollToTarget}
                             aria-label="Contactez-moi"
-                            className="text-white py-4 px-8 rounded-full border-2 border-white hover:text-black transition-colors duration-400 ease-in-out font-medium tracking-wide relative overflow-hidden group"
+                            className="group relative overflow-hidden rounded-full border-2 border-white px-8 py-4 font-medium text-white tracking-wide transition-colors duration-400 ease-in-out hover:text-black"
                         >
                             <span className="relative z-10">Contactez-moi</span>
-                            <span className="absolute bottom-0 left-0 w-0 h-full bg-white group-hover:w-full transition-all duration-400 ease-in-out -z-1 opacity-80"></span>
+                            <span className="-z-1 absolute bottom-0 left-0 h-full w-0 bg-white opacity-80 transition-all duration-400 ease-in-out group-hover:w-full" />
                         </button>
                     </div>
                 </div>
 
                 {/* Photo container - avec animation d'apparition */}
-                <div ref={photoRef} className="hidden md:block w-2/7 mt-10 md:mt-0 opacity-0">
+                <div ref={photoRef} className="mt-10 hidden w-2/7 opacity-0 md:mt-0 md:block">
                     <div
-                        className="relative w-full aspect-square max-w-md mx-auto"
+                        className="relative mx-auto aspect-square w-full max-w-md"
                         style={{
                             boxShadow: '0 20px 40px -12px rgba(0, 0, 0, 0.6)',
                             borderRadius: '20px',
@@ -166,9 +171,8 @@ export function Hero() {
                         <Image
                             src={Me}
                             alt="Nathan Bonnell"
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            className="rounded-lg"
+                            className="rounded-lg object-cover"
+                            style={{ width: '100%', height: 'auto' }}
                             priority
                         />
                     </div>
@@ -178,12 +182,12 @@ export function Hero() {
             {/* Scroll indicator */}
             <div
                 ref={scrollIndicatorRef}
-                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white opacity-0"
+                className="-translate-x-1/2 absolute bottom-8 left-1/2 transform text-white opacity-0"
             >
-                <div className="flex flex-col items-center animate-bounce">
-                    <span className="text-sm font-medium mb-2 tracking-wide">Lire la suite...</span>
-                    <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-                        <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+                <div className="flex animate-bounce flex-col items-center">
+                    <span className="mb-2 font-medium text-sm tracking-wide">Lire la suite...</span>
+                    <div className="flex h-10 w-6 justify-center rounded-full border-2 border-white">
+                        <div className="mt-2 h-3 w-1 animate-pulse rounded-full bg-white" />
                     </div>
                 </div>
             </div>

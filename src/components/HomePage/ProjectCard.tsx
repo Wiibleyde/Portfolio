@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
-import { Github, BoxArrowUpRight } from 'react-bootstrap-icons';
 import Image from 'next/image';
-import { Project, ProjectType } from '@/types';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { BoxArrowUpRight, Github } from 'react-bootstrap-icons';
+import { type Project, ProjectType } from '@/types';
 import { RichDescription } from './RichDescription';
 
 interface ProjectCardProps {
@@ -19,9 +19,9 @@ enum TooltipState {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-    const cardRef = useRef<HTMLDivElement>(null);
+    const cardRef = useRef<HTMLElement>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
-    const tagsContainerRef = useRef<HTMLDivElement>(null);
+    const tagsContainerRef = useRef<HTMLElement>(null);
     const [tooltipState, setTooltipState] = useState<TooltipState>(TooltipState.HIDDEN);
     const [, setShouldAnimateTags] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -138,7 +138,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 timeoutRef.current = setTimeout(performHide, 100);
             }
         },
-        [tooltipState, clearAllTimeouts, killCurrentAnimation]
+        [tooltipState, clearAllTimeouts, killCurrentAnimation],
     );
 
     const handleCardMouseLeave = useCallback(() => {
@@ -194,35 +194,35 @@ export function ProjectCard({ project }: ProjectCardProps) {
     };
 
     return (
-        <div
+        <article
             ref={cardRef}
-            className="group bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-visible shadow-lg transition-all duration-300 flex-shrink-0 w-80 h-96 transform-gpu relative"
+            className="group relative h-96 w-80 shrink-0 transform-gpu overflow-visible rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-sm transition-all duration-300"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
             style={{ transformOrigin: 'center center' }}
         >
             {/* Image */}
             <div className="relative h-48 overflow-hidden rounded-t-2xl">
-                <Image src={project.image} alt={project.title} fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <Image src={project.image} alt={project.title} fill sizes="320px" className="object-cover" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
 
                 {/* Type badge */}
                 <div
-                    className={`absolute top-3 left-3 px-3 py-1 rounded-lg text-xs font-medium border ${getTypeColor(project.type)}`}
+                    className={`absolute top-3 left-3 rounded-lg border px-3 py-1 font-medium text-xs ${getTypeColor(project.type)}`}
                 >
                     {project.type}
                 </div>
 
                 {/* Links */}
-                <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-3 right-3 flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     {project.repoUrl && (
                         <a
                             href={project.repoUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 bg-black/50 rounded-lg text-white hover:bg-black/70 transition-colors"
+                            className="rounded-lg bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
                         >
-                            <Github className="w-4 h-4" />
+                            <Github className="h-4 w-4" />
                         </a>
                     )}
                     {project.url && (
@@ -230,31 +230,32 @@ export function ProjectCard({ project }: ProjectCardProps) {
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 bg-black/50 rounded-lg text-white hover:bg-black/70 transition-colors"
+                            className="rounded-lg bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
                         >
-                            <BoxArrowUpRight className="w-4 h-4" />
+                            <BoxArrowUpRight className="h-4 w-4" />
                         </a>
                     )}
                 </div>
             </div>
 
             {/* Content */}
-            <div className="p-6 flex flex-col h-48">
-                <h3 className="text-xl font-semibold text-white mb-3 line-clamp-1">{project.title}</h3>
-                <p className="text-sm text-gray-300 mb-4 line-clamp-2 flex-grow">
+            <div className="flex h-48 flex-col p-6">
+                <h3 className="mb-3 line-clamp-1 font-semibold text-white text-xl">{project.title}</h3>
+                <p className="mb-4 line-clamp-2 grow text-gray-300 text-sm">
                     <RichDescription text={project.description} />
                 </p>
 
                 {/* Tags */}
-                <div
+                <section
                     ref={tagsContainerRef}
-                    className="relative cursor-help border border-transparent rounded-lg p-2 -m-2 transition-all duration-200"
+                    aria-label="Tags du projet"
+                    className="-m-2 relative cursor-help rounded-lg border border-transparent p-2 transition-all duration-200"
                     onMouseEnter={handleTagsMouseEnter}
                     onMouseLeave={handleTagsMouseLeave}
                 >
-                    <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs text-gray-400 font-medium">Tags</span>
-                        <span className="text-xs text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <div className="mb-1 flex items-center justify-between">
+                        <span className="font-medium text-gray-400 text-xs">Tags</span>
+                        <span className="text-blue-400 text-xs opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                             Survolez pour voir tout
                         </span>
                     </div>
@@ -263,40 +264,41 @@ export function ProjectCard({ project }: ProjectCardProps) {
                         {project.tags.slice(0, 3).map((tag) => (
                             <span
                                 key={tag}
-                                className="px-2 py-1 bg-white/10 text-xs text-gray-300 rounded-md whitespace-nowrap flex-shrink-0 hover:bg-white/20 transition-colors duration-200"
+                                className="shrink-0 whitespace-nowrap rounded-md bg-white/10 px-2 py-1 text-gray-300 text-xs transition-colors duration-200 hover:bg-white/20"
                             >
                                 {tag}
                             </span>
                         ))}
                         {project.tags.length > 3 && (
-                            <span className="px-2 py-1 bg-blue-500/20 text-xs text-blue-300 rounded-md whitespace-nowrap hover:bg-blue-500/30 transition-colors duration-200 border border-blue-500/30">
+                            <span className="whitespace-nowrap rounded-md border border-blue-500/30 bg-blue-500/20 px-2 py-1 text-blue-300 text-xs transition-colors duration-200 hover:bg-blue-500/30">
                                 +{project.tags.length - 3}
                             </span>
                         )}
                     </div>
-                </div>
+                </section>
             </div>
 
             {/* Tooltip overlay */}
             <div
                 ref={tooltipRef}
-                className="absolute -bottom-2 left-2 right-2 z-30 opacity-0 pointer-events-none"
+                role="tooltip"
+                className="-bottom-2 pointer-events-none absolute right-2 left-2 z-30 opacity-0"
                 style={{ transform: 'translateY(10px)' }}
                 onMouseEnter={handleTooltipMouseEnter}
                 onMouseLeave={handleTooltipMouseLeave}
             >
-                <div className="bg-gray-900/95 backdrop-blur-md rounded-xl p-4 shadow-2xl border border-white/20">
-                    <div className="flex items-center gap-2 mb-3">
-                        <div className="text-xs text-blue-300 font-semibold">Tags</div>
-                        <div className="flex-1 h-px bg-gradient-to-r from-blue-500/50 to-transparent"></div>
-                        <div className="text-xs text-gray-400">{project.tags.length} tags</div>
+                <div className="rounded-xl border border-white/20 bg-gray-900/95 p-4 shadow-2xl backdrop-blur-md">
+                    <div className="mb-3 flex items-center gap-2">
+                        <div className="font-semibold text-blue-300 text-xs">Tags</div>
+                        <div className="h-px flex-1 bg-linear-to-r from-blue-500/50 to-transparent" />
+                        <div className="text-gray-400 text-xs">{project.tags.length} tags</div>
                     </div>
 
                     <div className="flex flex-wrap gap-1.5">
                         {project.tags.map((tag) => (
                             <span
                                 key={tag}
-                                className="px-2.5 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-xs text-white rounded-md border border-blue-400/30 font-medium hover:scale-105 transition-transform duration-200"
+                                className="rounded-md border border-blue-400/30 bg-linear-to-r from-blue-500/20 to-purple-500/20 px-2.5 py-1 font-medium text-white text-xs transition-transform duration-200 hover:scale-105"
                             >
                                 {tag}
                             </span>
@@ -304,6 +306,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
     );
 }

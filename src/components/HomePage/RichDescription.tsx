@@ -19,13 +19,11 @@ interface ParsedSegment {
 export function RichDescription({ text, className = '' }: RichDescriptionProps) {
     const parseText = (input: string): ParsedSegment[] => {
         const segments: ParsedSegment[] = [];
-        // Regex to match [text](url) pattern
         const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
         let lastIndex = 0;
-        let match;
+        let match = linkRegex.exec(input);
 
-        while ((match = linkRegex.exec(input)) !== null) {
-            // Add text before the link
+        while (match !== null) {
             if (match.index > lastIndex) {
                 segments.push({
                     type: 'text',
@@ -33,14 +31,14 @@ export function RichDescription({ text, className = '' }: RichDescriptionProps) 
                 });
             }
 
-            // Add the link
             segments.push({
                 type: 'link',
-                content: match[1], // Text inside []
-                url: match[2], // URL inside ()
+                content: match[1],
+                url: match[2],
             });
 
             lastIndex = match.index + match[0].length;
+            match = linkRegex.exec(input);
         }
 
         // Add remaining text after last link
@@ -58,8 +56,8 @@ export function RichDescription({ text, className = '' }: RichDescriptionProps) 
 
     return (
         <span className={className}>
-            {segments.map((segment, index) => (
-                <Fragment key={index}>
+            {segments.map((segment) => (
+                <Fragment key={`${segment.type}-${segment.content.slice(0, 20)}`}>
                     {segment.type === 'text' ? (
                         segment.content
                     ) : (
@@ -67,7 +65,7 @@ export function RichDescription({ text, className = '' }: RichDescriptionProps) 
                             href={segment.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-400 hover:text-blue-300 underline decoration-blue-400/50 hover:decoration-blue-300 transition-colors duration-200"
+                            className="text-blue-400 underline decoration-blue-400/50 transition-colors duration-200 hover:text-blue-300 hover:decoration-blue-300"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {segment.content}

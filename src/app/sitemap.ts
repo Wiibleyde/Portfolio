@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 
 export const BASE_URL = 'https://nathan.bonnell.fr';
 

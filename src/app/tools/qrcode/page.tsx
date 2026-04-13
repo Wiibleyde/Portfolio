@@ -1,99 +1,67 @@
 'use client';
-import QrCodeWithLogo from 'qrcode-with-logos';
-import { BaseOptions, CornerType, DotType } from 'qrcode-with-logos/types/src/core/types';
-import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import QrCodeWithLogo from 'qrcode-with-logos';
+import type { BaseOptions, CornerType, DotType } from 'qrcode-with-logos/types/src/core/types';
+import { useEffect, useRef, useState } from 'react';
+import { QrCodeOptionsPanel } from '@/components/tools/QrCodeOptionsPanel';
+import { ToolPageLayout } from '@/components/tools/ToolPageLayout';
+import { useQrCodeOptions } from '@/hooks/useQrCodeOptions';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
-const dotTypes: DotType[] = [
-    'dot',
-    'dot-small',
-    'tile',
-    'rounded',
-    'square',
-    'diamond',
-    'star',
-    'fluid',
-    'fluid-line',
-    'stripe',
-    'stripe-row',
-    'stripe-column',
-];
-const cornerTypes: CornerType[] = [
-    'square',
-    'rounded',
-    'circle',
-    'rounded-circle',
-    'circle-rounded',
-    'circle-star',
-    'circle-diamond',
-];
-
-export default function VCardPage() {
+export default function QrCodePage() {
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
     const formRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [hasGenerated, setHasGenerated] = useState(false);
-    const [text, setText] = useState<string>('');
-    const [logo, setLogo] = useState<string>('');
-    const [dotType, setDotType] = useState<string>('dot');
-    const [cornerType, setCornerType] = useState<string>('circle');
-    const [dotColor, setDotColor] = useState<string>('#000000');
-    const [cornerColor, setCornerColor] = useState<string>('#000000');
-    const [lightColor, setLightColor] = useState<string>('#FFFFFF');
+    const [text, setText] = useState('');
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        setText(value);
-    };
+    const qrOptions = useQrCodeOptions({
+        dotType: 'dot',
+        cornerType: 'circle',
+        dotColor: '#000000',
+        cornerColor: '#000000',
+    });
 
-    const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setLogo(reader.result as string);
-            };
-            reader.readAsDataURL(file);
+    useScrollAnimation(containerRef, () => {
+        const tl = gsap.timeline({ delay: 0.2 });
+        tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' })
+            .to(formRef.current, { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' }, '-=0.4')
+            .to(canvasRef.current, { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6');
+
+        const formFields = formRef.current?.querySelectorAll('.form-field');
+        if (formFields) {
+            gsap.fromTo(
+                formFields,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, delay: 1, ease: 'power2.out' },
+            );
         }
-    };
+    });
+
+    useEffect(() => {
+        gsap.set(titleRef.current, { opacity: 0, y: 50 });
+        gsap.set(formRef.current, { opacity: 0, x: -50 });
+        gsap.set(canvasRef.current, { opacity: 0, x: 50 });
+        gsap.set(document.querySelectorAll('.form-field'), { opacity: 0, y: 20 });
+    }, []);
 
     const handleGenerateQrCode = async () => {
         if (!text.trim()) return;
-
         setIsGenerating(true);
 
-        // Animation du bouton pendant la génération
         const button = document.querySelector('.generate-button');
-        if (button) {
-            gsap.to(button, {
-                scale: 0.95,
-                duration: 0.1,
-                yoyo: true,
-                repeat: 1,
-            });
-        }
+        if (button) gsap.to(button, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
 
         try {
             const qrCodeOptions: BaseOptions = {
                 content: text,
                 width: 900,
-                nodeQrCodeOptions: {
-                    color: {
-                        light: lightColor,
-                    },
-                },
-                dotsOptions: {
-                    type: dotType as DotType,
-                    color: dotColor,
-                },
-                cornersOptions: {
-                    type: cornerType as CornerType,
-                    color: cornerColor,
-                },
-                logo: logo ? { src: logo, logoRadius: 1 } : undefined,
+                nodeQrCodeOptions: { color: { light: qrOptions.lightColor } },
+                dotsOptions: { type: qrOptions.dotType as DotType, color: qrOptions.dotColor },
+                cornersOptions: { type: qrOptions.cornerType as CornerType, color: qrOptions.cornerColor },
+                logo: qrOptions.logo ? { src: qrOptions.logo, logoRadius: 1 } : undefined,
             };
 
             const qrCode = new QrCodeWithLogo(qrCodeOptions);
@@ -109,23 +77,12 @@ export default function VCardPage() {
             img.onload = () => {
                 if (context) {
                     context.drawImage(img, 0, 0, 500, 500);
-
-                    // Animation du canvas après génération
                     gsap.fromTo(
                         canvas,
                         { scale: 0.8, opacity: 0, rotation: 5 },
-                        {
-                            scale: 1,
-                            opacity: 1,
-                            rotation: 0,
-                            duration: 0.6,
-                            ease: 'back.out(1.7)',
-                        }
+                        { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.7)' },
                     );
-
-                    if (!hasGenerated) {
-                        setHasGenerated(true);
-                    }
+                    if (!hasGenerated) setHasGenerated(true);
                 }
                 setIsGenerating(false);
             };
@@ -135,110 +92,10 @@ export default function VCardPage() {
         }
     };
 
-    // Animation on scroll
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !isVisible) {
-                        setIsVisible(true);
-
-                        const tl = gsap.timeline({ delay: 0.2 });
-
-                        tl.to(titleRef.current, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.8,
-                            ease: 'power2.out',
-                        })
-                            .to(
-                                formRef.current,
-                                {
-                                    opacity: 1,
-                                    x: 0,
-                                    duration: 0.8,
-                                    ease: 'power2.out',
-                                },
-                                '-=0.4'
-                            )
-                            .to(
-                                canvasRef.current,
-                                {
-                                    opacity: 1,
-                                    x: 0,
-                                    duration: 0.8,
-                                    ease: 'power2.out',
-                                },
-                                '-=0.6'
-                            );
-
-                        // Animation des champs du formulaire
-                        const formFields = formRef.current?.querySelectorAll('.form-field');
-                        if (formFields) {
-                            gsap.fromTo(
-                                formFields,
-                                { opacity: 0, y: 20 },
-                                {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.5,
-                                    stagger: 0.1,
-                                    delay: 1,
-                                    ease: 'power2.out',
-                                }
-                            );
-                        }
-                    }
-                });
-            },
-            { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
-        );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [isVisible]);
-
-    // Set initial state
-    useEffect(() => {
-        gsap.set([titleRef.current], {
-            opacity: 0,
-            y: 50,
-        });
-
-        gsap.set([formRef.current], {
-            opacity: 0,
-            x: -50,
-        });
-
-        gsap.set([canvasRef.current], {
-            opacity: 0,
-            x: 50,
-        });
-
-        // Set initial state for form fields
-        const formFields = document.querySelectorAll('.form-field');
-        gsap.set(formFields, { opacity: 0, y: 20 });
-    }, []);
-
-    // Animation pour le téléchargement du QR code
     const handleDownloadQrCode = () => {
         const canvas = document.getElementById('qrcodeCanvas') as HTMLCanvasElement;
         if (canvas && hasGenerated) {
-            // Animation du canvas
-            gsap.to(canvas, {
-                scale: 1.05,
-                duration: 0.1,
-                yoyo: true,
-                repeat: 1,
-                ease: 'power2.inOut',
-            });
-
-            // Télécharger l'image
+            gsap.to(canvas, { scale: 1.05, duration: 0.1, yoyo: true, repeat: 1, ease: 'power2.inOut' });
             const link = document.createElement('a');
             link.download = 'qrcode.png';
             link.href = canvas.toDataURL();
@@ -247,38 +104,25 @@ export default function VCardPage() {
     };
 
     return (
-        <div
-            ref={containerRef}
-            className="min-h-screen relative bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12"
-        >
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-10">
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), 
-                                     radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
-                    }}
-                ></div>
-            </div>
-
-            <div className="relative z-10 px-6 max-w-7xl mx-auto">
-                {/* Title Section */}
-                <div ref={titleRef} className="text-center mb-8">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Générateur de QR Code</h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-3"></div>
+        <ToolPageLayout>
+            <div ref={containerRef} className="mx-auto max-w-7xl px-6">
+                {/* Title */}
+                <div ref={titleRef} className="mb-8 text-center">
+                    <h2 className="mb-3 font-bold text-3xl text-white md:text-4xl">Générateur de QR Code</h2>
+                    <div className="mx-auto mb-3 h-1 w-20 rounded-full bg-linear-to-r from-blue-500 to-purple-600" />
                     <p className="text-gray-300 text-lg">Créez des QR codes personnalisés avec logo et couleurs</p>
                 </div>
 
-                <div className="grid lg:grid-cols-2 gap-8 items-start">
-                    {/* Form Section */}
+                <div className="grid items-start gap-8 lg:grid-cols-2">
+                    {/* Form */}
                     <div
                         ref={formRef}
-                        className="bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl"
+                        className="rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 p-6 shadow-2xl backdrop-blur-md md:p-8"
                     >
-                        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <h3 className="mb-6 flex items-center gap-2 font-bold text-white text-xl">
                             <svg
-                                className="w-6 h-6 text-blue-400"
+                                aria-hidden="true"
+                                className="h-6 w-6 text-blue-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -294,135 +138,35 @@ export default function VCardPage() {
                         </h3>
 
                         <form className="space-y-5">
-                            {/* Text/URL Input */}
                             <div className="form-field">
-                                <label htmlFor="text" className="block text-sm font-medium text-gray-200 mb-2">
+                                <label htmlFor="text" className="mb-2 block font-medium text-gray-200 text-sm">
                                     Texte/URL *
                                 </label>
                                 <input
                                     type="text"
                                     id="text"
                                     value={text}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
+                                    onChange={(e) => setText(e.target.value)}
+                                    className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
                                     placeholder="https://example.com ou votre texte"
                                 />
                             </div>
 
-                            {/* Logo Upload */}
-                            <div className="form-field">
-                                <label htmlFor="logo" className="block text-sm font-medium text-gray-200 mb-2">
-                                    Logo (optionnel)
-                                </label>
-                                <input
-                                    type="file"
-                                    id="logo"
-                                    accept="image/*"
-                                    onChange={handleLogoChange}
-                                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:font-medium hover:file:bg-blue-700 file:transition-colors"
-                                />
-                            </div>
+                            <QrCodeOptionsPanel options={qrOptions} />
 
-                            {/* Dot Type and Color */}
-                            <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label htmlFor="dotType" className="block text-sm font-medium text-gray-200 mb-2">
-                                        Type de point
-                                    </label>
-                                    <select
-                                        id="dotType"
-                                        value={dotType}
-                                        onChange={(e) => setDotType(e.target.value)}
-                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
-                                    >
-                                        {dotTypes.map((type) => (
-                                            <option key={type} value={type} className="bg-gray-800">
-                                                {type}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label htmlFor="dotColor" className="block text-sm font-medium text-gray-200 mb-2">
-                                        Couleur du point
-                                    </label>
-                                    <input
-                                        type="color"
-                                        id="dotColor"
-                                        value={dotColor}
-                                        onChange={(e) => setDotColor(e.target.value)}
-                                        className="w-full h-12 px-2 bg-white/10 border border-white/20 rounded-xl cursor-pointer focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Corner Type and Color */}
-                            <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label
-                                        htmlFor="cornerType"
-                                        className="block text-sm font-medium text-gray-200 mb-2"
-                                    >
-                                        Type de coin
-                                    </label>
-                                    <select
-                                        id="cornerType"
-                                        value={cornerType}
-                                        onChange={(e) => setCornerType(e.target.value)}
-                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
-                                    >
-                                        {cornerTypes.map((type) => (
-                                            <option key={type} value={type} className="bg-gray-800">
-                                                {type}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="cornerColor"
-                                        className="block text-sm font-medium text-gray-200 mb-2"
-                                    >
-                                        Couleur du coin
-                                    </label>
-                                    <input
-                                        type="color"
-                                        id="cornerColor"
-                                        value={cornerColor}
-                                        onChange={(e) => setCornerColor(e.target.value)}
-                                        className="w-full h-12 px-2 bg-white/10 border border-white/20 rounded-xl cursor-pointer focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Background Color */}
-                            <div className="form-field">
-                                <label htmlFor="lightColor" className="block text-sm font-medium text-gray-200 mb-2">
-                                    Couleur de fond
-                                </label>
-                                <input
-                                    type="color"
-                                    id="lightColor"
-                                    value={lightColor}
-                                    onChange={(e) => setLightColor(e.target.value)}
-                                    className="w-full h-12 px-2 bg-white/10 border border-white/20 rounded-xl cursor-pointer focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
-                                />
-                            </div>
-
-                            {/* Generate Button */}
                             <div className="pt-4">
                                 <button
                                     type="button"
                                     onClick={handleGenerateQrCode}
                                     disabled={!text.trim() || isGenerating}
-                                    className="generate-button group relative w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 shadow-xl hover:shadow-blue-500/25 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+                                    className="generate-button group relative flex w-full transform items-center justify-center gap-3 rounded-2xl bg-linear-to-r from-blue-600 to-purple-600 px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-purple-700 hover:shadow-blue-500/25 disabled:scale-100 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-
+                                    <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-blue-400 to-purple-400 opacity-0 blur transition-opacity duration-300 group-hover:opacity-30" />
                                     {isGenerating ? (
                                         <>
                                             <svg
-                                                className="w-5 h-5 relative z-10 animate-spin"
+                                                aria-hidden="true"
+                                                className="relative z-10 h-5 w-5 animate-spin"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
@@ -439,7 +183,8 @@ export default function VCardPage() {
                                     ) : (
                                         <>
                                             <svg
-                                                className="w-5 h-5 relative z-10"
+                                                aria-hidden="true"
+                                                className="relative z-10 h-5 w-5"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
@@ -459,14 +204,15 @@ export default function VCardPage() {
                         </form>
                     </div>
 
-                    {/* QR Code Display Section */}
+                    {/* Preview */}
                     <div
                         ref={canvasRef}
-                        className="bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl"
+                        className="rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 p-6 shadow-2xl backdrop-blur-md md:p-8"
                     >
-                        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <h3 className="mb-6 flex items-center gap-2 font-bold text-white text-xl">
                             <svg
-                                className="w-6 h-6 text-purple-400"
+                                aria-hidden="true"
+                                className="h-6 w-6 text-purple-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -486,18 +232,18 @@ export default function VCardPage() {
                             </svg>
                             Aperçu
                         </h3>
-
                         <div className="flex justify-center">
-                            <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 shadow-inner">
+                            <div className="relative rounded-2xl border border-white/10 bg-white/5 p-6 shadow-inner">
                                 <canvas
                                     id="qrcodeCanvas"
-                                    className="max-w-full h-auto rounded-lg shadow-lg border border-white/10"
+                                    className="h-auto max-w-full rounded-lg border border-white/10 shadow-lg"
                                 />
                                 {!text && (
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="text-center text-gray-400">
                                             <svg
-                                                className="w-16 h-16 mx-auto mb-4 opacity-50"
+                                                aria-hidden="true"
+                                                className="mx-auto mb-4 h-16 w-16 opacity-50"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
@@ -519,17 +265,17 @@ export default function VCardPage() {
                                 )}
                             </div>
                         </div>
-
-                        {/* Download Button */}
                         {hasGenerated && (
                             <div className="mt-6 flex justify-center">
                                 <button
+                                    type="button"
                                     onClick={handleDownloadQrCode}
-                                    className="group relative bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:shadow-green-500/25 transform hover:scale-105"
+                                    className="group relative flex transform items-center gap-2 rounded-2xl bg-linear-to-r from-green-600 to-emerald-600 px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-green-700 hover:to-emerald-700 hover:shadow-green-500/25"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                                    <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-green-400 to-emerald-400 opacity-0 blur transition-opacity duration-300 group-hover:opacity-30" />
                                     <svg
-                                        className="w-5 h-5 relative z-10"
+                                        aria-hidden="true"
+                                        className="relative z-10 h-5 w-5"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -548,6 +294,6 @@ export default function VCardPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </ToolPageLayout>
     );
 }

@@ -3,9 +3,9 @@ import '../markdown.css';
 
 export default function TermsOfService() {
     return (
-        <div className="flex flex-col items-center justify-center py-12 dark:bg-black bg-gray-100 dark:text-white min-h-screen">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 py-12 dark:bg-black dark:text-white">
             <div className="flex flex-col items-center justify-center">
-                <div className="w-full max-w-3xl p-8 dark:bg-black bg-gray-100 rounded-lg shadow-lg border-2 markdownApplicable">
+                <div className="markdownApplicable w-full max-w-3xl rounded-lg border-2 bg-gray-100 p-8 shadow-lg dark:bg-black">
                     <Markdown className="prose prose-lg prose-invert">{frenchMd}</Markdown>
                 </div>
             </div>

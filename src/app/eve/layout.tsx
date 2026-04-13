@@ -1,5 +1,5 @@
+import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
-import { Metadata } from 'next';
 import '@/app/globals.css';
 
 const montserrat = Montserrat({
@@ -17,5 +17,5 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return <div className={montserrat.className + ' bg-black min-h-screen'}>{children}</div>;
+    return <div className={`${montserrat.className} min-h-screen bg-black`}>{children}</div>;
 }

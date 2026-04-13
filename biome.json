@@ -1,0 +1,71 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.4.8/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "includes": ["**", "!**/.next", "!**/node_modules", "!**/public"]
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 120
+    },
+    "css": {
+        "parser": {
+            "cssModules": true,
+            "tailwindDirectives": true
+        }
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "trailingCommas": "all",
+            "semicolons": "always"
+        }
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "correctness": {
+                "noUnusedImports": "warn",
+                "useExhaustiveDependencies": "warn",
+                "noEmptyCharacterClassInRegex": "warn",
+                "noUnusedFunctionParameters": "warn",
+                "useParseIntRadix": "warn"
+            },
+            "suspicious": {
+                "noExplicitAny": "warn",
+                "noImplicitAnyLet": "warn",
+                "noAssignInExpressions": "warn",
+                "noArrayIndexKey": "warn"
+            },
+            "style": {
+                "noNonNullAssertion": "off",
+                "useConst": "warn"
+            },
+            "a11y": {
+                "useButtonType": "warn",
+                "noSvgWithoutTitle": "warn",
+                "useKeyWithClickEvents": "warn",
+                "noStaticElementInteractions": "warn"
+            },
+            "complexity": {
+                "noForEach": "off",
+                "noImportantStyles": "warn"
+            }
+        }
+    },
+    "assist": {
+        "enabled": true,
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    }
+}
