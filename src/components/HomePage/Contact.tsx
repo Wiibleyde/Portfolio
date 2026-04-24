@@ -97,7 +97,7 @@ export function Contact() {
                           return executeRecaptcha('contact');
                       })();
 
-                const response = await fetch('/api/v1/contact', {
+                const response = await fetch('/api/contact', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -38,7 +38,7 @@ This is Nathan Bonnell's personal portfolio built with **Next.js 15 (App Router)
 ```
 src/
   app/               # Next.js App Router pages
-    api/v1/         # API routes (versioned)
+    api             # API routes (versioned)
     [feature]/      # Feature-specific page groups
   components/
     HomePage/       # Landing page components
@@ -140,7 +140,7 @@ export interface Project {
 
 ### API Route Structure
 
-Routes are versioned under `/api/v1/`:
+Routes are versioned under `/api/`:
 
 - `contact/route.ts` - Contact form submission via nodemailer
 - `twitch/auth/route.ts` - Twitch OAuth flow
@@ -226,7 +226,7 @@ Next.js image component configured for:
 
 1. Frontend validates with reCAPTCHA v3 (`react-google-recaptcha-v3`)
 2. Server action `verifyCaptchaAction` validates score > 0.5
-3. API route `/api/v1/contact` sends email via nodemailer (OVH SMTP)
+3. API route `/api/contact` sends email via nodemailer (OVH SMTP)
 4. Password stored with `||` replaced by `$` in env var
 
 ## Common Pitfalls & Solutions
