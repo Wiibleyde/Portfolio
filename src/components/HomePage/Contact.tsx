@@ -1,16 +1,8 @@
 'use client';
 import { gsap } from 'gsap';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-
-declare global {
-    interface Window {
-        grecaptcha: {
-            ready: (cb: () => void) => void;
-            execute: (siteKey: string, options: { action: string }) => Promise<string>;
-        };
-    }
-}
 
 interface FormData {
     name: string;
@@ -32,6 +24,7 @@ export function Contact() {
     const formRef = useRef<HTMLFormElement>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const { executeRecaptcha } = useGoogleReCaptcha();
 
     useScrollAnimation(containerRef, () => {
         const tl = gsap.timeline({ delay: 0.2 });
@@ -57,7 +50,7 @@ export function Contact() {
     const [errors, setErrors] = useState<FormErrors>({});
 
     // Validation
-    const validateForm = (): boolean => {
+    const validateForm = useCallback((): boolean => {
         const newErrors: FormErrors = {};
 
         if (!formData.name.trim()) {
@@ -82,51 +75,50 @@ export function Contact() {
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    };
+    }, [formData]);
 
     // Handle form submission
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = useCallback(
+        async (e: React.FormEvent) => {
+            e.preventDefault();
 
-        if (!validateForm()) return;
+            if (!validateForm()) return;
 
-        setIsSubmitting(true);
+            setIsSubmitting(true);
 
-        try {
-            const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_KEY;
-            if (!siteKey || !window.grecaptcha) {
-                console.error('reCAPTCHA not loaded');
-                setIsSubmitting(false);
-                return;
-            }
+            try {
+                const isDev = process.env.NODE_ENV === 'development';
+                const token = isDev
+                    ? 'dev-bypass'
+                    : await (async () => {
+                          if (!executeRecaptcha) {
+                              throw new Error('reCAPTCHA not ready');
+                          }
+                          return executeRecaptcha('contact');
+                      })();
 
-            const token = await new Promise<string>((resolve) => {
-                window.grecaptcha.ready(async () => {
-                    const t = await window.grecaptcha.execute(siteKey, { action: 'contact' });
-                    resolve(t);
+                const response = await fetch('/api/v1/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ...formData, captchaToken: token }),
                 });
-            });
-
-            const response = await fetch('/api/v1/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ ...formData, captchaToken: token }),
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Erreur lors de l'envoi du message");
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || "Erreur lors de l'envoi du message");
+                }
+                setIsSubmitted(true);
+                setFormData({ name: '', email: '', subject: '', message: '' });
+                setErrors({});
+            } catch (error) {
+                console.error('Error submitting form:', error);
+            } finally {
+                setIsSubmitting(false);
             }
-            setIsSubmitted(true);
-            setFormData({ name: '', email: '', subject: '', message: '' });
-            setErrors({});
-        } catch (error) {
-            console.error('Error submitting form:', error);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+        },
+        [executeRecaptcha, formData, validateForm],
+    );
 
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -272,7 +264,9 @@ export function Contact() {
                             <div className="flex justify-center pt-2">
                                 <button
                                     type="submit"
-                                    disabled={isSubmitting}
+                                    disabled={
+                                        isSubmitting || (process.env.NODE_ENV !== 'development' && !executeRecaptcha)
+                                    }
                                     aria-label="Envoyer le message"
                                     className="group relative flex transform items-center gap-3 rounded-2xl bg-linear-to-r from-blue-600 to-purple-600 px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-purple-700 hover:shadow-blue-500/25 disabled:scale-100 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700"
                                 >

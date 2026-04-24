@@ -125,7 +125,7 @@ export function Timeline() {
         }
     });
 
-    // Set initial state
+    // Set initial statew
     useEffect(() => {
         if (timelineRef.current) {
             const items = timelineRef.current.querySelectorAll('.timeline-item');
@@ -152,7 +152,7 @@ export function Timeline() {
                 <div className="w-full rounded-2xl border border-blue-500/30 bg-linear-to-b from-blue-500/30 to-purple-600/30 p-8 shadow-lg">
                     <h2 className="mb-6 font-bold text-3xl text-white">Mon Parcours</h2>
                     <div className="relative">
-                        <div ref={scrollContainerRef} className="overflow-x-auto pt-14 pb-6">
+                        <div ref={scrollContainerRef} className="overflow-x-auto pt-14 pb-6 overflow-y-hidden">
                             <ol
                                 ref={timelineRef}
                                 className="relative flex flex-col border-l-2 border-gray-600 ml-4 md:flex-row md:border-t-2 md:border-l-0 md:ml-0 md:min-w-max"

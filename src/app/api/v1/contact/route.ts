@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 import { verifyCaptchaToken } from '@/captcha';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -18,39 +17,54 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return NextResponse.json({ message: 'CAPTCHA verification failed' }, { status: 403 });
     }
 
-    const username = process.env.NEXT_PUBLIC_BURNER_USERNAME;
-    // Remplace : "||" by "$" because of the way the password is stored in the environment variable
-    const password = process.env.BURNER_PASSWORD?.replace(/\|\|/g, '$');
-    const myEmail = process.env.NEXT_PUBLIC_PERSONAL_EMAIL;
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    if (!webhookUrl) {
+        console.error('DISCORD_WEBHOOK_URL is not set');
+        return NextResponse.json({ message: 'Server misconfiguration' }, { status: 500 });
+    }
 
-    const transporter = nodemailer.createTransport({
-        host: 'ssl0.ovh.net',
-        port: 587,
-        secure: false,
-        authMethod: 'LOGIN',
-        auth: {
-            user: username,
-            pass: password,
-        },
-    });
+    const payload = {
+        embeds: [
+            {
+                title: `📬 ${subject}`,
+                color: 0x5865f2,
+                fields: [
+                    {
+                        name: '👤 Name',
+                        value: name,
+                        inline: true,
+                    },
+                    {
+                        name: '📧 Email',
+                        value: email,
+                        inline: true,
+                    },
+                    {
+                        name: '💬 Message',
+                        value: message,
+                    },
+                ],
+                footer: {
+                    text: 'Portfolio Contact Form',
+                },
+                timestamp: new Date().toISOString(),
+            },
+        ],
+    };
 
     try {
-        const data = {
-            name: name,
-            from: email,
-            subject: subject,
-            message: message,
-        };
-
-        await transporter.sendMail({
-            from: username,
-            to: myEmail,
-            replyTo: data.from,
-            subject: `Portfolio : ${data.subject}`,
-            text: data.message,
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
         });
+
+        if (!response.ok) {
+            console.error('Discord webhook error:', response.status, await response.text());
+            return NextResponse.json({ message: 'Error sending message' }, { status: 500 });
+        }
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error('Error sending Discord webhook:', error);
         return NextResponse.json({ message: 'Error sending message' }, { status: 500 });
     }
 

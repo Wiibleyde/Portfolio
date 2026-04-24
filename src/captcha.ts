@@ -1,4 +1,8 @@
 export async function verifyCaptchaToken(token: string): Promise<boolean> {
+    if (process.env.NODE_ENV === 'development') {
+        return true;
+    }
+
     const secret = process.env.RECAPTCHA_SECRET_KEY;
     if (!secret) {
         console.error('RECAPTCHA_SECRET_KEY is not set');
