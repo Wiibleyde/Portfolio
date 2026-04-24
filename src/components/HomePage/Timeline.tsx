@@ -7,6 +7,7 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 interface Timeline {
     title: string;
     duration: string;
+    isNow?: boolean;
     org: string;
     icon?: Icon;
     description?: string;
@@ -75,7 +76,7 @@ export function Timeline() {
         {
             title: 'Mastère Informatique',
             duration: 'Septembre 2022 - Septembre 2027',
-            org: 'Ynov Campus (Actuellement en B3)',
+            org: 'Ynov Campus (Actuellement en M1)',
             description:
                 "Développement d'applications web, mobile et logiciel (apprentissage néanmoins de technologies d'infrastructures et de réseaux).",
             skills: [
@@ -104,10 +105,11 @@ export function Timeline() {
         {
             title: 'Développeur Full Stack (alternance)',
             duration: "Septembre 2025 - Aujourd'hui",
+            isNow: true,
             org: 'Orange Business',
             icon: CodeSlash,
-            description: 'Développement pour Orange Business.',
-            skills: ['React', '.NET'],
+            description: 'Développement pour Orange Business (Live Intelligence).',
+            skills: ['React', '.NET', 'Tanstack', 'Docker'],
             class: 'text-sm font-medium me-2 px-2.5 py-0.5 rounded bg-orange-400 text-orange-100',
             circleColor: 'bg-orange-400',
             ringColor: 'ring-orange-400/45',
@@ -157,12 +159,8 @@ export function Timeline() {
                                 ref={timelineRef}
                                 className="relative flex flex-col border-l-2 border-gray-600 ml-4 md:flex-row md:border-t-2 md:border-l-0 md:ml-0 md:min-w-max"
                             >
-                                {data.map((item, index) => (
-                                    <TimelineItem
-                                        key={`${item.title}-${item.org}`}
-                                        item={item}
-                                        isLast={index === data.length - 1}
-                                    />
+                                {data.map((item) => (
+                                    <TimelineItem key={`${item.title}-${item.org}`} item={item} />
                                 ))}
                             </ol>
                         </div>
@@ -181,7 +179,7 @@ export function Timeline() {
     );
 }
 
-function TimelineItem({ item, isLast }: Readonly<{ item: Timeline; isLast: boolean }>) {
+function TimelineItem({ item }: Readonly<{ item: Timeline }>) {
     const startDate = extractStartDate(item.duration);
     return (
         <li className="timeline-item relative pl-8 mb-8 md:flex md:flex-col md:items-center md:min-w-72 md:w-72 md:pl-4 md:pr-4 md:pt-14 md:mb-0">
@@ -200,9 +198,9 @@ function TimelineItem({ item, isLast }: Readonly<{ item: Timeline; isLast: boole
             <div className="w-full md:text-center">
                 <h3 className="mb-1 font-semibold text-sm text-white leading-tight">
                     {item.title}
-                    {isLast && (
-                        <span className="mt-1 block rounded bg-red-500 px-2 py-0.5 font-medium text-white text-xs md:mx-auto w-fit">
-                            {'Récent'}
+                    {item.isNow && (
+                        <span className="mt-1 block rounded bg-green-500 px-2 py-0.5 font-medium text-white text-xs md:mx-auto w-fit">
+                            {'Actuellement'}
                         </span>
                     )}
                 </h3>
