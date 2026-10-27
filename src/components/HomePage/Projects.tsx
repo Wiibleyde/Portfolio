@@ -7,6 +7,8 @@ import FurutsuGame from '@public/img/projects/furutsugame.png';
 import HopeLogo from '@public/img/projects/hope.png';
 import LexPortLogo from '@public/img/projects/lexport.png';
 import LightManager from '@public/img/projects/light-manager.png';
+import LiveIntelligence from '@public/img/projects/live-intelligence.jpg';
+import MindCity from '@public/img/projects/mindcity.jpg';
 import Motus from '@public/img/projects/motus.jpg';
 import RPlaceLogo from '@public/img/projects/rplace-logo.png';
 import SABSLogo from '@public/img/projects/sabs-logo.png';
@@ -21,6 +23,34 @@ import { type Project, ProjectType } from '@/types';
 import { SectionHeading } from './SectionHeading';
 
 const projects: Project[] = [
+    {
+        title: 'Live Intelligence',
+        description:
+            "Console d'administration et Studio d'agents IA de la plateforme d'IA générative d'[Orange Business](https://www.orange-business.com/fr/solutions/data-ia-iot/live-intelligence).",
+        type: ProjectType.Professional,
+        url: 'https://www.orange-business.com/fr/solutions/data-ia-iot/live-intelligence',
+        image: LiveIntelligence.src,
+        tags: [
+            '.NET 10',
+            'React',
+            'TanStack',
+            'Kubernetes',
+            'ArgoCD',
+            'Docker',
+            'OpenCode',
+            'LLM self-hostés',
+            'Vertex AI',
+        ],
+    },
+    {
+        title: 'MindCity RP',
+        description:
+            'Serveur GTA RP communautaire : scripts Lua, interfaces en jeu en Vue et [site web](https://mindcity-rp.fr) en Symfony.',
+        type: ProjectType.Personal,
+        url: 'https://mindcity-rp.fr',
+        image: MindCity.src,
+        tags: ['FiveM', 'Lua', 'Vue.js', 'PHP', 'Symfony', 'MindCityRP'],
+    },
     {
         title: 'WikiGuessr',
         description:

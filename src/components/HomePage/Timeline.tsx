@@ -26,7 +26,7 @@ const data: Timeline[] = [
         org: 'Orange Business',
         icon: CodeSlash,
         description: 'Développement pour Orange Business (Live Intelligence).',
-        skills: ['React', '.NET', 'Tanstack', 'Docker'],
+        skills: ['.NET 10', 'React', 'TanStack', 'Kubernetes', 'ArgoCD', 'Docker', 'OpenCode', 'Vertex AI'],
     },
     {
         title: 'Développeur Full Stack (alternance)',
