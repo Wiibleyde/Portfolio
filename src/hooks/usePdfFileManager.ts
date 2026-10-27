@@ -1,30 +1,31 @@
 'use client';
 
 import { gsap } from 'gsap';
-import { PDFDocument, type PDFImage, RotationTypes } from 'pdf-lib';
+import { degrees, PDFDocument, type PDFImage } from 'pdf-lib';
 import { useCallback, useState } from 'react';
 
-// PDF.js is loaded via CDN script tag, define minimal interface
-interface PdfjsLib {
-    getDocument(src: ArrayBuffer | string): { promise: Promise<PdfjsDocument> };
-    GlobalWorkerOptions: { workerSrc: string };
+type PDFDocumentProxy = import('pdfjs-dist').PDFDocumentProxy;
+
+// pdfjs touches browser globals on import, so load it lazily on the client only
+let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | null = null;
+function loadPdfJs() {
+    pdfjsPromise ??= import('pdfjs-dist').then((pdfjs) => {
+        pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+            'pdfjs-dist/build/pdf.worker.min.mjs',
+            import.meta.url,
+        ).toString();
+        return pdfjs;
+    });
+    return pdfjsPromise;
 }
 
-interface PdfjsDocument {
-    numPages: number;
-    getPage(num: number): Promise<PdfjsPage>;
-}
-
-interface PdfjsPage {
-    getViewport(params: { scale: number }): { width: number; height: number };
-    render(params: { canvasContext: CanvasRenderingContext2D | null; viewport: { width: number; height: number } }): {
-        promise: Promise<void>;
-    };
-}
-
-declare global {
-    interface Window {
-        pdfjsLib: PdfjsLib;
+async function withPdf<T>(file: File, fn: (pdfDoc: PDFDocumentProxy) => Promise<T>): Promise<T> {
+    const pdfjs = await loadPdfJs();
+    const task = pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) });
+    try {
+        return await fn(await task.promise);
+    } finally {
+        await task.destroy();
     }
 }
 
@@ -61,20 +62,13 @@ export interface UsePdfFileManagerReturn {
     assemblePDFs: () => Promise<void>;
 }
 
-async function waitForPdfJs(): Promise<void> {
-    while (!window.pdfjsLib) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-}
-
-async function renderPdfPageToCanvas(pdfDoc: PdfjsDocument, pageNum: number, scale: number): Promise<string> {
+async function renderPdfPageToCanvas(pdfDoc: PDFDocumentProxy, pageNum: number, scale: number): Promise<string> {
     const page = await pdfDoc.getPage(pageNum);
     const viewport = page.getViewport({ scale });
     const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
     canvas.height = viewport.height;
     canvas.width = viewport.width;
-    await page.render({ canvasContext: context, viewport }).promise;
+    await page.render({ canvas, viewport }).promise;
     return canvas.toDataURL('image/png');
 }
 
@@ -88,15 +82,11 @@ async function generatePreview(file: File): Promise<{ preview: string; pageCount
     }
 
     try {
-        await waitForPdfJs();
-
-        const [arrayBuffer1, arrayBuffer2] = await Promise.all([file.arrayBuffer(), file.arrayBuffer()]);
-
-        const pdfJsDoc = await window.pdfjsLib.getDocument(arrayBuffer1).promise;
-        const preview = await renderPdfPageToCanvas(pdfJsDoc, 1, 0.5);
-
-        const pdfLibDoc = await PDFDocument.load(arrayBuffer2);
-        return { preview, pageCount: pdfLibDoc.getPageCount(), type: 'pdf' };
+        return await withPdf(file, async (pdfDoc) => ({
+            preview: await renderPdfPageToCanvas(pdfDoc, 1, 0.5),
+            pageCount: pdfDoc.numPages,
+            type: 'pdf',
+        }));
     } catch {
         try {
             const arrayBuffer = await file.arrayBuffer();
@@ -114,14 +104,13 @@ export async function renderAllPages(file: UploadedFile): Promise<string[]> {
     }
 
     try {
-        await waitForPdfJs();
-        const arrayBuffer = await file.file.arrayBuffer();
-        const pdfDoc = await window.pdfjsLib.getDocument(arrayBuffer).promise;
-        const pages: string[] = [];
-        for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-            pages.push(await renderPdfPageToCanvas(pdfDoc, pageNum, 1.5));
-        }
-        return pages;
+        return await withPdf(file.file, async (pdfDoc) => {
+            const pages: string[] = [];
+            for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+                pages.push(await renderPdfPageToCanvas(pdfDoc, pageNum, 1.5));
+            }
+            return pages;
+        });
     } catch {
         return [];
     }
@@ -320,7 +309,7 @@ export function usePdfFileManager(): UsePdfFileManagerReturn {
                     const pdf = await PDFDocument.load(arrayBuffer);
                     const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
                     for (const page of pages) {
-                        if (rotation > 0) page.setRotation({ angle: rotation, type: RotationTypes.Degrees });
+                        if (rotation > 0) page.setRotation(degrees((page.getRotation().angle + rotation) % 360));
                         mergedPdf.addPage(page);
                     }
                 } else {
@@ -344,8 +333,14 @@ export function usePdfFileManager(): UsePdfFileManagerReturn {
                         canvas.width = img.width;
                         canvas.height = img.height;
                         ctx?.drawImage(img, 0, 0);
-                        const pngBuffer = await new Promise<ArrayBuffer>((resolve) => {
-                            canvas.toBlob((blob) => blob?.arrayBuffer().then(resolve), 'image/png');
+                        const pngBuffer = await new Promise<ArrayBuffer>((resolve, reject) => {
+                            canvas.toBlob(
+                                (blob) =>
+                                    blob
+                                        ? blob.arrayBuffer().then(resolve, reject)
+                                        : reject(new Error('Image conversion failed')),
+                                'image/png',
+                            );
                         });
                         image = await mergedPdf.embedPng(pngBuffer);
                         URL.revokeObjectURL(img.src);
@@ -353,21 +348,8 @@ export function usePdfFileManager(): UsePdfFileManagerReturn {
 
                     const { width, height } = image.scale(1);
                     const page = mergedPdf.addPage([width, height]);
-
-                    if (rotation > 0) {
-                        const newW = rotation === 90 || rotation === 270 ? height : width;
-                        const newH = rotation === 90 || rotation === 270 ? width : height;
-                        page.setSize(newW, newH);
-                        page.drawImage(image, {
-                            x: (newW - width) / 2,
-                            y: (newH - height) / 2,
-                            width,
-                            height,
-                            rotate: { angle: rotation, type: RotationTypes.Degrees },
-                        });
-                    } else {
-                        page.drawImage(image, { x: 0, y: 0, width, height });
-                    }
+                    page.drawImage(image, { x: 0, y: 0, width, height });
+                    if (rotation > 0) page.setRotation(degrees(rotation));
                 }
             }
 
@@ -379,7 +361,7 @@ export function usePdfFileManager(): UsePdfFileManagerReturn {
             link.href = url;
             link.download = 'assembled-document.pdf';
             link.click();
-            URL.revokeObjectURL(url);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
 
             gsap.to('.success-animation', { scale: 1.1, duration: 0.3, yoyo: true, repeat: 1, ease: 'power2.inOut' });
         } catch (error) {

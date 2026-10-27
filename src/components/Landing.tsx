@@ -136,7 +136,7 @@ export function Landing() {
     return (
         <div
             ref={containerRef}
-            className="fixed top-0 left-0 z-50 flex h-screen w-screen flex-col items-center justify-center bg-black text-white"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-white"
         >
             <div ref={logoRef} className="relative mb-8">
                 <div className="flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-blue-500 via-purple-600 to-pink-500 shadow-lg">
@@ -147,12 +147,15 @@ export function Landing() {
 
             <h1
                 ref={welcomeTextRef}
-                className="mb-3 bg-linear-to-r from-white to-gray-300 bg-clip-text px-4 pb-2 font-black text-7xl text-transparent tracking-wide"
+                className="mb-3 bg-linear-to-r from-white to-gray-300 bg-clip-text px-4 pb-2 font-black text-6xl sm:text-7xl text-transparent tracking-wide"
             >
                 Bonjour
             </h1>
 
-            <p ref={taglineRef} className="mb-16 font-light text-gray-300 text-lg tracking-[0.3em]">
+            <p
+                ref={taglineRef}
+                className="mb-16 px-6 text-center font-light text-base text-gray-300 tracking-[0.3em] sm:text-lg"
+            >
                 BIENVENUE SUR MON PORTFOLIO
             </p>
 

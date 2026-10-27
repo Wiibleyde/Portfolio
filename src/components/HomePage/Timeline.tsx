@@ -136,7 +136,7 @@ export function Timeline() {
     }, []);
 
     return (
-        <div id="timeline" className="relative min-h-screen snap-start bg-gray-900">
+        <div id="timeline" className="relative min-h-dvh snap-start bg-gray-900">
             <div className="absolute inset-0 opacity-5">
                 <div
                     className="h-full w-full"
@@ -150,7 +150,7 @@ export function Timeline() {
                     }}
                 />
             </div>
-            <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-8">
+            <div className="relative z-10 flex min-h-dvh items-center justify-center px-4 py-8">
                 <div className="w-full rounded-2xl border border-blue-500/30 bg-linear-to-b from-blue-500/30 to-purple-600/30 p-8 shadow-lg">
                     <h2 className="mb-6 font-bold text-3xl text-white">Mon Parcours</h2>
                     <div className="relative">

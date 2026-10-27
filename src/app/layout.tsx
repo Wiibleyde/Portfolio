@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     },
 };
 
-const montserrat = Outfit({
+const outfit = Outfit({
     subsets: ['latin'],
 });
 
@@ -48,8 +48,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className={`antialiased ${montserrat.className} bg-black`}>
+        <html lang="fr">
+            <body className={`antialiased ${outfit.className} bg-black`}>
                 <ClientLayout>{children}</ClientLayout>
             </body>
         </html>

@@ -69,7 +69,7 @@ export function QrCodeOptionsPanel({ options }: QrCodeOptionsPanelProps) {
                             id="dotColor"
                             value={dotColor}
                             onChange={(e) => setDotColor(e.target.value)}
-                            className="h-12 w-12 cursor-pointer rounded-xl border border-white/20 bg-transparent"
+                            className="h-12 w-12 shrink-0 cursor-pointer rounded-xl border border-white/20 bg-transparent"
                         />
                         <input
                             type="text"
@@ -111,7 +111,7 @@ export function QrCodeOptionsPanel({ options }: QrCodeOptionsPanelProps) {
                             id="cornerColor"
                             value={cornerColor}
                             onChange={(e) => setCornerColor(e.target.value)}
-                            className="h-12 w-12 cursor-pointer rounded-xl border border-white/20 bg-transparent"
+                            className="h-12 w-12 shrink-0 cursor-pointer rounded-xl border border-white/20 bg-transparent"
                         />
                         <input
                             type="text"
@@ -135,7 +135,7 @@ export function QrCodeOptionsPanel({ options }: QrCodeOptionsPanelProps) {
                         id="lightColor"
                         value={lightColor}
                         onChange={(e) => setLightColor(e.target.value)}
-                        className="h-12 w-12 cursor-pointer rounded-xl border border-white/20 bg-transparent"
+                        className="h-12 w-12 shrink-0 cursor-pointer rounded-xl border border-white/20 bg-transparent"
                     />
                     <input
                         type="text"

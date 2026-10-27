@@ -196,7 +196,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     return (
         <article
             ref={cardRef}
-            className="group relative h-96 w-80 shrink-0 transform-gpu overflow-visible rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-sm transition-all duration-300"
+            className="group relative h-96 w-[calc(100vw-4rem)] max-w-80 shrink-0 transform-gpu overflow-visible rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-sm transition-all duration-300"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
             style={{ transformOrigin: 'center center' }}

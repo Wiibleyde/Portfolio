@@ -139,7 +139,7 @@ export function Presentation() {
     return (
         <div
             id="presentation"
-            className="relative min-h-screen snap-start bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-16"
+            className="relative min-h-dvh snap-start bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-16"
         >
             {/* Distinctive background pattern */}
             <div className="absolute inset-0 opacity-10">
@@ -152,7 +152,7 @@ export function Presentation() {
                 />
             </div>
 
-            <div ref={containerRef} className="relative z-10 px-10">
+            <div ref={containerRef} className="relative z-10 px-4 sm:px-10">
                 <div className="mb-8 text-center">
                     <h2 className="mb-3 font-bold text-3xl text-white md:text-4xl">Présentation</h2>
                     <div className="mx-auto h-1 w-20 rounded-full bg-linear-to-r from-blue-500 to-purple-600" />

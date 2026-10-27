@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { type RefObject, useEffect, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 
 interface UseScrollAnimationOptions {
     threshold?: number;
@@ -17,26 +17,27 @@ export function useScrollAnimation(
 ): boolean {
     const { threshold = 0.3, rootMargin = '0px 0px -100px 0px' } = options;
     const [isVisible, setIsVisible] = useState(false);
+    // Callers pass inline callbacks; keep the latest without re-creating the observer each render
+    const onVisibleRef = useRef(onVisible);
+    onVisibleRef.current = onVisible;
 
     useEffect(() => {
+        if (isVisible || !containerRef.current) return;
+
         const observer = new IntersectionObserver(
             (entries) => {
-                for (const entry of entries) {
-                    if (entry.isIntersecting && !isVisible) {
-                        setIsVisible(true);
-                        onVisible();
-                    }
+                if (entries.some((entry) => entry.isIntersecting)) {
+                    observer.disconnect();
+                    setIsVisible(true);
+                    onVisibleRef.current();
                 }
             },
             { threshold, rootMargin },
         );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
+        observer.observe(containerRef.current);
 
         return () => observer.disconnect();
-    }, [containerRef, isVisible, onVisible, threshold, rootMargin]);
+    }, [containerRef, isVisible, threshold, rootMargin]);
 
     return isVisible;
 }

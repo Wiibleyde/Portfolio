@@ -10,7 +10,7 @@ export default function Home() {
     return (
         <>
             <Landing />
-            <div className="h-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth">
+            <div className="h-dvh snap-y overflow-x-hidden overflow-y-scroll scroll-smooth md:snap-mandatory">
                 <Hero />
                 <Presentation />
                 <Timeline />

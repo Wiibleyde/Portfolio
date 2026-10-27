@@ -9,12 +9,16 @@ export async function verifyCaptchaToken(token: string): Promise<boolean> {
         return false;
     }
 
-    const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ secret, response: token }),
-    });
-
-    const data = await res.json();
-    return data.success === true && data.score > 0.5;
+    try {
+        const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ secret, response: token }),
+        });
+        const data = await res.json();
+        return data.success === true && data.score > 0.5;
+    } catch (error) {
+        console.error('reCAPTCHA verification error:', error);
+        return false;
+    }
 }

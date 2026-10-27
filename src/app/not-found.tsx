@@ -127,7 +127,7 @@ export default function NotFound() {
     };
 
     return (
-        <div className="relative flex min-h-screen items-center justify-center bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30">
+        <div className="relative flex min-h-dvh items-center justify-center py-12 bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30">
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div

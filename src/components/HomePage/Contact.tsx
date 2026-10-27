@@ -24,6 +24,7 @@ export function Contact() {
     const formRef = useRef<HTMLFormElement>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
     const { executeRecaptcha } = useGoogleReCaptcha();
 
     useScrollAnimation(containerRef, () => {
@@ -85,6 +86,7 @@ export function Contact() {
             if (!validateForm()) return;
 
             setIsSubmitting(true);
+            setSubmitError(null);
 
             try {
                 const isDev = process.env.NODE_ENV === 'development';
@@ -105,14 +107,14 @@ export function Contact() {
                     body: JSON.stringify({ ...formData, captchaToken: token }),
                 });
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || "Erreur lors de l'envoi du message");
+                    throw new Error(`Contact API responded ${response.status}`);
                 }
                 setIsSubmitted(true);
                 setFormData({ name: '', email: '', subject: '', message: '' });
                 setErrors({});
             } catch (error) {
                 console.error('Error submitting form:', error);
+                setSubmitError("Une erreur est survenue lors de l'envoi. Réessayez plus tard.");
             } finally {
                 setIsSubmitting(false);
             }
@@ -143,7 +145,7 @@ export function Contact() {
 
     return (
         <div
-            className="relative min-h-screen snap-start bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12"
+            className="relative min-h-dvh snap-start bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12"
             id="contact"
         >
             {/* Background pattern */}
@@ -157,7 +159,7 @@ export function Contact() {
                 />
             </div>
 
-            <div ref={containerRef} className="relative z-10 mx-auto max-w-4xl px-10">
+            <div ref={containerRef} className="relative z-10 mx-auto max-w-4xl px-4 sm:px-10">
                 {/* Title Section */}
                 <div ref={titleRef} className="mb-8 text-center">
                     <h2 className="mb-3 font-bold text-3xl text-white md:text-4xl">Contactez-moi</h2>
@@ -252,6 +254,7 @@ export function Contact() {
                                     id="message"
                                     name="message"
                                     rows={5}
+                                    maxLength={4000}
                                     value={formData.message}
                                     onChange={handleChange}
                                     className={`w-full border bg-white/10 px-4 py-3 ${errors.message ? 'border-red-400' : 'border-white/20'} resize-none rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
@@ -259,6 +262,12 @@ export function Contact() {
                                 />
                                 {errors.message && <p className="mt-1 text-red-400 text-sm">{errors.message}</p>}
                             </div>
+
+                            {submitError && (
+                                <p role="alert" className="text-center text-red-400 text-sm">
+                                    {submitError}
+                                </p>
+                            )}
 
                             {/* Submit Button */}
                             <div className="flex justify-center pt-2">

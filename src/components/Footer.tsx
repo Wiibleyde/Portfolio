@@ -51,9 +51,9 @@ export function Footer() {
 
     return (
         <footer
-            id="contact"
+            id="footer"
             ref={footerRef}
-            className="relative flex min-h-screen snap-start items-center justify-center bg-linear-to-br from-gray-900 via-slate-900 to-gray-800"
+            className="relative flex min-h-dvh snap-start items-center justify-center bg-linear-to-br from-gray-900 via-slate-900 to-gray-800"
         >
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
@@ -118,7 +118,7 @@ export function Footer() {
                 {/* Copyright */}
                 <div className="border-white/20 border-t pt-8">
                     <p className="flex items-center justify-center gap-2 text-gray-400 text-sm">
-                        © 2025 Nathan Bonnell. Fait avec
+                        © {new Date().getFullYear()} Nathan Bonnell. Fait avec
                         <Heart className="h-4 w-4 fill-current text-red-400" />à Bordeaux
                     </p>
 

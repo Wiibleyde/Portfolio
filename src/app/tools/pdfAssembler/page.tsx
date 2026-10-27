@@ -49,19 +49,6 @@ export default function PdfAssemblerPage() {
         assemblePDFs,
     } = usePdfFileManager();
 
-    // Load PDF.js dynamically
-    useEffect(() => {
-        if (!window.pdfjsLib) {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-            script.onload = () => {
-                window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-                    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-            };
-            document.head.appendChild(script);
-        }
-    }, []);
-
     useScrollAnimation(containerRef, () => {
         const tl = gsap.timeline({ delay: 0.2 });
         tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }).to(
@@ -128,7 +115,7 @@ export default function PdfAssemblerPage() {
                 onPageChange={(page) => setPreviewModal((prev) => ({ ...prev, currentPage: page }))}
             />
 
-            <div className="mx-auto max-w-5xl px-6">
+            <div ref={containerRef} className="mx-auto max-w-5xl px-6">
                 {/* Title */}
                 <div ref={titleRef} className="mb-8 text-center">
                     <h2 className="mb-3 font-bold text-3xl text-white md:text-4xl">Assembleur PDF</h2>

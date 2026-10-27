@@ -1,16 +1,29 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { verifyCaptchaToken } from '@/captcha';
 
+const asText = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
+
+// Discord rejects embeds above these limits
+const truncate = (value: string, max: number) => (value.length > max ? `${value.slice(0, max - 1)}…` : value);
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
-    if (!request.body) {
-        return NextResponse.json({ message: 'No body provided' }, { status: 400 });
+    const body = await request.json().catch(() => null);
+    if (!body || typeof body !== 'object') {
+        return NextResponse.json({ message: 'Invalid body' }, { status: 400 });
     }
 
-    const body = await request.json();
-    const { name, email, subject, message, captchaToken } = body;
+    const name = asText(body.name);
+    const email = asText(body.email);
+    const subject = asText(body.subject);
+    const message = asText(body.message);
+    const captchaToken = asText(body.captchaToken);
 
     if (!name || !email || !subject || !message) {
         return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
+    }
+
+    if (message.length > 4000) {
+        return NextResponse.json({ message: 'Message too long' }, { status: 400 });
     }
 
     if (!captchaToken || !(await verifyCaptchaToken(captchaToken))) {
@@ -24,26 +37,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const payload = {
+        allowed_mentions: { parse: [] },
         embeds: [
             {
-                title: `📬 ${subject}`,
+                title: truncate(`📬 ${subject}`, 256),
                 color: 0x5865f2,
                 fields: [
                     {
                         name: '👤 Name',
-                        value: name,
+                        value: truncate(name, 1024),
                         inline: true,
                     },
                     {
                         name: '📧 Email',
-                        value: email,
+                        value: truncate(email, 1024),
                         inline: true,
                     },
-                    {
-                        name: '💬 Message',
-                        value: message,
-                    },
                 ],
+                description: message,
                 footer: {
                     text: 'Portfolio Contact Form',
                 },

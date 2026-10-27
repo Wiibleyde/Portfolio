@@ -79,7 +79,7 @@
 .glitch {
     position: relative;
     color: white;
-    font-size: 4rem;
+    font-size: clamp(2rem, 11vw, 4rem);
     font-weight: bold;
     animation: glitch 1s infinite;
 }

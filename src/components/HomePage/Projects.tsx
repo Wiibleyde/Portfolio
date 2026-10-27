@@ -193,15 +193,15 @@ export function Projects() {
     const [projectsPerView, setProjectsPerView] = useState(3);
 
     useEffect(() => {
-        const handleResize = () => {
-            setProjectsPerView(getProjectsPerView());
-            setCurrentIndex(0); // Reset to first page on resize
-        };
+        const handleResize = () => setProjectsPerView(getProjectsPerView());
 
         setProjectsPerView(getProjectsPerView());
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, [getProjectsPerView]);
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: reset to first page when the layout changes
+    useEffect(() => setCurrentIndex(0), [projectsPerView]);
 
     const maxIndex = Math.max(0, filteredProjects.length - projectsPerView);
     const totalPages = Math.ceil(filteredProjects.length / projectsPerView);
@@ -228,8 +228,10 @@ export function Projects() {
 
     const animateTransition = useCallback(() => {
         if (gridRef.current && !isAnimating) {
+            // card width is fluid on phones, so measure it instead of assuming 320px
+            const cardWidth = (gridRef.current.firstElementChild as HTMLElement | null)?.offsetWidth ?? 320;
             gsap.to(gridRef.current, {
-                x: -currentIndex * (320 + 24),
+                x: -currentIndex * (cardWidth + 24),
                 duration: 0.5,
                 ease: 'power2.out',
             });
@@ -325,7 +327,7 @@ export function Projects() {
     return (
         <div
             ref={containerRef}
-            className="relative flex h-screen snap-start flex-col bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30"
+            className="relative flex min-h-dvh snap-start flex-col bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30"
         >
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
@@ -348,7 +350,7 @@ export function Projects() {
 
                 {/* Filters */}
                 <div ref={filtersRef} className="mb-6 flex justify-center">
-                    <div className="flex gap-2 rounded-2xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm">
+                    <div className="flex flex-wrap justify-center gap-1 rounded-2xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm sm:gap-2">
                         {(
                             ['all', ProjectType.Personal, ProjectType.School, ProjectType.Professional] as (
                                 | ProjectType
@@ -361,13 +363,13 @@ export function Projects() {
                                 aria-label={`Filtrer par ${getFilterLabel(filter)}`}
                                 onClick={() => handleFilterChange(filter)}
                                 disabled={isAnimating}
-                                className={`flex items-center gap-2 rounded-xl px-4 py-2 font-medium text-sm transition-all duration-300 ${
+                                className={`flex items-center gap-2 rounded-xl px-3 py-2 font-medium text-sm transition-all sm:px-4 duration-300 ${
                                     activeFilter === filter
                                         ? 'bg-blue-500 text-white shadow-lg'
                                         : 'text-gray-300 hover:bg-white/10 hover:text-white'
                                 } ${isAnimating ? 'cursor-not-allowed opacity-50' : ''}`}
                             >
-                                <Filter className="h-3 w-3" />
+                                <Filter className="hidden h-3 w-3 sm:block" />
                                 {getFilterLabel(filter)}
                             </button>
                         ))}
@@ -383,7 +385,7 @@ export function Projects() {
                             aria-label="Projet précédent"
                             onClick={prevProjects}
                             disabled={currentIndex === 0 || isAnimating}
-                            className={`-translate-y-1/2 absolute top-1/2 left-4 z-20 rounded-full p-3 transition-all duration-300 ${
+                            className={`-translate-y-1/2 absolute top-1/2 left-0 z-20 rounded-full p-2 transition-all sm:left-4 sm:p-3 duration-300 ${
                                 currentIndex === 0 || isAnimating
                                     ? 'cursor-not-allowed bg-white/5 text-gray-500'
                                     : 'bg-white/10 text-white hover:scale-110 hover:bg-white/20'
@@ -397,7 +399,7 @@ export function Projects() {
                             onClick={nextProjects}
                             aria-label="Projet suivant"
                             disabled={currentIndex >= maxIndex || isAnimating}
-                            className={`-translate-y-1/2 absolute top-1/2 right-4 z-20 rounded-full p-3 transition-all duration-300 ${
+                            className={`-translate-y-1/2 absolute top-1/2 right-0 z-20 rounded-full p-2 transition-all sm:right-4 sm:p-3 duration-300 ${
                                 currentIndex >= maxIndex || isAnimating
                                     ? 'cursor-not-allowed bg-white/5 text-gray-500'
                                     : 'bg-white/10 text-white hover:scale-110 hover:bg-white/20'
@@ -407,14 +409,11 @@ export function Projects() {
                         </button>
 
                         {/* Projects Container */}
-                        <div className="mx-16 overflow-hidden">
+                        <div className="overflow-hidden sm:mx-16">
                             <div
                                 ref={gridRef}
-                                className="flex gap-6 px-2 py-4"
-                                style={{
-                                    width: `${filteredProjects.length * (320 + 24)}px`,
-                                    willChange: 'transform',
-                                }}
+                                className="flex w-max gap-6 px-2 py-4"
+                                style={{ willChange: 'transform' }}
                             >
                                 {filteredProjects.map((project) => (
                                     <ProjectCard key={`${displayedFilter}-${project.title}`} project={project} />

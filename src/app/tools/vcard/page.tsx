@@ -1,12 +1,11 @@
 'use client';
 import { gsap } from 'gsap';
-import QrCodeWithLogo from 'qrcode-with-logos';
-import type { BaseOptions, CornerType, DotType } from 'qrcode-with-logos/types/src/core/types';
 import { useEffect, useRef, useState } from 'react';
 import { QrCodeOptionsPanel } from '@/components/tools/QrCodeOptionsPanel';
 import { ToolPageLayout } from '@/components/tools/ToolPageLayout';
 import { useQrCodeOptions } from '@/hooks/useQrCodeOptions';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { renderQrCodeToCanvas } from '@/lib/qrcode';
 
 interface VCardData {
     firstName: string;
@@ -26,22 +25,29 @@ const INPUT_CLASS =
     'w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400';
 const LABEL_CLASS = 'mb-2 block font-medium text-gray-200 text-sm';
 
+// RFC 6350: escape backslash, comma, semicolon and newlines in property values
+const esc = (value: string) =>
+    value
+        .trim()
+        .replace(/[\\,;]/g, '\\$&')
+        .replace(/\r?\n/g, '\\n');
+
 function generateVCardString(data: VCardData): string {
-    let vcard = 'BEGIN:VCARD\nVERSION:3.0\n';
+    const lines = ['BEGIN:VCARD', 'VERSION:3.0'];
     if (data.firstName || data.lastName) {
-        vcard += `FN:${data.firstName} ${data.lastName}\n`;
-        vcard += `N:${data.lastName};${data.firstName};;;\n`;
+        lines.push(`FN:${esc(`${data.firstName} ${data.lastName}`)}`);
+        lines.push(`N:${esc(data.lastName)};${esc(data.firstName)};;;`);
     }
-    if (data.organization) vcard += `ORG:${data.organization}\n`;
-    if (data.title) vcard += `TITLE:${data.title}\n`;
-    if (data.phone) vcard += `TEL:${data.phone}\n`;
-    if (data.email) vcard += `EMAIL:${data.email}\n`;
-    if (data.website) vcard += `URL:${data.website}\n`;
+    if (data.organization) lines.push(`ORG:${esc(data.organization)}`);
+    if (data.title) lines.push(`TITLE:${esc(data.title)}`);
+    if (data.phone) lines.push(`TEL:${esc(data.phone)}`);
+    if (data.email) lines.push(`EMAIL:${esc(data.email)}`);
+    if (data.website) lines.push(`URL:${esc(data.website)}`);
     if (data.address || data.city || data.postalCode || data.country) {
-        vcard += `ADR:;;${data.address};${data.city};;${data.postalCode};${data.country}\n`;
+        lines.push(`ADR:;;${esc(data.address)};${esc(data.city)};;${esc(data.postalCode)};${esc(data.country)}`);
     }
-    vcard += 'END:VCARD';
-    return vcard;
+    lines.push('END:VCARD');
+    return lines.join('\r\n');
 }
 
 export default function VCardPage() {
@@ -108,39 +114,17 @@ export default function VCardPage() {
         if (button) gsap.to(button, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
 
         try {
-            const qrCodeOptions: BaseOptions = {
-                content: generateVCardString(vCardData),
-                width: 900,
-                nodeQrCodeOptions: { color: { light: qrOptions.lightColor } },
-                dotsOptions: { type: qrOptions.dotType as DotType, color: qrOptions.dotColor },
-                cornersOptions: { type: qrOptions.cornerType as CornerType, color: qrOptions.cornerColor },
-                logo: qrOptions.logo ? { src: qrOptions.logo, logoRadius: 1 } : undefined,
-            };
-
-            const qrCode = new QrCodeWithLogo(qrCodeOptions);
-            const image = await qrCode.getImage();
-
-            const img = new Image();
-            img.src = image.src;
             const canvas = document.getElementById('vcardCanvas') as HTMLCanvasElement;
-            canvas.width = 500;
-            canvas.height = 500;
-            const context = canvas.getContext('2d');
-
-            img.onload = () => {
-                if (context) {
-                    context.drawImage(img, 0, 0, 500, 500);
-                    gsap.fromTo(
-                        canvas,
-                        { scale: 0.8, opacity: 0, rotation: 5 },
-                        { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.7)' },
-                    );
-                    if (!hasGenerated) setHasGenerated(true);
-                }
-                setIsGenerating(false);
-            };
+            await renderQrCodeToCanvas(canvas, generateVCardString(vCardData), qrOptions);
+            gsap.fromTo(
+                canvas,
+                { scale: 0.8, opacity: 0, rotation: 5 },
+                { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.7)' },
+            );
+            setHasGenerated(true);
         } catch (error) {
             console.error('Error generating VCard QR code:', error);
+        } finally {
             setIsGenerating(false);
         }
     };
@@ -168,7 +152,7 @@ export default function VCardPage() {
                     <p className="text-gray-300 text-lg">Créez un QR code de carte de visite numérique</p>
                 </div>
 
-                <div className="grid items-start gap-8 lg:grid-cols-2">
+                <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
                     {/* Form */}
                     <div
                         ref={formRef}

@@ -31,12 +31,12 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="rainbow-background h-screen w-screen overflow-hidden">
-            <div className="mlg-effects flex h-full flex-col items-center justify-center">
+        <div className="rainbow-background h-dvh w-screen overflow-hidden">
+            <div className="mlg-effects flex h-full flex-col items-center justify-center px-4 text-center">
                 <h1 className="glitch font-bold text-4xl text-white" data-text="Lock Your Computer">
                     Lock Your Computer
                 </h1>
-                <div className="mt-4 text-8xl text-white">
+                <div className="mt-4 text-5xl text-white md:text-8xl">
                     {os === OsType.Windows && (
                         <p className="mb-2">
                             Press <span className="rainbow-text font-bold">Win + L</span>
@@ -59,7 +59,7 @@ export default function Home() {
                         </p>
                     )}
                 </div>
-                <Image src={CatGif} alt="Cat" width={600} height={600} />
+                <Image src={CatGif} alt="Cat" width={600} height={600} className="h-auto max-w-full" />
             </div>
         </div>
     );

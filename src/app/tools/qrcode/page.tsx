@@ -1,12 +1,11 @@
 'use client';
 import { gsap } from 'gsap';
-import QrCodeWithLogo from 'qrcode-with-logos';
-import type { BaseOptions, CornerType, DotType } from 'qrcode-with-logos/types/src/core/types';
 import { useEffect, useRef, useState } from 'react';
 import { QrCodeOptionsPanel } from '@/components/tools/QrCodeOptionsPanel';
 import { ToolPageLayout } from '@/components/tools/ToolPageLayout';
 import { useQrCodeOptions } from '@/hooks/useQrCodeOptions';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { renderQrCodeToCanvas } from '@/lib/qrcode';
 
 export default function QrCodePage() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -55,39 +54,17 @@ export default function QrCodePage() {
         if (button) gsap.to(button, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
 
         try {
-            const qrCodeOptions: BaseOptions = {
-                content: text,
-                width: 900,
-                nodeQrCodeOptions: { color: { light: qrOptions.lightColor } },
-                dotsOptions: { type: qrOptions.dotType as DotType, color: qrOptions.dotColor },
-                cornersOptions: { type: qrOptions.cornerType as CornerType, color: qrOptions.cornerColor },
-                logo: qrOptions.logo ? { src: qrOptions.logo, logoRadius: 1 } : undefined,
-            };
-
-            const qrCode = new QrCodeWithLogo(qrCodeOptions);
-            const image = await qrCode.getImage();
-
-            const img = new Image();
-            img.src = image.src;
             const canvas = document.getElementById('qrcodeCanvas') as HTMLCanvasElement;
-            canvas.width = 500;
-            canvas.height = 500;
-            const context = canvas.getContext('2d');
-
-            img.onload = () => {
-                if (context) {
-                    context.drawImage(img, 0, 0, 500, 500);
-                    gsap.fromTo(
-                        canvas,
-                        { scale: 0.8, opacity: 0, rotation: 5 },
-                        { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.7)' },
-                    );
-                    if (!hasGenerated) setHasGenerated(true);
-                }
-                setIsGenerating(false);
-            };
+            await renderQrCodeToCanvas(canvas, text, qrOptions);
+            gsap.fromTo(
+                canvas,
+                { scale: 0.8, opacity: 0, rotation: 5 },
+                { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.7)' },
+            );
+            setHasGenerated(true);
         } catch (error) {
             console.error('Error generating QR code:', error);
+        } finally {
             setIsGenerating(false);
         }
     };
@@ -113,7 +90,7 @@ export default function QrCodePage() {
                     <p className="text-gray-300 text-lg">Créez des QR codes personnalisés avec logo et couleurs</p>
                 </div>
 
-                <div className="grid items-start gap-8 lg:grid-cols-2">
+                <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
                     {/* Form */}
                     <div
                         ref={formRef}

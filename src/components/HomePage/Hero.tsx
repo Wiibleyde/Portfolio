@@ -128,16 +128,16 @@ export function Hero() {
 
     return (
         <div
-            className="relative h-screen w-full snap-start"
+            className="relative h-dvh w-full snap-start"
             style={{
                 backgroundImage: `url(${Background.src})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}
         >
-            <div className="flex min-h-screen w-full flex-col items-center justify-between bg-linear-to-r from-black/80 via-black/70 to-black/20 px-12 md:flex-row md:px-20 lg:px-24">
+            <div className="flex h-full w-full flex-col items-center justify-center bg-linear-to-r from-black/80 via-black/70 to-black/20 px-8 sm:px-12 md:flex-row md:justify-between md:px-20 lg:px-24">
                 <div ref={containerRef} className="w-full max-w-2xl text-left text-white md:w-1/2">
-                    <h1 ref={nameRef} className="mb-4 font-black text-7xl text-white md:text-8xl">
+                    <h1 ref={nameRef} className="mb-4 font-black text-6xl text-white sm:text-7xl md:text-8xl">
                         Nathan Bonnell
                     </h1>
                     <h2 ref={titleRef} className="mb-8 font-bold text-2xl text-gray-300 md:text-3xl">
