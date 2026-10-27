@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
 @theme {
+    --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+    /* single accent color used across the site */
+    --color-accent: #8fb3ff;
+    --color-accent-strong: #5b8cff;
+
     --color-sabs-gradient-1: #85527e;
     --color-sabs-gradient-2: #754974;
     --color-sabs-gradient-3: #3d2845;
@@ -8,26 +15,84 @@
     --color-sabs-primary: #7373b4;
 }
 
-html,
-body {
-    scroll-snap-type: y mandatory;
-}
-
 * {
     scroll-behavior: smooth;
 }
 
-.grecaptcha-badge {
-    visibility: hidden;
+::selection {
+    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
 }
 
-@keyframes fadeInScale {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
+/* Shared building blocks */
+@utility card {
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--color-zinc-800);
+    background-color: color-mix(in oklab, var(--color-zinc-900) 50%, transparent);
+}
+
+@utility eyebrow {
+    font-size: var(--text-sm);
+    color: var(--color-zinc-500);
+}
+
+@utility btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.625rem 1.25rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    transition:
+        background-color 150ms,
+        color 150ms,
+        border-color 150ms;
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
     }
-    100% {
-        opacity: 1;
-        transform: scale(1);
+}
+
+@utility btn-primary {
+    background-color: var(--color-zinc-100);
+    color: var(--color-zinc-950);
+    &:hover:not(:disabled) {
+        background-color: var(--color-white);
     }
+}
+
+@utility btn-secondary {
+    border: 1px solid var(--color-zinc-800);
+    color: var(--color-zinc-200);
+    &:hover:not(:disabled) {
+        border-color: var(--color-zinc-600);
+        background-color: var(--color-zinc-900);
+    }
+}
+
+@utility input {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-zinc-800);
+    background-color: var(--color-zinc-900);
+    padding: 0.625rem 0.875rem;
+    color: var(--color-zinc-100);
+    transition: border-color 150ms;
+    &::placeholder {
+        color: var(--color-zinc-500);
+    }
+    &:focus {
+        outline: none;
+        border-color: var(--color-zinc-500);
+    }
+}
+
+@utility tag {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-zinc-800);
+    padding: 0.125rem 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-zinc-400);
 }

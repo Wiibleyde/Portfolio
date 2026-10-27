@@ -65,7 +65,7 @@ export function RichDescription({ text, className = '' }: RichDescriptionProps) 
                             href={segment.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-400 underline decoration-blue-400/50 transition-colors duration-200 hover:text-blue-300 hover:decoration-blue-300"
+                            className="text-zinc-200 underline decoration-zinc-600 underline-offset-2 transition-colors hover:decoration-zinc-300"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {segment.content}

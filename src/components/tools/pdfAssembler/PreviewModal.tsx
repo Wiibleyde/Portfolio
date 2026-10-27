@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { ArrowRepeat, ChevronLeft, ChevronRight, X } from 'react-bootstrap-icons';
 import type { UploadedFile } from '@/hooks/usePdfFileManager';
 
 interface PreviewModalState {
@@ -34,41 +35,26 @@ export function PreviewModal({ modal, onClose, onNavigate, onPageChange }: Previ
             aria-modal="true"
             aria-label="Prévisualisation du PDF"
         >
-            <div className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 shadow-2xl backdrop-blur-md">
-                {/* Modal Header */}
-                <div className="flex shrink-0 items-center justify-between border-white/20 border-b p-6">
-                    <div>
-                        <h3 className="mb-1 font-bold text-white text-xl">{modal.file?.name}</h3>
-                        <p className="text-gray-400 text-sm">
+            <div className="relative flex max-h-[90dvh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950">
+                <div className="flex shrink-0 items-center justify-between gap-4 border-zinc-800 border-b px-5 py-4">
+                    <div className="min-w-0">
+                        <h3 className="truncate font-medium text-zinc-100">{modal.file?.name}</h3>
+                        <p className="font-mono text-xs text-zinc-500">
                             Page {modal.currentPage} sur {modal.totalPages}
                         </p>
                     </div>
                     <button
                         type="button"
                         onClick={onClose}
-                        className="rounded-xl p-2 text-gray-400 transition-all duration-200 hover:bg-white/10 hover:text-white"
+                        className="btn btn-secondary px-2.5 py-1.5"
                         aria-label="Fermer"
                     >
-                        <svg
-                            aria-hidden="true"
-                            className="h-6 w-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <X className="h-5 w-5" />
                     </button>
                 </div>
 
-                {/* Modal Content */}
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-                    <div className="flex-1 overflow-auto p-6">
+                    <div className="flex-1 overflow-auto bg-zinc-900 p-6">
                         {modal.pageImages.length > 0 ? (
                             <div className="flex h-full w-full items-center justify-center">
                                 <Image
@@ -76,7 +62,7 @@ export function PreviewModal({ modal, onClose, onNavigate, onPageChange }: Previ
                                     alt={`Page ${modal.currentPage} de ${modal.file?.name}`}
                                     width={800}
                                     height={1000}
-                                    className="rounded-xl object-contain shadow-lg"
+                                    className="rounded-md object-contain"
                                     style={{
                                         transform: `rotate(${modal.file?.rotation || 0}deg)`,
                                         transformOrigin: 'center center',
@@ -90,56 +76,27 @@ export function PreviewModal({ modal, onClose, onNavigate, onPageChange }: Previ
                                 />
                             </div>
                         ) : (
-                            <div className="flex h-full w-full flex-col items-center justify-center p-12">
-                                <div className="mb-4 animate-spin">
-                                    <svg
-                                        aria-hidden="true"
-                                        className="h-8 w-8 text-blue-400"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                        />
-                                    </svg>
-                                </div>
-                                <p className="text-gray-400">Chargement du document...</p>
+                            <div className="flex h-full w-full items-center justify-center gap-3 p-12 text-sm text-zinc-500">
+                                <ArrowRepeat className="h-5 w-5 animate-spin" aria-hidden="true" />
+                                Chargement du document...
                             </div>
                         )}
                     </div>
 
-                    {/* Navigation Controls */}
                     {modal.totalPages > 1 && (
-                        <div className="flex shrink-0 items-center justify-between border-white/20 border-t p-6">
+                        <div className="flex shrink-0 items-center justify-between gap-3 border-zinc-800 border-t px-5 py-4">
                             <button
                                 type="button"
                                 onClick={() => onNavigate('prev')}
                                 disabled={modal.currentPage === 1}
-                                className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-600"
+                                className="btn btn-secondary"
                             >
-                                <svg
-                                    aria-hidden="true"
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M15 19l-7-7 7-7"
-                                    />
-                                </svg>
+                                <ChevronLeft className="h-4 w-4" />
                                 Précédent
                             </button>
 
-                            <div className="flex items-center gap-2">
-                                <span className="text-gray-400 text-sm">Page</span>
+                            <div className="flex items-center gap-2 text-sm text-zinc-500">
+                                <span>Page</span>
                                 <input
                                     type="number"
                                     min="1"
@@ -149,32 +106,20 @@ export function PreviewModal({ modal, onClose, onNavigate, onPageChange }: Previ
                                         const page = Number.parseInt(e.target.value, 10);
                                         if (page >= 1 && page <= modal.totalPages) onPageChange(page);
                                     }}
-                                    className="w-16 rounded-lg border border-white/20 bg-white/10 px-2 py-1 text-center text-sm text-white"
+                                    className="input w-16 px-2 py-1 text-center text-sm"
+                                    aria-label="Numéro de page"
                                 />
-                                <span className="text-gray-400 text-sm">/ {modal.totalPages}</span>
+                                <span>/ {modal.totalPages}</span>
                             </div>
 
                             <button
                                 type="button"
                                 onClick={() => onNavigate('next')}
                                 disabled={modal.currentPage === modal.totalPages}
-                                className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-600"
+                                className="btn btn-secondary"
                             >
                                 Suivant
-                                <svg
-                                    aria-hidden="true"
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M9 5l7 7-7 7"
-                                    />
-                                </svg>
+                                <ChevronRight className="h-4 w-4" />
                             </button>
                         </div>
                     )}

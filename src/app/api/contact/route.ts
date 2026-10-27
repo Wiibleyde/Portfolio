@@ -1,7 +1,22 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { verifyCaptchaToken } from '@/captcha';
 
 const asText = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
+
+const RATE_LIMIT = 5;
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+// shortcut: in-memory, per server instance; move to a shared store (Redis…) if the site ever runs on several instances
+const recentSubmissions = new Map<string, number[]>();
+
+function isRateLimited(ip: string, now = Date.now()): boolean {
+    const recent = (recentSubmissions.get(ip) ?? []).filter((time) => now - time < RATE_WINDOW_MS);
+    if (recent.length >= RATE_LIMIT) {
+        recentSubmissions.set(ip, recent);
+        return true;
+    }
+    recent.push(now);
+    recentSubmissions.set(ip, recent);
+    return false;
+}
 
 // Discord rejects embeds above these limits
 const truncate = (value: string, max: number) => (value.length > max ? `${value.slice(0, max - 1)}…` : value);
@@ -16,7 +31,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const email = asText(body.email);
     const subject = asText(body.subject);
     const message = asText(body.message);
-    const captchaToken = asText(body.captchaToken);
+
+    // honeypot: hidden field only bots fill in; pretend success so they don't retry
+    if (asText(body.website)) {
+        return NextResponse.json({ message: 'Message sent' });
+    }
 
     if (!name || !email || !subject || !message) {
         return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
@@ -26,8 +45,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return NextResponse.json({ message: 'Message too long' }, { status: 400 });
     }
 
-    if (!captchaToken || !(await verifyCaptchaToken(captchaToken))) {
-        return NextResponse.json({ message: 'CAPTCHA verification failed' }, { status: 403 });
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
+    if (isRateLimited(ip)) {
+        return NextResponse.json({ message: 'Too many requests' }, { status: 429 });
     }
 
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;

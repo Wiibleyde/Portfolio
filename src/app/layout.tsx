@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Outfit } from 'next/font/google';
-import { ClientLayout } from '@/app/clientLayout';
+import { Geist, Geist_Mono } from 'next/font/google';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: 'Portfolio - Nathan Bonnell',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         card: 'summary',
         title: 'Portfolio - Nathan Bonnell',
         description:
-            'Portfolio de Nathan Bonnell, développeur web fullstack en alternance. Réalisé avec React, Next.js, TailwindCSS et TypeScript, disponible en français et en anglais ce site présente mes projets, mes compétences et mon parcours.',
+            'Portfolio de Nathan Bonnell, développeur web fullstack en alternance. Ce site présente mes projets, mes compétences et mon parcours.',
         creator: '@wiibleyde',
         site: 'https://nathan.bonnell.fr',
     },
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         url: 'https://nathan.bonnell.fr',
         title: 'Portfolio - Nathan Bonnell',
         description:
-            'Portfolio de Nathan Bonnell, développeur web fullstack en alternance. Réalisé avec React, Next.js, TailwindCSS et TypeScript, disponible en français et en anglais ce site présente mes projets, mes compétences et mon parcours.',
+            'Portfolio de Nathan Bonnell, développeur web fullstack en alternance. Ce site présente mes projets, mes compétences et mon parcours.',
         images: [
             {
                 url: 'https://nathan.bonnell.fr/img/pp.webp',
@@ -38,9 +38,8 @@ export const metadata: Metadata = {
     },
 };
 
-const outfit = Outfit({
-    subsets: ['latin'],
-});
+const geist = Geist({ subsets: ['latin'], variable: '--font-geist' });
+const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' });
 
 export default function RootLayout({
     children,
@@ -49,8 +48,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="fr">
-            <body className={`antialiased ${outfit.className} bg-black`}>
-                <ClientLayout>{children}</ClientLayout>
+            <body className={`${geist.variable} ${geistMono.variable} bg-zinc-950 font-sans text-zinc-100 antialiased`}>
+                {children}
+                <Script
+                    src="https://umami.wiibleyde.dev/script.js"
+                    data-website-id="713f0ec9-cc70-4d2d-b26c-3633755ebac7"
+                />
             </body>
         </html>
     );

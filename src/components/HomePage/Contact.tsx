@@ -1,8 +1,7 @@
 'use client';
-import { gsap } from 'gsap';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { useCallback, useEffect, useState } from 'react';
+import { ArrowRepeat, CheckCircle, Send } from 'react-bootstrap-icons';
+import { SectionHeading } from './SectionHeading';
 
 interface FormData {
     name: string;
@@ -19,27 +18,9 @@ interface FormErrors {
 }
 
 export function Contact() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const formRef = useRef<HTMLFormElement>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
-    const { executeRecaptcha } = useGoogleReCaptcha();
-
-    useScrollAnimation(containerRef, () => {
-        const tl = gsap.timeline({ delay: 0.2 });
-        tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }).to(
-            formRef.current,
-            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-            '-=0.4',
-        );
-    });
-
-    // Set initial state
-    useEffect(() => {
-        gsap.set([titleRef.current, formRef.current], { opacity: 0, y: 50 });
-    }, []);
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -89,23 +70,18 @@ export function Contact() {
             setSubmitError(null);
 
             try {
-                const isDev = process.env.NODE_ENV === 'development';
-                const token = isDev
-                    ? 'dev-bypass'
-                    : await (async () => {
-                          if (!executeRecaptcha) {
-                              throw new Error('reCAPTCHA not ready');
-                          }
-                          return executeRecaptcha('contact');
-                      })();
-
+                const honeypot = new FormData(e.currentTarget as HTMLFormElement).get('website') ?? '';
                 const response = await fetch('/api/contact', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ ...formData, captchaToken: token }),
+                    body: JSON.stringify({ ...formData, website: honeypot }),
                 });
+                if (response.status === 429) {
+                    setSubmitError('Trop de messages envoyés. Réessayez dans quelques minutes.');
+                    return;
+                }
                 if (!response.ok) {
                     throw new Error(`Contact API responded ${response.status}`);
                 }
@@ -119,7 +95,7 @@ export function Contact() {
                 setIsSubmitting(false);
             }
         },
-        [executeRecaptcha, formData, validateForm],
+        [formData, validateForm],
     );
 
     // Handle input changes
@@ -143,187 +119,110 @@ export function Contact() {
         }
     }, [isSubmitted]);
 
-    return (
-        <div
-            className="relative min-h-dvh snap-start bg-linear-to-br from-slate-900 via-blue-900/20 to-purple-900/30 py-12"
-            id="contact"
-        >
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-10">
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%),
-                                     radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%)`,
-                    }}
+    const field = (name: keyof FormData, label: string, placeholder: string, type = 'text') => (
+        <div>
+            <label htmlFor={name} className="mb-1.5 block text-sm text-zinc-300">
+                {label}
+            </label>
+            {name === 'message' ? (
+                <textarea
+                    id={name}
+                    name={name}
+                    rows={5}
+                    maxLength={4000}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    aria-invalid={!!errors[name]}
+                    className={`input resize-none ${errors[name] ? 'border-red-500/60' : ''}`}
+                    placeholder={placeholder}
                 />
-            </div>
+            ) : (
+                <input
+                    type={type}
+                    id={name}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    aria-invalid={!!errors[name]}
+                    className={`input ${errors[name] ? 'border-red-500/60' : ''}`}
+                    placeholder={placeholder}
+                />
+            )}
+            {errors[name] && <p className="mt-1.5 text-red-400 text-sm">{errors[name]}</p>}
+        </div>
+    );
 
-            <div ref={containerRef} className="relative z-10 mx-auto max-w-4xl px-4 sm:px-10">
-                {/* Title Section */}
-                <div ref={titleRef} className="mb-8 text-center">
-                    <h2 className="mb-3 font-bold text-3xl text-white md:text-4xl">Contactez-moi</h2>
-                    <div className="mx-auto mb-3 h-1 w-20 rounded-full bg-linear-to-r from-blue-500 to-purple-600" />
-                    <p className="text-gray-300 text-lg">
+    return (
+        <section id="contact" className="relative border-zinc-900 border-t py-24 md:py-32">
+            <div className="mx-auto grid max-w-6xl gap-12 px-6 md:px-10 lg:grid-cols-[1fr_1.2fr]">
+                <div>
+                    <SectionHeading title="Contact">
                         Une idée, un projet, une question ? N&apos;hésitez pas à me contacter !
-                    </p>
+                    </SectionHeading>
+                    <dl className="space-y-4 text-sm">
+                        <div>
+                            <dt className="eyebrow">Email</dt>
+                            <dd className="mt-1">
+                                <a href="mailto:nathan@bonnell.fr" className="text-zinc-200 hover:text-white">
+                                    nathan@bonnell.fr
+                                </a>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="eyebrow">Localisation</dt>
+                            <dd className="mt-1 text-zinc-200">Bordeaux, France</dd>
+                        </div>
+                    </dl>
                 </div>
 
-                {/* Form Section */}
-                <div className="rounded-3xl border border-white/20 bg-linear-to-br from-white/10 via-white/8 to-white/5 p-6 shadow-2xl backdrop-blur-md md:p-8">
+                <div className="card p-6 md:p-8">
                     {isSubmitted ? (
-                        <div className="py-8 text-center">
-                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20">
-                                <svg
-                                    aria-hidden="true"
-                                    className="h-8 w-8 text-green-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className="mb-2 font-bold text-2xl text-white">Message envoyé !</h3>
-                            <p className="text-gray-300">Je vous répondrai dans les plus brefs délais.</p>
+                        <div className="flex flex-col items-center py-12 text-center">
+                            <CheckCircle className="h-10 w-10 text-emerald-400" />
+                            <h3 className="mt-4 font-medium text-xl text-zinc-50">Message envoyé !</h3>
+                            <p className="mt-2 text-zinc-400">Je vous répondrai dans les plus brefs délais.</p>
                         </div>
                     ) : (
-                        <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
-                            {/* Name Field */}
-                            <div>
-                                <label htmlFor="name" className="mb-2 block font-medium text-gray-200 text-sm">
-                                    NOM & Prénom *
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    className={`w-full border bg-white/10 px-4 py-3 ${errors.name ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
-                                    placeholder="Votre nom complet"
-                                />
-                                {errors.name && <p className="mt-1 text-red-400 text-sm">{errors.name}</p>}
+                        <form onSubmit={handleSubmit} noValidate className="space-y-5">
+                            <div className="grid gap-5 sm:grid-cols-2">
+                                {field('name', 'Nom & prénom', 'Votre nom complet')}
+                                {field('email', 'Email', 'votre.email@exemple.com', 'email')}
                             </div>
-
-                            {/* Email Field */}
-                            <div>
-                                <label htmlFor="email" className="mb-2 block font-medium text-gray-200 text-sm">
-                                    Email *
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className={`w-full border bg-white/10 px-4 py-3 ${errors.email ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
-                                    placeholder="votre.email@exemple.com"
-                                />
-                                {errors.email && <p className="mt-1 text-red-400 text-sm">{errors.email}</p>}
-                            </div>
-
-                            {/* Subject Field */}
-                            <div>
-                                <label htmlFor="subject" className="mb-2 block font-medium text-gray-200 text-sm">
-                                    Objet *
-                                </label>
-                                <input
-                                    type="text"
-                                    id="subject"
-                                    name="subject"
-                                    value={formData.subject}
-                                    onChange={handleChange}
-                                    className={`w-full border bg-white/10 px-4 py-3 ${errors.subject ? 'border-red-400' : 'border-white/20'} rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
-                                    placeholder="Sujet de votre message"
-                                />
-                                {errors.subject && <p className="mt-1 text-red-400 text-sm">{errors.subject}</p>}
-                            </div>
-
-                            {/* Message Field */}
-                            <div>
-                                <label htmlFor="message" className="mb-2 block font-medium text-gray-200 text-sm">
-                                    Message *
-                                </label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    rows={5}
-                                    maxLength={4000}
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    className={`w-full border bg-white/10 px-4 py-3 ${errors.message ? 'border-red-400' : 'border-white/20'} resize-none rounded-xl text-white placeholder-gray-400 transition-colors focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400`}
-                                    placeholder="Décrivez votre projet ou votre demande..."
-                                />
-                                {errors.message && <p className="mt-1 text-red-400 text-sm">{errors.message}</p>}
-                            </div>
+                            {/* honeypot: invisible to people, bots fill it in */}
+                            <input
+                                type="text"
+                                name="website"
+                                tabIndex={-1}
+                                autoComplete="off"
+                                aria-hidden="true"
+                                className="-left-[9999px] absolute h-px w-px opacity-0"
+                            />
+                            {field('subject', 'Objet', 'Sujet de votre message')}
+                            {field('message', 'Message', 'Décrivez votre projet ou votre demande...')}
 
                             {submitError && (
-                                <p role="alert" className="text-center text-red-400 text-sm">
+                                <p role="alert" className="text-red-400 text-sm">
                                     {submitError}
                                 </p>
                             )}
 
-                            {/* Submit Button */}
-                            <div className="flex justify-center pt-2">
-                                <button
-                                    type="submit"
-                                    disabled={
-                                        isSubmitting || (process.env.NODE_ENV !== 'development' && !executeRecaptcha)
-                                    }
-                                    aria-label="Envoyer le message"
-                                    className="group relative flex transform items-center gap-3 rounded-2xl bg-linear-to-r from-blue-600 to-purple-600 px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-purple-700 hover:shadow-blue-500/25 disabled:scale-100 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700"
-                                >
-                                    <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-blue-400 to-purple-400 opacity-0 blur transition-opacity duration-300 group-hover:opacity-30" />
-
-                                    {isSubmitting ? (
-                                        <>
-                                            <svg
-                                                aria-hidden="true"
-                                                className="relative z-10 h-5 w-5 animate-spin"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                                />
-                                            </svg>
-                                            <span className="relative z-10">Envoi en cours...</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <svg
-                                                aria-hidden="true"
-                                                className="relative z-10 h-5 w-5"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={2}
-                                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                                                />
-                                            </svg>
-                                            <span className="relative z-10">Envoyer le message</span>
-                                        </>
-                                    )}
-                                </button>
-                            </div>
+                            <button type="submit" disabled={isSubmitting} className="btn btn-primary w-full sm:w-auto">
+                                {isSubmitting ? (
+                                    <>
+                                        <ArrowRepeat className="h-4 w-4 animate-spin" />
+                                        Envoi en cours...
+                                    </>
+                                ) : (
+                                    <>
+                                        Envoyer le message
+                                        <Send className="h-4 w-4" />
+                                    </>
+                                )}
+                            </button>
                         </form>
                     )}
                 </div>
             </div>
-        </div>
+        </section>
     );
 }

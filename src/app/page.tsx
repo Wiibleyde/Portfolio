@@ -4,20 +4,20 @@ import { Hero } from '@/components/HomePage/Hero';
 import { Presentation } from '@/components/HomePage/Presentation';
 import { Projects } from '@/components/HomePage/Projects';
 import { Timeline } from '@/components/HomePage/Timeline';
-import { Landing } from '@/components/Landing';
+import Noise from '@/components/reactbits/Noise';
 
 export default function Home() {
     return (
         <>
-            <Landing />
-            <div className="h-dvh snap-y overflow-x-hidden overflow-y-scroll scroll-smooth md:snap-mandatory">
+            <main className="overflow-x-clip">
                 <Hero />
                 <Presentation />
                 <Timeline />
                 <Projects />
                 <Contact />
-                <Footer />
-            </div>
+            </main>
+            <Footer />
+            <Noise fixed opacity={0.05} fps={12} zIndex={40} />
         </>
     );
 }
