@@ -89,6 +89,10 @@
 }
 
 @utility tag {
+    /* same box whether it's a <li> or a <button> */
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.5;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-zinc-800);
     padding: 0.125rem 0.5rem;

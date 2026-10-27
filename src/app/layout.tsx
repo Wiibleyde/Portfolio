@@ -47,8 +47,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="fr">
-            <body className={`${geist.variable} ${geistMono.variable} bg-zinc-950 font-sans text-zinc-100 antialiased`}>
+        <html lang="fr" className={`${geist.variable} ${geistMono.variable}`}>
+            <body className="bg-zinc-950 font-sans text-zinc-100 antialiased">
                 {children}
                 <Script
                     src="https://umami.wiibleyde.dev/script.js"
