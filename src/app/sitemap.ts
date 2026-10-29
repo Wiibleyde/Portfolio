@@ -5,7 +5,7 @@ export const BASE_URL = 'https://nathan.bonnell.fr';
 export default function sitemap(): MetadataRoute.Sitemap {
     const pages = [
         { url: '/', lastModified: new Date() },
-        { url: '/files/CV%20Nathan%20Bonnell.pdf', lastModified: new Date() },
+        { url: '/cv.pdf', lastModified: new Date() },
         { url: '/tools/pdfAssembler', lastModified: new Date() },
         { url: '/tools/qrcode', lastModified: new Date() },
         { url: '/tools/vcard', lastModified: new Date() },
@@ -24,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
 function getPriority(url: string): number {
     if (url === '/') return 1.0; // Home page has the highest priority
-    if (url.startsWith('/files/')) return 0.5; // Files have medium priority
+    if (url === '/cv.pdf') return 0.5;
     if (url.startsWith('/tools/')) return 0.5;
     if (url === '/legal-mentions') return 0.3; // Legal mentions
     return 0.1; // Default priority for other pages
