@@ -2,7 +2,7 @@
 import Me from '@public/img/pp.webp';
 import gsap from 'gsap';
 import { useEffect, useRef } from 'react';
-import { ArrowRight } from 'react-bootstrap-icons';
+import { ArrowRight, ChevronDown } from 'react-bootstrap-icons';
 import DotGrid from '@/components/reactbits/DotGrid';
 import ProfileCard from '@/components/reactbits/ProfileCard';
 import Shuffle from '@/components/reactbits/Shuffle';
@@ -14,6 +14,7 @@ export function Hero() {
 
     const { scrollToTarget: scrollToContact } = useScroll({ targetId: 'contact' });
     const { scrollToTarget: scrollToProjects } = useScroll({ targetId: 'projects' });
+    const { scrollToTarget: scrollToPresentation } = useScroll({ targetId: 'presentation' });
 
     useEffect(() => {
         const items = contentRef.current?.children;
@@ -44,7 +45,10 @@ export function Hero() {
                         text="Nathan Bonnell"
                         textAlign="left"
                         shuffleDirection="up"
-                        shuffleTimes={2}
+                        shuffleTimes={1}
+                        duration={0.9}
+                        stagger={0.06}
+                        animationMode="sequence"
                         scrambleCharset="ABCDEFGHIJKLMNOPQRSTUVWXYZ01"
                         className="mt-3 font-sans font-semibold text-5xl text-zinc-50 tracking-tighter sm:text-7xl lg:text-8xl"
                     />
@@ -70,12 +74,22 @@ export function Hero() {
                         title="Développeur fullstack"
                         handle="wiibleyde"
                         status="Bordeaux"
-                        contactText="Contact"
-                        onContactClick={scrollToContact}
+                        contactText=""
+                        radius={6}
                         backdropColor="#18181b"
                     />
                 </div>
             </div>
+
+            <button
+                type="button"
+                onClick={scrollToPresentation}
+                aria-label="Défiler vers la présentation"
+                className="absolute bottom-8 left-1/2 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-1.5 text-sm text-zinc-500 transition-colors hover:text-zinc-200"
+            >
+                Défiler
+                <ChevronDown className="h-4 w-4 motion-safe:animate-bounce" />
+            </button>
         </section>
     );
 }
