@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import fontkit from '@pdf-lib/fontkit';
-import { PDFDocument, type PDFFont, type PDFPage, type RGB, rgb, setCharacterSpacing } from 'pdf-lib';
+import { PDFDocument, type PDFFont, type PDFPage, PDFString, type RGB, rgb, setCharacterSpacing } from 'pdf-lib';
 import sharp from 'sharp';
 import { profile } from '@/data/profile';
 import { projects } from '@/data/projects';
@@ -150,6 +150,28 @@ export async function GET() {
     const textRight = (value: string, edge: number, at: number, font: PDFFont, size: number, tint: RGB) =>
         text(value, edge - font.widthOfTextAtSize(value, size), at, font, size, tint);
 
+    // drawn text is not clickable on its own: a link annotation covers the text box
+    const linkTo = (target: PDFPage, url: string, x: number, at: number, width: number, size: number) => {
+        const annot = doc.context.obj({
+            Type: 'Annot',
+            Subtype: 'Link',
+            Rect: [x, at - size * 0.25, x + width, at + size * 0.85],
+            Border: [0, 0, 0],
+            A: { Type: 'Action', S: 'URI', URI: PDFString.of(url) },
+        });
+        target.node.addAnnot(doc.context.register(annot));
+    };
+
+    // a row of links separated by dots, each one clickable
+    const links = (items: { label: string; url: string }[], x: number, at: number, size: number, tint: RGB) => {
+        items.forEach(({ label, url }, i) => {
+            if (i) x += text('  ·  ', x, at, regular, size, tint);
+            const width = text(label, x, at, regular, size, tint);
+            linkTo(page, url, x, at, width, size);
+            x += width;
+        });
+    };
+
     const paragraph = (value: string, font = regular, size = 9, tint = ZINC_700, lineHeight = 1.38) => {
         for (const line of wrap(clean(value), font, size, right - textX)) {
             ensure(size * lineHeight);
@@ -240,11 +262,15 @@ export async function GET() {
     // a bordered card, like the site's project grid
     const projectCard = (project: Project) => () => {
         const pad = 8;
-        const link = (project.url ?? project.repoUrl)?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+        const url = project.url ?? project.repoUrl;
+        const link = url?.replace(/^https?:\/\//, '').replace(/\/$/, '');
         within(left + pad, right - pad, left + pad, () => {
             y -= pad + 6.5;
             text(project.type, left, y, mono, 6.5, ZINC_500);
-            if (link) textRight(link, right, y, mono, 6.5, ZINC_500);
+            if (url && link) {
+                const width = textRight(link, right, y, mono, 6.5, ZINC_500);
+                linkTo(page, url, right - width, y, width, 6.5);
+            }
             y -= 2;
             paragraph(clean(project.title), semibold, 10, ZINC_950, 1.3);
             paragraph(project.description, regular, 8.5, ZINC_700, 1.35);
@@ -279,8 +305,23 @@ export async function GET() {
     const headerX = photoX + PHOTO + 18;
     text(`${profile.headline} · ${profile.location}`, headerX, top - 10, regular, 9.5, ZINC_500);
     text(profile.name, headerX, top - 40, semibold, 28, ZINC_950, -0.3);
-    text([profile.email, profile.phone].join('  ·  '), headerX, top - 58, regular, 9, ZINC_700);
-    text(profile.links.join('  ·  '), headerX, top - 72, regular, 9, ACCENT);
+    links(
+        [
+            { label: profile.email, url: `mailto:${profile.email}` },
+            { label: profile.phone, url: `tel:+33${profile.phone.replace(/\s/g, '').slice(1)}` },
+        ],
+        headerX,
+        top - 58,
+        9,
+        ZINC_700,
+    );
+    links(
+        profile.links.map((link) => ({ label: link, url: `https://${link}` })),
+        headerX,
+        top - 72,
+        9,
+        ACCENT,
+    );
     y = photoY - 10;
 
     paragraph(profile.summary, regular, 9.5);
@@ -332,13 +373,11 @@ export async function GET() {
 
     const updated = new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
     for (const p of doc.getPages()) {
-        p.drawText(`Généré depuis ${profile.links[0]} · ${updated}`, {
-            x: MARGIN,
-            y: 14,
-            size: 6.5,
-            font: mono,
-            color: ZINC_500,
-        });
+        const prefix = 'Généré depuis ';
+        const footer = `${prefix}${profile.links[0]} · ${updated}`;
+        p.drawText(footer, { x: MARGIN, y: 14, size: 6.5, font: mono, color: ZINC_500 });
+        const siteX = MARGIN + mono.widthOfTextAtSize(prefix, 6.5);
+        linkTo(p, `https://${profile.links[0]}`, siteX, 14, mono.widthOfTextAtSize(profile.links[0], 6.5), 6.5);
     }
     if (doc.getPageCount() > 1) console.warn(`cv.pdf: content overflows to ${doc.getPageCount()} pages`);
 
