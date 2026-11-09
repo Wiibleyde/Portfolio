@@ -50,7 +50,7 @@ export function Presentation() {
 
     const handleDownloadCV = () => {
         const link = document.createElement('a');
-        link.href = '/files/CV Nathan Bonnell.pdf';
+        link.href = '/cv.pdf';
         link.download = 'CV Nathan Bonnell.pdf';
         document.body.appendChild(link);
         link.click();
@@ -234,7 +234,7 @@ export function Presentation() {
                             </div>
                         </div>
                         <iframe
-                            src="/files/CV Nathan Bonnell.pdf"
+                            src="/cv.pdf"
                             className="w-full flex-1 border-0 bg-white"
                             title="Prévisualisation du CV"
                         />

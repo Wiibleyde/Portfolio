@@ -4,6 +4,10 @@ const isDocker = process.env.IS_DOCKER === 'true';
 
 const nextConfig: NextConfig = {
     output: isDocker ? 'standalone' : undefined,
+    // the CV used to be a static file, keep old links working
+    async redirects() {
+        return [{ source: '/files/CV Nathan Bonnell.pdf', destination: '/cv.pdf', permanent: true }];
+    },
     images: {
         remotePatterns: [
             {

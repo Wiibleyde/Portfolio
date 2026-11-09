@@ -15,10 +15,6 @@
     --color-sabs-primary: #7373b4;
 }
 
-* {
-    scroll-behavior: smooth;
-}
-
 ::selection {
     background: color-mix(in oklab, var(--color-accent) 35%, transparent);
 }

@@ -12,4 +12,6 @@ export interface Project {
     repoUrl?: string;
     image: string;
     tags: string[];
+    // listed in the generated CV
+    cv?: boolean;
 }

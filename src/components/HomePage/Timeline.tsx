@@ -2,76 +2,11 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useRef } from 'react';
-import { Book, Briefcase, Calendar, CodeSlash, HeartFill, type Icon } from 'react-bootstrap-icons';
+import { Calendar } from 'react-bootstrap-icons';
+import { type TimelineEntry, timeline } from '@/data/timeline';
 import { SectionHeading } from './SectionHeading';
 
 gsap.registerPlugin(ScrollTrigger);
-
-interface Timeline {
-    title: string;
-    duration: string;
-    isNow?: boolean;
-    org: string;
-    icon?: Icon;
-    description?: string;
-    skills: string[];
-}
-
-// most recent first
-const data: Timeline[] = [
-    {
-        title: 'Développeur Full Stack (alternance)',
-        duration: "Septembre 2025 - Aujourd'hui",
-        isNow: true,
-        org: 'Orange Business',
-        icon: CodeSlash,
-        description: 'Développement pour Orange Business (Live Intelligence).',
-        skills: ['.NET 10', 'React', 'TanStack', 'Kubernetes', 'ArgoCD', 'Docker', 'OpenCode', 'Vertex AI'],
-    },
-    {
-        title: 'Développeur Full Stack (alternance)',
-        duration: 'Septembre 2024 - Août 2025',
-        org: 'Lex-Port',
-        icon: Briefcase,
-        description: 'Développement de sites web pour le cabinet.',
-        skills: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'Mariadb', 'Node.js'],
-    },
-    {
-        title: 'Mastère Informatique',
-        duration: 'Septembre 2022 - Septembre 2027',
-        org: 'Ynov Campus (Actuellement en M2)',
-        description:
-            "Développement d'applications web, mobile et logiciel (apprentissage néanmoins de technologies d'infrastructures et de réseaux).",
-        skills: [
-            'Développement Web',
-            'Développement Mobile',
-            'Développement Logiciel',
-            'Infrastructures et Réseaux',
-            'Cybersécurité',
-            'Data Science',
-        ],
-    },
-    {
-        title: "Maraude de l'Ordre de Malte",
-        duration: "Septembre 2019 - Aujourd'hui",
-        org: 'Ordre de Malte',
-        icon: HeartFill,
-        description: 'Aide aux sans-abris de Bordeaux.',
-        skills: ['Écoute', 'Aide', 'Partage'],
-    },
-    {
-        title: 'Scolarité (Maternelle, Primaire, Collège, Lycée)',
-        duration: 'Septembre 2007 - Juin 2022',
-        org: 'Sainte Marie Grand Lebrun',
-        description: 'Scolarité de la maternelle à la terminale, baccalauréat général.',
-        icon: Book,
-        skills: [
-            'Numérique et Sciences Informatiques',
-            'Histoire-Géographie Géopolitique et Sciences Politiques',
-            'Sciences Économiques et Sociales',
-        ],
-    },
-];
 
 export function Timeline() {
     const listRef = useRef<HTMLOListElement>(null);
@@ -122,7 +57,7 @@ export function Timeline() {
                     >
                         <div ref={fillRef} className="h-full w-full origin-top bg-accent" />
                     </div>
-                    {data.map((item) => (
+                    {timeline.map((item) => (
                         <TimelineItem key={`${item.title}-${item.org}`} item={item} />
                     ))}
                 </ol>
@@ -131,7 +66,7 @@ export function Timeline() {
     );
 }
 
-function TimelineItem({ item }: Readonly<{ item: Timeline }>) {
+function TimelineItem({ item }: Readonly<{ item: TimelineEntry }>) {
     const ItemIcon = item.icon ?? Calendar;
     const startYear = item.duration.match(/\d{4}/)?.[0];
     return (
